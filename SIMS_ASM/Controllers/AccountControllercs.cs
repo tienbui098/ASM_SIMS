@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using SIMS_ASM.Data;
 using SIMS_ASM.Models;
+using SIMS_ASM.Singleton;
 
 namespace SIMS_ASM.Controllers
 {
@@ -13,16 +14,19 @@ namespace SIMS_ASM.Controllers
         public class AccountController : Controller
         {
             private readonly ApplicationDbContex _context;
+            private readonly AccountSingleton _singleton;
 
             public AccountController(ApplicationDbContex context)
             {
                 _context = context;
+                _singleton = AccountSingleton.Instance;
             }
 
             // Hiển thị form đăng nhập
             [HttpGet]
             public IActionResult Login()
             {
+                ViewBag.SystemName = "Student Information Management System";
                 return View();
             }
 
@@ -33,6 +37,7 @@ namespace SIMS_ASM.Controllers
                 if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 {
                     ModelState.AddModelError("", "Username and password are required.");
+                    _singleton.Log($"Failed login attempt: Username or password is empty");
                     return View();
                 }
 
@@ -44,11 +49,13 @@ namespace SIMS_ASM.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Invalid login attempt.");
+                    _singleton.Log($"Failed login attempt for user {username}");
                     return View();
                 }
 
                 HttpContext.Session.SetInt32("UserId", user.UserID);
                 HttpContext.Session.SetString("Role", user.Role);
+                _singleton.Log($"User {username} logged in with role {user.Role}");
 
                 switch (user.Role)
                 {
@@ -66,6 +73,7 @@ namespace SIMS_ASM.Controllers
             // Hiển thị form đăng ký
             public IActionResult Register()
             {
+                ViewBag.SystemName = "Student Information Management System";
                 return View();
             }
 
@@ -76,6 +84,7 @@ namespace SIMS_ASM.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _singleton.Log($"Failed registration attempt: Invalid model state for username {user.Username}");
                     return View(user);
                 }
 
@@ -83,6 +92,7 @@ namespace SIMS_ASM.Controllers
                 if (await _context.Users.AnyAsync(u => u.Username == user.Username))
                 {
                     ModelState.AddModelError("Username", "Username already exists.");
+                    _singleton.Log($"Failed registration attempt: Username {user.Username} already exists");
                     return View(user);
                 }
 
@@ -90,6 +100,7 @@ namespace SIMS_ASM.Controllers
                 if (await _context.Users.AnyAsync(u => u.Email == user.Email))
                 {
                     ModelState.AddModelError("Email", "Email already exists.");
+                    _singleton.Log($"Failed registration attempt: Email {user.Email} already exists");
                     return View(user);
                 }
 
@@ -99,6 +110,7 @@ namespace SIMS_ASM.Controllers
                 // Thêm người dùng mới vào cơ sở dữ liệu
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+                _singleton.Log($"User {user.Username} registered successfully with role {user.Role}");
 
                 // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
                 return RedirectToAction("Login");
@@ -107,7 +119,9 @@ namespace SIMS_ASM.Controllers
             // Đăng xuất
             public IActionResult Logout()
             {
+                var username = _context.Users.Where(u => u.UserID == HttpContext.Session.GetInt32("UserId")).Select(u => u.Username).FirstOrDefault();
                 HttpContext.Session.Clear();
+                _singleton.Log($"User {username} logged out");
                 return RedirectToAction("Login");
             }
 
