@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cMZZUCxqxUI=",
+  "dgSpecHash": "rS6BV+1iuO8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\qtien\\source\\repos\\SIMS_ASMM\\SIMS_ASM\\SIMS_ASM.csproj",
+  "projectFilePath": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\SIMS_ASM.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\qtien\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\qtien\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

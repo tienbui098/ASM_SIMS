@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\qtien\\source\\repos\\SIMS_ASMM\\SIMS_ASM\\SIMS_ASM.csproj": {}
+    "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\SIMS_ASM.csproj": {}
   },
   "projects": {
-    "C:\\Users\\qtien\\source\\repos\\SIMS_ASMM\\SIMS_ASM\\SIMS_ASM.csproj": {
+    "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\SIMS_ASM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\qtien\\source\\repos\\SIMS_ASMM\\SIMS_ASM\\SIMS_ASM.csproj",
+        "projectUniqueName": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\SIMS_ASM.csproj",
         "projectName": "SIMS_ASM",
-        "projectPath": "C:\\Users\\qtien\\source\\repos\\SIMS_ASMM\\SIMS_ASM\\SIMS_ASM.csproj",
+        "projectPath": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\SIMS_ASM.csproj",
         "packagesPath": "C:\\Users\\qtien\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\qtien\\source\\repos\\SIMS_ASMM\\SIMS_ASM\\obj\\",
+        "outputPath": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
