@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SIMS_ASM.Data;
 using Microsoft.EntityFrameworkCore;
+using SIMS_ASM.Singleton;
 
 namespace SIMS_ASM.Controllers
 {
     public class AdminController : Controller
     {
         private readonly ApplicationDbContex _context;
+        private readonly AccountSingleton _singleton;
 
         public AdminController(ApplicationDbContex context)
         {
             _context = context;
+            _singleton = AccountSingleton.Instance;
         }
 
         // Trang chính cho quản trị viên
@@ -35,6 +38,11 @@ namespace SIMS_ASM.Controllers
             {
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
+                _singleton.Log($"User {user.Username} (ID: {id}) deleted by Admin");
+            }
+            else
+            {
+                _singleton.Log($"Failed to delete user with ID {id}: User not found");
             }
             return RedirectToAction("ManageUsers");
         }
@@ -54,6 +62,11 @@ namespace SIMS_ASM.Controllers
             {
                 _context.Courses.Remove(course);
                 await _context.SaveChangesAsync();
+                _singleton.Log($"Course {course.CourseName} (ID: {id}) deleted by admin");
+            }
+            else
+            {
+                _singleton.Log($"Failed to delete course with ID {id}: Course not found");
             }
             return RedirectToAction("ManageCourses");
         }
