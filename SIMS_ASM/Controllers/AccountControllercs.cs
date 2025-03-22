@@ -68,6 +68,8 @@ namespace SIMS_ASM.Controllers
             }
         }
 
+
+
         // Hiển thị form đăng ký
         public IActionResult Register()
         {
@@ -78,11 +80,16 @@ namespace SIMS_ASM.Controllers
         // Xử lý đăng ký
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(User user, string password)
+        public async Task<IActionResult> Register(User user)
         {
             if (!ModelState.IsValid)
             {
-                _singleton.Log($"Failed registration attempt: Invalid model state for username {user.Username}");
+                foreach (var entry in ModelState)
+                {
+                    var key = entry.Key; // Tên property
+                    var errors = entry.Value.Errors.Select(e => e.ErrorMessage); // Danh sách lỗi
+                    _singleton.Log($"Property: {key}, Errors: {string.Join(", ", errors)}");
+                }
                 return View(user);
             }
 
@@ -102,17 +109,26 @@ namespace SIMS_ASM.Controllers
                 return View(user);
             }
 
-            // Mã hóa mật khẩu
-            user.Password = HashPassword(password);
-
             // Thêm người dùng mới vào cơ sở dữ liệu
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            _singleton.Log($"User {user.Username} registered successfully with role {user.Role}");
-
+            try
+            {
+                // Mã hóa mật khẩu
+                user.Password = HashPassword(user.Password);
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                _singleton.Log($"User {user.Username} registered successfully with role {user.Role}");
+            }
+            catch (Exception ex)
+            {
+                _singleton.Log($"Failed to register user {user.Username}: {ex.Message}");
+                ModelState.AddModelError("", "An error occurred while registering. Please try again.");
+                return View(user);
+            }
             // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
             return RedirectToAction("Login");
         }
+
+
 
         // Đăng xuất
         public IActionResult Logout()
