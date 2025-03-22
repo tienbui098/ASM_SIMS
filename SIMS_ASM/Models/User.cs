@@ -37,9 +37,8 @@ namespace SIMS_ASM.Models
         public string Gender { get; set; }
 
         // Quan hệ 1-nhiều với Course, Grade, và RequestSupport
-        public ICollection<Course> Courses { get; set; }
-        public ICollection<Grade> Grades { get; set; }
-        public ICollection<RequestSupport> RequestSupports { get; set; }
-
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
+        public ICollection<Grade> Grades { get; set; } = new List<Grade>();
+        public ICollection<RequestSupport> RequestSupports { get; set; } = new List<RequestSupport>();
     }
 }
