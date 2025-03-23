@@ -60,7 +60,7 @@ namespace SIMS_ASM.Controllers
                 case "Student":
                     return RedirectToAction("Index", "Student");
                 case "Lecturer":
-                    return RedirectToAction("Index", "Lecturer");
+                    return RedirectToAction("Index", "Teacher");
                 case "Administrator":
                     return RedirectToAction("Index", "Admin");
                 default:
@@ -131,13 +131,17 @@ namespace SIMS_ASM.Controllers
 
 
         // Đăng xuất
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
             var username = _context.Users.Where(u => u.UserID == HttpContext.Session.GetInt32("UserId")).Select(u => u.Username).FirstOrDefault();
-            HttpContext.Session.Clear();
+            HttpContext.Session.Clear();// xóa thông tin phiên đăng nhập
             _singleton.Log($"User {username} logged out");
             return RedirectToAction("Login");
         }
+
+
 
         // Hàm mã hóa password (ví dụ đơn giản)
         private string HashPassword(string password)
