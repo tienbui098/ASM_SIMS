@@ -1,5 +1,29 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/SIMS_ASM/css/Login.0649j20tr4.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\Login.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"0649j20tr4"},{"Name":"integrity","Value":"sha256-qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q="},{"Name":"label","Value":"_content/SIMS_ASM/css/Login.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"554"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q=\u0022"},{"Name":"Last-Modified","Value":"Sat, 22 Mar 2025 14:36:47 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SIMS_ASM/css/Login.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\Login.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"554"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q=\u0022"},{"Name":"Last-Modified","Value":"Sat, 22 Mar 2025 14:36:47 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SIMS_ASM/css/Register.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\Register.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-rVVZ8V\u002B5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1518"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022rVVZ8V\u002B5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM=\u0022"},{"Name":"Last-Modified","Value":"Sun, 23 Mar 2025 07:24:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/SIMS_ASM/css/Register.pxb5qco843.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\Register.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"pxb5qco843"},{"Name":"integrity","Value":"sha256-rVVZ8V\u002B5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM="},{"Name":"label","Value":"_content/SIMS_ASM/css/Register.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1518"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022rVVZ8V\u002B5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM=\u0022"},{"Name":"Last-Modified","Value":"Sun, 23 Mar 2025 07:24:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/SIMS_ASM/css/site.c2tiyv64ts.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
