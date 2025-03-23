@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "cFfoAJnqZNGZihz4/re5xogOafwLiyi7HaQuWKlvK9Y=",
+  "Hash": "eujjR3NgqI6ttlWfpVadFwcPp9s41P44uUgcnso5a/M=",
   "Source": "SIMS_ASM",
   "BasePath": "_content/SIMS_ASM",
   "Mode": "Default",
@@ -57,6 +57,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\SIMS_ASM.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Login.css",
+      "SourceId": "SIMS_ASM",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\",
+      "BasePath": "_content/SIMS_ASM",
+      "RelativePath": "css/Login#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "0649j20tr4",
+      "Integrity": "qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\Login.css"
+    },
+    {
+      "Identity": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Register.css",
+      "SourceId": "SIMS_ASM",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\",
+      "BasePath": "_content/SIMS_ASM",
+      "RelativePath": "css/Register#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "pxb5qco843",
+      "Integrity": "rVVZ8V+5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\Register.css"
     },
     {
       "Identity": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\site.css",
@@ -1320,6 +1362,170 @@
     }
   ],
   "Endpoints": [
+    {
+      "Route": "css/Login.0649j20tr4.css",
+      "AssetFile": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "554"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 22 Mar 2025 14:36:47 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0649j20tr4"
+        },
+        {
+          "Name": "label",
+          "Value": "css/Login.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q="
+        }
+      ]
+    },
+    {
+      "Route": "css/Login.css",
+      "AssetFile": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "554"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 22 Mar 2025 14:36:47 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qAclFmK2P9nskdOudGHrH1MC8wZjGKqDPT2qQeJtB2Q="
+        }
+      ]
+    },
+    {
+      "Route": "css/Register.css",
+      "AssetFile": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Register.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1518"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rVVZ8V+5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Mar 2025 07:24:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-rVVZ8V+5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM="
+        }
+      ]
+    },
+    {
+      "Route": "css/Register.pxb5qco843.css",
+      "AssetFile": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Register.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1518"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rVVZ8V+5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Mar 2025 07:24:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pxb5qco843"
+        },
+        {
+          "Name": "label",
+          "Value": "css/Register.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-rVVZ8V+5VOdFz/C98KnNRmpp1qspGwPoQvDKkJNPgMM="
+        }
+      ]
+    },
     {
       "Route": "css/site.c2tiyv64ts.css",
       "AssetFile": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\site.css",

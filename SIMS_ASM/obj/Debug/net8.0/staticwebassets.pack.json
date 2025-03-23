@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\SIMS_ASM.mrrqnh22dl.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Login.css",
+      "PackagePath": "staticwebassets\\css\\Login.css"
+    },
+    {
+      "Id": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\Register.css",
+      "PackagePath": "staticwebassets\\css\\Register.css"
+    },
+    {
       "Id": "C:\\Users\\qtien\\source\\repos\\SIMS_ASM\\SIMS_ASM\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
