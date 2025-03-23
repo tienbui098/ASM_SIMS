@@ -1,0 +1,55 @@
+﻿body {
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    border-radius: 10px; /* Làm tròn các góc của card */
+}
+
+.card-header {
+    border-top-left-radius: 10px; /* Làm tròn góc trên bên trái */
+    border-top-right-radius: 10px; /* Làm tròn góc trên bên phải */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Màu xanh dương */
+    border-color: #007bff; /* Biên màu xanh dương */
+    transition: background-color 0.3s, border-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Màu xanh đậm khi hover */
+        border-color: #0056b3; /* Biên màu xanh đậm khi hover */
+    }
+
+.btn-secondary {
+    background-color: #6c757d; /* Màu xám */
+    border-color: #6c757d; /* Biên màu xám */
+    transition: background-color 0.3s, border-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268; /* Màu xám đậm khi hover */
+        border-color: #545b62; /* Biên màu xám đậm khi hover */
+    }
+
+.form-group label {
+    font-weight: bold; /* Đậm cho nhãn */
+}
+
+.text-danger {
+    font-size: 0.9rem; /* Kích thước chữ cho thông báo lỗi */
+}
+
+.mt-3 {
+    margin-top: 1rem; /* Khoảng cách trên cho phần đã đăng nhập */
+}
+
+.mt-5 {
+    margin-top: 3rem; /* Khoảng cách trên cho thẻ card */
+}
+
+.bg-light {
+    background-color: #f8f9fa !important; /* Màu nền sáng */
+}
+
