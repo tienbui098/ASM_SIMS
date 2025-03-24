@@ -1,2 +1,5 @@
 SIMS_ASM/appsettings.json
 .vs
+/SIMS_ASM/bin/*
+/SIMS_ASM/bin/
+/SIMS_ASM/bin

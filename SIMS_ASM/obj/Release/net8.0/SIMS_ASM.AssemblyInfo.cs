@@ -12,9 +12,9 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("SIMS_ASM")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1ebd7808ea66992bee2a370426ca1695fc1197a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+562be745db2ca4ac31de66e3d4fece97a8c5567d")]
 [assembly: System.Reflection.AssemblyProductAttribute("SIMS_ASM")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SIMS_ASM")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
