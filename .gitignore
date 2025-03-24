@@ -3,3 +3,9 @@ SIMS_ASM/appsettings.json
 /SIMS_ASM/bin/*
 /SIMS_ASM/bin/
 /SIMS_ASM/bin
+/SIMS_ASM/obj/*
+/SIMS_ASM/obj/
+/SIMS_ASM/obj
+/SIMS_ASM/Logs/*
+/SIMS_ASM/Logs/
+/SIMS_ASM/Logs
