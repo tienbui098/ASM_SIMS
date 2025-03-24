@@ -6,6 +6,8 @@ using System.Text;
 using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 using SIMS_ASM.Singleton;
+using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace SIMS_ASM.Controllers
 {
@@ -82,6 +84,16 @@ namespace SIMS_ASM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(User user)
         {
+
+            // Kiểm tra username chỉ chứa chữ thường và số
+            if (!Regex.IsMatch(user.Username, "^[a-z0-9]+$"))
+            {
+                ModelState.AddModelError("Username", "Username can only contain lowercase letters and numbers.");
+                _singleton.Log($"Failed registration attempt: Invalid username format {user.Username}");
+                return View(user);
+            }
+
+
             if (!ModelState.IsValid)
             {
                 foreach (var entry in ModelState)
