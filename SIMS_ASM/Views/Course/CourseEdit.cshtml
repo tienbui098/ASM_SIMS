@@ -1,0 +1,52 @@
+﻿@model SIMS_ASM.Models.Course
+
+@{
+    ViewData["Title"] = "Edit Course";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Course</h2>
+
+<form asp-action="CourseEdit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="CourseID" />
+
+    <div class="form-group">
+        <label asp-for="CourseName" class="control-label"></label>
+        <input asp-for="CourseName" class="form-control" required />
+        <span asp-validation-for="CourseName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UserID" class="control-label">Instructor</label>
+        <select asp-for="UserID" class="form-control" required>
+            <option value="" disabled>Select Instructor</option>
+            @foreach (var teacher in ViewBag.Teacher)
+            {
+                <option value="@teacher.UserID" selected="@(teacher.UserID == Model.UserID ? "selected" : null)">@teacher.Username</option>
+            }
+        </select>
+        <span asp-validation-for="UserID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CourseStartDate" class="control-label"></label>
+        <input asp-for="CourseStartDate" class="form-control" type="date" />
+        <span asp-validation-for="CourseStartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CourseEndDate" class="control-label"></label>
+        <input asp-for="CourseEndDate" class="form-control" type="date" />
+        <span asp-validation-for="CourseEndDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
