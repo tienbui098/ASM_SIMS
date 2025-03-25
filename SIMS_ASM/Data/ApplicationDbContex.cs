@@ -27,7 +27,7 @@ namespace SIMS_ASM.Data
                 .HasMaxLength(20)
                 .HasConversion<string>();
             modelBuilder.Entity<User>()
-                .ToTable(t => t.HasCheckConstraint("CK_User_Role", "Role IN ('Student', 'Lecturer', 'Administrator')"));
+                .ToTable(t => t.HasCheckConstraint("CK_User_Role", "Role IN ('Student', 'Teacher', 'Administrator')"));
 
             // Ràng buộc RequestStatus chỉ nhận giá trị In Progress, Completed
             modelBuilder.Entity<RequestSupport>()
