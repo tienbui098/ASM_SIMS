@@ -14,6 +14,39 @@
     <button type="submit" class="btn btn-danger">Logout</button>
 </form>
 
+<h3>All Users</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>DateOfBirth</th>
+            <th>Address</th>
+            <th>PhoneNumber</th>
+            <th>Gender</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Role</td>
+                <td>@user.Email</td>
+				<td>@user.DateOfBirth</td>
+				<td>@user.Address</td>
+				<td>@user.PhoneNumber</td>
+				<td>@user.Gender</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="ManageUsers" class="btn btn-primary">Manage Users</a>
+<a asp-controller="Course" asp-action="Index" class="btn btn-primary">Manage Courses</a>
+<a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Manage Grades</a>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

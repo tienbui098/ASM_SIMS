@@ -2,6 +2,7 @@
 using SIMS_ASM.Data;
 using Microsoft.EntityFrameworkCore;
 using SIMS_ASM.Singleton;
+using SIMS_ASM.Models;
 
 namespace SIMS_ASM.Controllers
 {
@@ -38,7 +39,7 @@ namespace SIMS_ASM.Controllers
             {
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
-                _singleton.Log($"User {user.Username} (ID: {id}) deleted by Admin");
+                _singleton.Log($"User {user.Username} (ID: {id}) deleted by admin");
             }
             else
             {
@@ -46,30 +47,5 @@ namespace SIMS_ASM.Controllers
             }
             return RedirectToAction("ManageUsers");
         }
-
-        // Quản lý khóa học
-        public IActionResult ManageCourses()
-        {
-            var courses = _context.Courses.ToList();
-            return View(courses);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ManageCourses(int id)
-        {
-            var course = await _context.Courses.FindAsync(id);
-            if (course != null)
-            {
-                _context.Courses.Remove(course);
-                await _context.SaveChangesAsync();
-                _singleton.Log($"Course {course.CourseName} (ID: {id}) deleted by admin");
-            }
-            else
-            {
-                _singleton.Log($"Failed to delete course with ID {id}: Course not found");
-            }
-            return RedirectToAction("ManageCourses");
-        }
     }
-
 }

@@ -35,37 +35,37 @@ namespace SIMS_ASM.Controllers
             return View(grades);
         }
 
-        // Cập nhật điểm số
-        public async Task<IActionResult> UpdateGrade(int id)
-        {
-            var grade = await _context.Grades.FindAsync(id);
-            if (grade == null)
-            {
-                _singleton.Log($"Grade with ID {id} not found for update");
-                return NotFound();
-            }
-            return View(grade);
-        }
+        //// Cập nhật điểm số
+        //public async Task<IActionResult> UpdateGrade(int id)
+        //{
+        //    var grade = await _context.Grades.FindAsync(id);
+        //    if (grade == null)
+        //    {
+        //        _singleton.Log($"Grade with ID {id} not found for update");
+        //        return NotFound();
+        //    }
+        //    return View(grade);
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateGrade(int id, Grade grade)
-        {
-            if (id != grade.GradeID)
-            {
-                _singleton.Log($"Invalid grade update attempt: ID mismatch for GradeID {id}");
-                return NotFound();
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateGrade(int id, Grade grade)
+        //{
+        //    if (id != grade.GradeID)
+        //    {
+        //        _singleton.Log($"Invalid grade update attempt: ID mismatch for GradeID {id}");
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                _context.Update(grade);
-                await _context.SaveChangesAsync();
-                _singleton.Log($"Grade updated for GradeID {grade.GradeID}, new value: {grade.GradeValue}");
-                return RedirectToAction("Index");
-            }
-            _singleton.Log($"Failed to update grade for GradeID {grade.GradeID}: Invalid model state");
-            return View(grade);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Update(grade);
+        //        await _context.SaveChangesAsync();
+        //        _singleton.Log($"Grade updated for GradeID {grade.GradeID}, new value: {grade.GradeValue}");
+        //        return RedirectToAction("Index");
+        //    }
+        //    _singleton.Log($"Failed to update grade for GradeID {grade.GradeID}: Invalid model state");
+        //    return View(grade);
+        //}
     }
 }
 
