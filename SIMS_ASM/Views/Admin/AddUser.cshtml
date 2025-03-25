@@ -1,7 +1,7 @@
 ﻿@model SIMS_ASM.Models.User
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Add User";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,8 +11,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/Register.css"> <!-- Đường dẫn đến file CSS tùy chỉnh -->
-    <title>Register</title>
+    <link rel="stylesheet" href="~/css/AddUser.css"> <!-- Đường dẫn đến file CSS tùy chỉnh -->
+    <title>Add User</title>
 </head>
 <body class="bg-light">
     <div class="container">
@@ -20,10 +20,10 @@
             <div class="col-md-8">
                 <div class="card mt-5 shadow">
                     <div class="card-header text-center bg-primary text-white">
-                        <h2>Register</h2>
+                        <h2>Add User</h2>
                     </div>
                     <div class="card-body">
-                        <form asp-controller="Account" asp-action="Register" method="post">
+                        <form asp-controller="Admin" asp-action="AddUser" method="post">
                             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                             <div class="form-group">
@@ -85,8 +85,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block">Register</button>
-                                <p>Already have an account? <a asp-action="Login">Login here</a></p>
+                                <button type="submit" class="btn btn-primary btn-block">Add</button>
                             </div>
                         </form>
                     </div>
@@ -94,8 +93,8 @@
             </div>
         </div>
     </div>
-        @section Scripts {
-            <partial name="_ValidationScriptsPartial" />
-        }
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
 </body>
 </html>
