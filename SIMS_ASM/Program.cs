@@ -1,10 +1,17 @@
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using SIMS_ASM.Data;
+using SIMS_ASM.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Đăng ký DbContext
 builder.Services.AddDbContext<ApplicationDbContex>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Đăng ký Service
+builder.Services.AddScoped<IAccountService, AccountService>();
+
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
