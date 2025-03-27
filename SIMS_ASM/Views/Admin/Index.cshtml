@@ -9,10 +9,12 @@
 
 <h2>Admin User Management</h2>
 
-<form asp-controller="Home" asp-action="Index" method="post" style="display:inline;">
+<form asp-controller="Admin" asp-action="Index" method="post" style="display:inline;">
     @Html.AntiForgeryToken()  <!-- Bảo mật chống CSRF -->
     <button type="submit" class="btn btn-danger">Logout</button>
 </form>
+
+<a asp-action="AddUser" class="btn btn-primary">Create New Class</a>
 
 <h3>All Users</h3>
 <table class="table">
@@ -20,10 +22,11 @@
         <tr>
             <th>Username</th>
             <th>Role</th>
+            <th>FullName</th>
             <th>Email</th>
-            <th>DateOfBirth</th>
+            <th>Date_of_birth</th>
             <th>Address</th>
-            <th>PhoneNumber</th>
+            <th>Phone_number</th>
             <th>Gender</th>
         </tr>
     </thead>
@@ -33,20 +36,27 @@
             <tr>
                 <td>@user.Username</td>
                 <td>@user.Role</td>
+                <td>@user.FullName</td>
                 <td>@user.Email</td>
-				<td>@user.DateOfBirth</td>
-				<td>@user.Address</td>
-				<td>@user.PhoneNumber</td>
-				<td>@user.Gender</td>
+                <td>@user.Date_of_birth</td>
+                <td>@user.Address</td>
+                <td>@user.Phone_number</td>
+                <td>@user.Gender</td>
             </tr>
         }
     </tbody>
 </table>
 
 <a asp-action="ManageUsers" class="btn btn-primary">Manage Users</a>
+
 <a asp-controller="Course" asp-action="Index" class="btn btn-primary">Manage Courses</a>
+
+<a asp-controller="Class" asp-action="Index" class="btn btn-primary">Manage Classes</a>
+
+<a asp-controller="Enrollment" asp-action="Index" class="btn btn-primary">Manage Enrollments</a>
+
 <a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Manage Grades</a>
-<a asp-controller="RequestSupport" asp-action="Index" class="btn btn-primary">Manage Request Support</a>
+
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
