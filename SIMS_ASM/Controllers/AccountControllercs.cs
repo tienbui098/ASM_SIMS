@@ -62,7 +62,7 @@ namespace SIMS_ASM.Controllers
                 case "Student":
                     return RedirectToAction("Index", "Student");
                 case "Lecturer":
-                    return RedirectToAction("Index", "Teacher");
+                    return RedirectToAction("Index", "Lecturer");
                 case "Administrator":
                     return RedirectToAction("Index", "Admin");
                 default:
