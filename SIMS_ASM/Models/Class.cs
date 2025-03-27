@@ -3,24 +3,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SIMS_ASM.Models
 {
-    public class Course
+    public class Class
     {
         [Key]
-        public int CourseID { get; set; }
+        public int ClassID { get; set; }
 
         [ForeignKey("Major")]
         public int MajorID { get; set; }
 
         [StringLength(100)]
-        public string CourseName { get; set; }
-
-        public DateTime CourseStartDate { get; set; }
-        public DateTime CourseEndDate { get; set; }
+        public string ClassName { get; set; }
 
         // Navigation properties
         public virtual Major Major { get; set; }
+        public virtual ICollection<StudentClass> StudentClasses { get; set; }
         public virtual ICollection<ClassCourseFaculty> ClassCourseFaculties { get; set; }
-    }
- 
-}
 
+    }
+}

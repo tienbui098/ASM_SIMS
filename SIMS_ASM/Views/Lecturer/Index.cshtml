@@ -19,19 +19,19 @@
             <th>Action</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var grade in Model)
-        {
-            <tr>
-                <td>@grade.User?.Username</td>
-                <td>@grade.Course?.CourseName</td>
-                <td>@grade.GradeValue</td>
-                <td>
-                    <a asp-controller="Grade" asp-action="Edit" asp-route-id="@grade.GradeID" class="btn btn-sm btn-primary">Update</a>
-                </td>
-            </tr>
-        }
-    </tbody>
+    @* <tbody> *@
+    @*     @foreach (var grade in Model) *@
+    @*     { *@
+    @*         <tr> *@
+    @*             <td>@grade.User?.Username</td> *@
+    @*             <td>@grade.Course?.CourseName</td> *@
+    @*             <td>@grade.GradeValue</td> *@
+    @*             <td> *@
+    @*                 <a asp-controller="Grade" asp-action="EditGrade" asp-route-id="@grade.GradeID" class="btn btn-sm btn-primary">Update</a> *@
+    @*             </td> *@
+    @*         </tr> *@
+    @*     } *@
+    @* </tbody> *@
 </table>
 
 <a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Manage Grades</a>

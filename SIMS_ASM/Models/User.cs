@@ -9,36 +9,35 @@ namespace SIMS_ASM.Models
         [Key]
         public int UserID { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string Username { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string Password { get; set; } // Mật khẩu mã hóa
+        [StringLength(50)]
+        public string Password { get; set; }
 
-        [Required]
         [StringLength(20)]
-        public string Role { get; set; } // Student, Lecturer, Administrator
+        public string Role { get; set; }
 
-        [Required]
+        [StringLength(100)]
+        public string FullName { get; set; } 
+
         [StringLength(100)]
         public string Email { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime Date_of_birth { get; set; }
 
-        [StringLength(200)]
+        [StringLength(255)]
         public string Address { get; set; }
 
-        [StringLength(20)]
-        public string PhoneNumber { get; set; }
+        [StringLength(15)]
+        public string Phone_number { get; set; }
 
         [StringLength(10)]
         public string Gender { get; set; }
 
-        // Quan hệ 1-nhiều với Course, Grade, và RequestSupport
-        public ICollection<Course> Courses { get; set; } = new List<Course>();
-        public ICollection<Grade> Grades { get; set; } = new List<Grade>();
-        public ICollection<RequestSupport> RequestSupports { get; set; } = new List<RequestSupport>();
+        // Navigation properties
+        public virtual ICollection<StudentClass> StudentClasses { get; set; } = new List<StudentClass>();
+        public virtual ICollection<ClassCourseFaculty> ClassCourseFaculties { get; set; } = new List<ClassCourseFaculty>();
+        public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }

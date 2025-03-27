@@ -7,14 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SIMS_ASM.Controllers
 {
-    public class CourseController :Controller
+    public class CourseController : Controller
     {
-        // Khai báo DbContext để truy cập dữ liệu từ cơ sở dữ liệu
         private readonly ApplicationDbContex _context;
-        // Khai báo singleton để ghi log
         private readonly AccountSingleton _singleton;
 
-        // Constructor để khởi tạo context và singleton
         public CourseController(ApplicationDbContex context)
         {
             _context = context;
@@ -24,21 +21,23 @@ namespace SIMS_ASM.Controllers
         // Kiểm tra quyền Admin
         private bool IsAdmin()
         {
-            var role = HttpContext.Session.GetString("Role"); // Lấy quyền từ Session
-            return role == "Administrator"; // Kiểm tra quyền Admin
+            var role = HttpContext.Session.GetString("Role");
+            return role == "Admin"; // Cập nhật vai trò từ "Administrator" thành "Admin"
         }
 
         // Hiển thị danh sách khóa học
         public async Task<IActionResult> Index()
         {
-            // Kiểm tra quyền Admin
             if (!IsAdmin())
             {
                 _singleton.Log("Unauthorized access to Course Management: User not an admin");
                 return RedirectToAction("Login", "Account");
             }
-            // Lấy danh sách khóa học từ cơ sở dữ liệu
-            var courses = await _context.Courses.Include(c => c.User).ToListAsync();
+
+            // Lấy danh sách khóa học và bao gồm thông tin về Major
+            var courses = await _context.Courses
+                .Include(c => c.Major)
+                .ToListAsync();
             return View(courses);
         }
 
@@ -50,14 +49,21 @@ namespace SIMS_ASM.Controllers
                 _singleton.Log("Unauthorized access to Create Course: User not an admin");
                 return RedirectToAction("Login", "Account");
             }
-            // Lấy danh sách giáo viên từ cơ sở dữ liệu
-            ViewBag.Teacher = await _context.Users
-                .Where(u => u.Role == "Teacher")
-                .ToListAsync();
+
+            // Lấy danh sách Major để hiển thị trong dropdown
+            ViewBag.Majors = await _context.Majors.ToListAsync();
+
+            // Kiểm tra xem có Major nào không
+            if (ViewBag.Majors == null || !((List<Major>)ViewBag.Majors).Any())
+            {
+                TempData["ErrorMessage"] = "No majors available. Please create a major first.";
+                return RedirectToAction("Index");
+            }
+
             return View();
         }
 
-        //Phương thức POST để tạo khóa học
+        // Phương thức POST để tạo khóa học
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CourseCreate(Course course)
@@ -68,38 +74,44 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            if (ModelState.IsValid) // Nếu dữ liệu trong model hợp lệ
+            if (!ModelState.IsValid)
             {
                 try
                 {
-                    _context.Courses.Add(course); // Thêm khóa học vào DbContext
-                    await _context.SaveChangesAsync();// Lưu thay đổi vào cơ sở dữ liệu
-                    _singleton.Log($"Course {course.CourseName} (ID: {course.CourseID}) created by admin");
+                    // Kiểm tra Major có tồn tại không
+                    var major = await _context.Majors.FindAsync(course.MajorID);
+                    if (major == null)
+                    {
+                        ModelState.AddModelError("MajorID", "Invalid major selected.");
+                        _singleton.Log($"Failed to create course {course.CourseName}: Invalid Major ID {course.MajorID}");
+                        ViewBag.Majors = await _context.Majors.ToListAsync();
+                        return View(course);
+                    }
+
+                    _context.Courses.Add(course);
+                    await _context.SaveChangesAsync();
+                    _singleton.Log($"Course {course.CourseName} (ID: {course.CourseID}) created by admin, assigned to Major {major.MajorName}");
+                    TempData["SuccessMessage"] = "Course created successfully!";
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    //Ghi log lỗi nếu có ngoại lệ
                     _singleton.Log($"Failed to create course {course.CourseName}: {ex.Message}");
-                    // Thêm thông báo lỗi vào ModelState
                     ModelState.AddModelError("", "An error occurred while creating the course.");
                 }
             }
             else
             {
-                //Nếu model không hợp lệ, ghi log các lỗi
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
                 _singleton.Log($"Failed to create course: Invalid model state. Errors: {string.Join(", ", errors)}");
             }
 
-            //Lấy lại danh sách giáo viên để hiện thị trong view khi gặp lỗi
-            ViewBag.Teacher = await _context.Users
-                .Where(u => u.Role == "Teacher")
-                .ToListAsync();
-            return View(course);// Trả về View và giữ lại khóa học để sửa lỗi
+            // Lấy lại danh sách Major để hiển thị trong view khi gặp lỗi
+            ViewBag.Majors = await _context.Majors.ToListAsync();
+            return View(course);
         }
 
-        //Phương thức hiển thị trang chỉnh sửa khóa học
+        // Phương thức hiển thị trang chỉnh sửa khóa học
         public async Task<IActionResult> CourseEdit(int id)
         {
             if (!IsAdmin())
@@ -109,20 +121,19 @@ namespace SIMS_ASM.Controllers
             }
 
             // Tìm khóa học theo ID
-            var course = await _context.Courses.FindAsync(id);
-            if (course == null)// Nếu không tìm thấy khóa học
+            var course = await _context.Courses
+                .Include(c => c.Major)
+                .FirstOrDefaultAsync(c => c.CourseID == id);
+            if (course == null)
             {
                 _singleton.Log($"Failed to edit course with ID {id}: Course not found");
-                return NotFound();// Trả về lỗi 404
+                return NotFound();
             }
 
-            // Lấy danh sách giáo viên để hiển thị trong view
-            ViewBag.Teacher = await _context.Users
-                .Where(u => u.Role == "Teacher")
-                .ToListAsync();
+            // Lấy danh sách Major để hiển thị trong dropdown
+            ViewBag.Majors = await _context.Majors.ToListAsync();
             return View(course);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -134,20 +145,30 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Kiểm tra xem ID khóa học có khớp với ID trong model không
             if (id != course.CourseID)
             {
                 _singleton.Log($"Invalid course edit attempt: ID mismatch for CourseID {id}");
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(course);// Cập nhật thông tin khóa học trong DbContext
-                    await _context.SaveChangesAsync();//Lưu thay đổi vào cơ sở dữ liệu
-                    _singleton.Log($"Course {course.CourseName} (ID: {course.CourseID}) updated by admin");
+                    // Kiểm tra Major có tồn tại không
+                    var major = await _context.Majors.FindAsync(course.MajorID);
+                    if (major == null)
+                    {
+                        ModelState.AddModelError("MajorID", "Invalid major selected.");
+                        _singleton.Log($"Failed to update course {course.CourseName}: Invalid Major ID {course.MajorID}");
+                        ViewBag.Majors = await _context.Majors.ToListAsync();
+                        return View(course);
+                    }
+
+                    _context.Update(course);
+                    await _context.SaveChangesAsync();
+                    _singleton.Log($"Course {course.CourseName} (ID: {course.CourseID}) updated by admin, assigned to Major {major.MajorName}");
+                    TempData["SuccessMessage"] = "Course updated successfully!";
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -162,13 +183,12 @@ namespace SIMS_ASM.Controllers
                 _singleton.Log($"Failed to update course: Invalid model state. Errors: {string.Join(", ", errors)}");
             }
 
-            ViewBag.Teacher = await _context.Users
-                .Where(u => u.Role == "Teacher")
-                .ToListAsync();
+            ViewBag.Majors = await _context.Majors.ToListAsync();
             return View(course);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CourseDelete(int id)
         {
             if (!IsAdmin())
@@ -177,17 +197,35 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var course = await _context.Courses.FindAsync(id);
-            if (course != null)
+            var course = await _context.Courses
+                .Include(c => c.ClassCourseFaculties)
+                .FirstOrDefaultAsync(c => c.CourseID == id);
+            if (course == null)
             {
+                _singleton.Log($"Failed to delete course with ID {id}: Course not found");
+                return NotFound();
+            }
+
+            try
+            {
+                if (course.ClassCourseFaculties.Any())
+                {
+                    _singleton.Log($"Failed to delete course {course.CourseName} (ID: {id}): Course is associated with classes and faculty.");
+                    TempData["ErrorMessage"] = "Cannot delete course because it is associated with classes and faculty.";
+                    return RedirectToAction("Index");
+                }
+
                 _context.Courses.Remove(course);
                 await _context.SaveChangesAsync();
                 _singleton.Log($"Course {course.CourseName} (ID: {id}) deleted by admin");
+                TempData["SuccessMessage"] = "Course deleted successfully!";
             }
-            else
+            catch (Exception ex)
             {
-                _singleton.Log($"Failed to delete course with ID {id}: Course not found");
+                _singleton.Log($"Failed to delete course {course.CourseName} (ID: {id}): {ex.Message}");
+                TempData["ErrorMessage"] = "An error occurred while deleting the course.";
             }
+
             return RedirectToAction("Index");
         }
     }

@@ -8,17 +8,12 @@ namespace SIMS_ASM.Models
         [Key]
         public int GradeID { get; set; }
 
-        [ForeignKey("Course")]
-        public int CourseID { get; set; }
+        [ForeignKey("Enrollment")]
+        public int EnrollmentID { get; set; }
 
-        [ForeignKey("User")]
-        public int UserID { get; set; }
+        public decimal Score { get; set; }
 
-        [Column(TypeName = "decimal(5,2)")]
-        public decimal GradeValue { get; set; } // Điểm số
-
-        // Quan hệ
-        public Course Course { get; set; }
-        public User User { get; set; }
+        // Navigation properties
+        public virtual Enrollment Enrollment { get; set; }
     }
 }

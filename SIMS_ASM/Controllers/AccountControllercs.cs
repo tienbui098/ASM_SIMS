@@ -8,17 +8,18 @@ using SIMS_ASM.Models;
 using SIMS_ASM.Singleton;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using SIMS_ASM.Services;
 
 namespace SIMS_ASM.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ApplicationDbContex _context;
+        private readonly IAccountService _accountService;
         private readonly AccountSingleton _singleton;
 
-        public AccountController(ApplicationDbContex context)
+        public AccountController(IAccountService accountService)
         {
-            _context = context;
+            _accountService = accountService;
             _singleton = AccountSingleton.Instance;
         }
 
@@ -41,11 +42,7 @@ namespace SIMS_ASM.Controllers
                 return View();
             }
 
-            string hashedPassword = HashPassword(password);
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == username && u.Password == hashedPassword);
-
+            var user = await _accountService.AuthenticateAsync(username, password);
             if (user == null)
             {
                 ModelState.AddModelError("", "Invalid login attempt.");
@@ -63,13 +60,12 @@ namespace SIMS_ASM.Controllers
                     return RedirectToAction("Index", "Student");
                 case "Lecturer":
                     return RedirectToAction("Index", "Lecturer");
-                case "Administrator":
+                case "Admin":
                     return RedirectToAction("Index", "Admin");
                 default:
                     return RedirectToAction("Index", "Home");
             }
         }
-
 
 
         // Hiển thị form đăng ký
@@ -84,8 +80,21 @@ namespace SIMS_ASM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(User user)
         {
+            if (!ModelState.IsValid)
+            {
+                _singleton.Log($"Failed registration attempt: Invalid data for {user.Username}");
+                return View(user);
+            }
 
-            // Kiểm tra username chỉ chứa chữ thường và số
+            var validRoles = new[] { "Student", "Lecturer", "Admin" };
+            if (!validRoles.Contains(user.Role))
+            {
+                ModelState.AddModelError("Role", "Role must be Student, Lecturer, or Admin.");
+                _singleton.Log($"Failed registration attempt: Invalid role {user.Role}");
+                return View(user);
+            }
+
+            // Kiểm tra regex cho Username (vì Data Annotations không đủ mạnh để xử lý regex phức tạp)
             if (!Regex.IsMatch(user.Username, "^[a-z0-9]+$"))
             {
                 ModelState.AddModelError("Username", "Username can only contain lowercase letters and numbers.");
@@ -93,51 +102,25 @@ namespace SIMS_ASM.Controllers
                 return View(user);
             }
 
-
-            if (!ModelState.IsValid)
-            {
-                foreach (var entry in ModelState)
-                {
-                    var key = entry.Key; // Tên property
-                    var errors = entry.Value.Errors.Select(e => e.ErrorMessage); // Danh sách lỗi
-                    _singleton.Log($"Property: {key}, Errors: {string.Join(", ", errors)}");
-                }
-                return View(user);
-            }
-
-            // Kiểm tra username đã tồn tại chưa
-            if (await _context.Users.AnyAsync(u => u.Username == user.Username))
-            {
-                ModelState.AddModelError("Username", "Username already exists.");
-                _singleton.Log($"Failed registration attempt: Username {user.Username} already exists");
-                return View(user);
-            }
-
-            // Kiểm tra email đã tồn tại chưa
-            if (await _context.Users.AnyAsync(u => u.Email == user.Email))
-            {
-                ModelState.AddModelError("Email", "Email already exists.");
-                _singleton.Log($"Failed registration attempt: Email {user.Email} already exists");
-                return View(user);
-            }
-
-            // Thêm người dùng mới vào cơ sở dữ liệu
             try
             {
-                // Mã hóa mật khẩu
-                user.Password = HashPassword(user.Password);
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
+                await _accountService.RegisterAsync(user);
                 _singleton.Log($"User {user.Username} registered successfully with role {user.Role}");
+                return RedirectToAction("Login");
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                _singleton.Log($"Failed registration attempt: {ex.Message}");
+                return View(user);
             }
             catch (Exception ex)
             {
                 _singleton.Log($"Failed to register user {user.Username}: {ex.Message}");
-                ModelState.AddModelError("", "An error occurred while registering. Please try again.");
+                ModelState.AddModelError("", "An error occurred while registering.");
                 return View(user);
             }
-            // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
-            return RedirectToAction("Login");
+
         }
 
 
@@ -147,8 +130,11 @@ namespace SIMS_ASM.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            var username = _context.Users.Where(u => u.UserID == HttpContext.Session.GetInt32("UserId")).Select(u => u.Username).FirstOrDefault();
-            HttpContext.Session.Clear();// xóa thông tin phiên đăng nhập
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var username = userId.HasValue
+                ? _accountService.AuthenticateAsync("", "").Result?.Username ?? "Unknown"
+                : "Unknown";
+            HttpContext.Session.Clear();
             _singleton.Log($"User {username} logged out");
             return RedirectToAction("Login");
         }
@@ -161,7 +147,8 @@ namespace SIMS_ASM.Controllers
             using (var sha256 = SHA256.Create())
             {
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
+                var base64 = Convert.ToBase64String(hashedBytes);
+                return base64.Length > 50 ? base64.Substring(0, 50) : base64; // Cắt ngắn nếu vượt quá 50
             }
         }
     }
