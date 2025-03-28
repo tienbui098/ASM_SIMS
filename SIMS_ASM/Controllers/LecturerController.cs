@@ -3,17 +3,20 @@ using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 using Microsoft.EntityFrameworkCore;
 using SIMS_ASM.Singleton;
+using SIMS_ASM.Services;
 
 namespace SIMS_ASM.Controllers
 {
     public class LecturerController : Controller
     {
         private readonly ApplicationDbContex _context;
+        private readonly IUserService _userService;
         private readonly AccountSingleton _singleton;
 
-        public LecturerController(ApplicationDbContex context)
+        public LecturerController(ApplicationDbContex context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
             _singleton = AccountSingleton.Instance;
         }
         public IActionResult Index()
@@ -25,6 +28,49 @@ namespace SIMS_ASM.Controllers
         {
             var users = await _context.Users.ToListAsync();
             return View(users);
+        }
+
+        public IActionResult AddLecturer()
+        {
+            ViewBag.SystemName = "Student Information Management System";
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddLecturer(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                _singleton.Log($"Failed adding teacher: Invalid data for {user.Username}");
+                ViewBag.SystemName = "Student Information Management System";
+                return View(user);
+            }
+
+            try
+            {
+                await _userService.AddUserAsync(user, "Lecturer"); // Gán role là Lecturer
+                _singleton.Log($"User {user.Username} added successfully with role Lecturer");
+                return RedirectToAction("ManageLecturer"); // Chuyển hướng tùy ý
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("Username", ex.Message);
+                _singleton.Log($"Failed adding teacher: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                _singleton.Log($"Failed adding teacher: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _singleton.Log($"Failed to add teacher {user.Username}: {ex.Message}");
+                ModelState.AddModelError("", "An error occurred while adding.");
+            }
+
+            ViewBag.SystemName = "Student Information Management System";
+            return View(user);
         }
 
         [HttpGet]
@@ -105,32 +151,6 @@ namespace SIMS_ASM.Controllers
             return _context.Users.Any(e => e.UserID == id);
         }
     }
-    //private readonly ApplicationDbContex _context;
-    //private readonly AccountSingleton _singleton;
-
-    //public LecturerController(ApplicationDbContex context)
-    //{
-    //    _context = context;
-    //    _singleton = AccountSingleton.Instance;
-    //}
-
-    //// Trang chính cho giảng viên
-    //public async Task<IActionResult> Index()
-    //{
-    //    var userId = HttpContext.Session.GetInt32("UserId");
-    //    if (userId == null)
-    //    {
-    //        _singleton.Log("Unauthorized access to Lecturer dashboard: User not logged in");
-    //        return RedirectToAction("Login", "Account");
-    //    }
-
-    //    var grades = await _context.Grades
-    //        .Where(g => g.UserID == userId)
-    //        .Include(g => g.Course)
-    //        .Include(g => g.User)
-    //        .ToListAsync();
-    //    return View(grades);
-    //}
 
 }
 

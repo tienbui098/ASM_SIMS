@@ -3,17 +3,20 @@ using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 using Microsoft.EntityFrameworkCore;
 using SIMS_ASM.Singleton;
+using SIMS_ASM.Services;
 
 namespace SIMS_ASM.Controllers
 {
     public class StudentController : Controller
     {
         private readonly ApplicationDbContex _context;
+        private readonly IUserService _userService;
         private readonly AccountSingleton _singleton;
 
-        public StudentController(ApplicationDbContex context)
+        public StudentController(ApplicationDbContex context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
             _singleton = AccountSingleton.Instance;
         }
         public IActionResult Index()
@@ -26,6 +29,51 @@ namespace SIMS_ASM.Controllers
             var users = await _context.Users.ToListAsync();
             return View(users);
         }
+
+
+        public IActionResult AddStudent()
+        {
+            ViewBag.SystemName = "Student Information Management System";
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddStudent(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                _singleton.Log($"Failed adding student: Invalid data for {user.Username}");
+                ViewBag.SystemName = "Student Information Management System";
+                return View(user);
+            }
+
+            try
+            {
+                await _userService.AddUserAsync(user, "Student"); // Gán role là Student
+                _singleton.Log($"User {user.Username} added successfully with role Student");
+                return RedirectToAction("ManageStudent"); // Chuyển hướng tùy ý
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("Username", ex.Message);
+                _singleton.Log($"Failed adding student: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                _singleton.Log($"Failed adding student: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _singleton.Log($"Failed to add student {user.Username}: {ex.Message}");
+                ModelState.AddModelError("", "An error occurred while adding.");
+            }
+
+            ViewBag.SystemName = "Student Information Management System";
+            return View(user);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> UpdateStudent(int id)
@@ -85,33 +133,25 @@ namespace SIMS_ASM.Controllers
             return View(updatedUser);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ManageStudent));
+        }
+
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserID == id);
         }
     }
-
-    //private readonly ApplicationDbContex _context;
-
-    //public StudentController(ApplicationDbContex context)
-    //{
-    //    _context = context;
-    //}
-
-    //// Trang chính cho sinh viên
-    //public async Task<IActionResult> Index()
-    //{
-    //    var userId = HttpContext.Session.GetInt32("UserId");
-    //    if (userId == null)
-    //    {
-    //        return RedirectToAction("Login", "Account");
-    //    }
-
-    //    var courses = await _context.Courses
-    //        .Where(c => c.UserID == userId)
-    //        .Include(c => c.Grade)
-    //        .ToListAsync();
-    //    return View(courses);
-    //}
 
 }
