@@ -3,29 +3,30 @@ using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 using SIMS_ASM.Singleton;
 using Microsoft.EntityFrameworkCore;
+using SIMS_ASM.Services;
 
 
 namespace SIMS_ASM.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly ApplicationDbContex _context;
+        private readonly ICourseService _courseService;
+        private readonly IMajorService _majorService; // Thêm IMajorService
         private readonly AccountSingleton _singleton;
 
-        public CourseController(ApplicationDbContex context)
+        public CourseController(ICourseService courseService, IMajorService majorService)
         {
-            _context = context;
+            _courseService = courseService;
+            _majorService = majorService; // Inject IMajorService
             _singleton = AccountSingleton.Instance;
         }
 
-        // Kiểm tra quyền Admin
         private bool IsAdmin()
         {
             var role = HttpContext.Session.GetString("Role");
-            return role == "Admin"; // Cập nhật vai trò từ "Administrator" thành "Admin"
+            return role == "Admin";
         }
 
-        // Hiển thị danh sách khóa học
         public async Task<IActionResult> Index()
         {
             if (!IsAdmin())
@@ -34,14 +35,10 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Lấy danh sách khóa học và bao gồm thông tin về Major
-            var courses = await _context.Courses
-                .Include(c => c.Major)
-                .ToListAsync();
+            var courses = await _courseService.GetAllCoursesAsync();
             return View(courses);
         }
 
-        // Thêm khóa học: Hiển thị form
         public async Task<IActionResult> CourseCreate()
         {
             if (!IsAdmin())
@@ -50,11 +47,9 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Lấy danh sách Major để hiển thị trong dropdown
-            ViewBag.Majors = await _context.Majors.ToListAsync();
+            ViewBag.Majors = await _majorService.GetAllMajorsAsync(); // Dùng IMajorService
 
-            // Kiểm tra xem có Major nào không
-            if (ViewBag.Majors == null || !((List<Major>)ViewBag.Majors).Any())
+            if (ViewBag.Majors == null || !((IEnumerable<Major>)ViewBag.Majors).Any())
             {
                 TempData["ErrorMessage"] = "No majors available. Please create a major first.";
                 return RedirectToAction("Index");
@@ -63,7 +58,6 @@ namespace SIMS_ASM.Controllers
             return View();
         }
 
-        // Phương thức POST để tạo khóa học
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CourseCreate(Course course)
@@ -78,21 +72,15 @@ namespace SIMS_ASM.Controllers
             {
                 try
                 {
-                    // Kiểm tra Major có tồn tại không
-                    var major = await _context.Majors.FindAsync(course.MajorID);
-                    if (major == null)
-                    {
-                        ModelState.AddModelError("MajorID", "Invalid major selected.");
-                        _singleton.Log($"Failed to create course {course.CourseName}: Invalid Major ID {course.MajorID}");
-                        ViewBag.Majors = await _context.Majors.ToListAsync();
-                        return View(course);
-                    }
-
-                    _context.Courses.Add(course);
-                    await _context.SaveChangesAsync();
-                    _singleton.Log($"Course {course.CourseName} (ID: {course.CourseID}) created by admin, assigned to Major {major.MajorName}");
+                    var createdCourse = await _courseService.CreateCourseAsync(course);
+                    _singleton.Log($"Course {createdCourse.CourseName} (ID: {createdCourse.CourseID}) created by admin");
                     TempData["SuccessMessage"] = "Course created successfully!";
                     return RedirectToAction("Index");
+                }
+                catch (ArgumentException ex)
+                {
+                    ModelState.AddModelError("MajorID", ex.Message);
+                    _singleton.Log($"Failed to create course {course.CourseName}: {ex.Message}");
                 }
                 catch (Exception ex)
                 {
@@ -106,12 +94,10 @@ namespace SIMS_ASM.Controllers
                 _singleton.Log($"Failed to create course: Invalid model state. Errors: {string.Join(", ", errors)}");
             }
 
-            // Lấy lại danh sách Major để hiển thị trong view khi gặp lỗi
-            ViewBag.Majors = await _context.Majors.ToListAsync();
+            ViewBag.Majors = await _majorService.GetAllMajorsAsync(); // Dùng IMajorService
             return View(course);
         }
 
-        // Phương thức hiển thị trang chỉnh sửa khóa học
         public async Task<IActionResult> CourseEdit(int id)
         {
             if (!IsAdmin())
@@ -120,18 +106,14 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Tìm khóa học theo ID
-            var course = await _context.Courses
-                .Include(c => c.Major)
-                .FirstOrDefaultAsync(c => c.CourseID == id);
+            var course = await _courseService.GetCourseByIdAsync(id);
             if (course == null)
             {
                 _singleton.Log($"Failed to edit course with ID {id}: Course not found");
                 return NotFound();
             }
 
-            // Lấy danh sách Major để hiển thị trong dropdown
-            ViewBag.Majors = await _context.Majors.ToListAsync();
+            ViewBag.Majors = await _majorService.GetAllMajorsAsync(); // Dùng IMajorService
             return View(course);
         }
 
@@ -155,21 +137,15 @@ namespace SIMS_ASM.Controllers
             {
                 try
                 {
-                    // Kiểm tra Major có tồn tại không
-                    var major = await _context.Majors.FindAsync(course.MajorID);
-                    if (major == null)
-                    {
-                        ModelState.AddModelError("MajorID", "Invalid major selected.");
-                        _singleton.Log($"Failed to update course {course.CourseName}: Invalid Major ID {course.MajorID}");
-                        ViewBag.Majors = await _context.Majors.ToListAsync();
-                        return View(course);
-                    }
-
-                    _context.Update(course);
-                    await _context.SaveChangesAsync();
-                    _singleton.Log($"Course {course.CourseName} (ID: {course.CourseID}) updated by admin, assigned to Major {major.MajorName}");
+                    await _courseService.UpdateCourseAsync(course);
+                    _singleton.Log($"Course {course.CourseName} (ID: {course.CourseID}) updated by admin");
                     TempData["SuccessMessage"] = "Course updated successfully!";
                     return RedirectToAction("Index");
+                }
+                catch (ArgumentException ex)
+                {
+                    ModelState.AddModelError("MajorID", ex.Message);
+                    _singleton.Log($"Failed to update course {course.CourseName}: {ex.Message}");
                 }
                 catch (Exception ex)
                 {
@@ -183,7 +159,7 @@ namespace SIMS_ASM.Controllers
                 _singleton.Log($"Failed to update course: Invalid model state. Errors: {string.Join(", ", errors)}");
             }
 
-            ViewBag.Majors = await _context.Majors.ToListAsync();
+            ViewBag.Majors = await _majorService.GetAllMajorsAsync(); // Dùng IMajorService
             return View(course);
         }
 
@@ -197,33 +173,25 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var course = await _context.Courses
-                .Include(c => c.ClassCourseFaculties)
-                .FirstOrDefaultAsync(c => c.CourseID == id);
-            if (course == null)
+            var success = await _courseService.DeleteCourseAsync(id);
+            if (!success)
             {
-                _singleton.Log($"Failed to delete course with ID {id}: Course not found");
-                return NotFound();
-            }
-
-            try
-            {
-                if (course.ClassCourseFaculties.Any())
+                var hasClasses = await _courseService.HasAssociatedClassesAsync(id);
+                if (hasClasses)
                 {
-                    _singleton.Log($"Failed to delete course {course.CourseName} (ID: {id}): Course is associated with classes and faculty.");
+                    _singleton.Log($"Failed to delete course with ID {id}: Course is associated with classes and faculty.");
                     TempData["ErrorMessage"] = "Cannot delete course because it is associated with classes and faculty.";
-                    return RedirectToAction("Index");
                 }
-
-                _context.Courses.Remove(course);
-                await _context.SaveChangesAsync();
-                _singleton.Log($"Course {course.CourseName} (ID: {id}) deleted by admin");
-                TempData["SuccessMessage"] = "Course deleted successfully!";
+                else
+                {
+                    _singleton.Log($"Failed to delete course with ID {id}: Course not found");
+                    TempData["ErrorMessage"] = "Course not found.";
+                }
             }
-            catch (Exception ex)
+            else
             {
-                _singleton.Log($"Failed to delete course {course.CourseName} (ID: {id}): {ex.Message}");
-                TempData["ErrorMessage"] = "An error occurred while deleting the course.";
+                _singleton.Log($"Course with ID {id} deleted by admin");
+                TempData["SuccessMessage"] = "Course deleted successfully!";
             }
 
             return RedirectToAction("Index");
