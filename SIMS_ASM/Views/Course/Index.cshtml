@@ -1,12 +1,62 @@
-﻿@model List<SIMS_ASM.Models.Course>
+﻿@model IEnumerable<SIMS_ASM.Models.Course>
 
 @{
     ViewData["Title"] = "Course Management";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 <h2>Course Management</h2>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="CourseCreate" class="btn btn-primary">Create New Course</a>
+    <a asp-controller="Account" asp-action="Logout" class="btn btn-secondary">Logout</a>
+
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Course ID</th>
+            <th>Course Name</th>
+            <th>Major</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.CourseID</td>
+                <td>@course.CourseName</td>
+                <td>@course.Major?.MajorName</td>
+                <td>@course.CourseStartDate.ToString("yyyy-MM-dd")</td>
+                <td>@course.CourseEndDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="CourseEdit" asp-route-id="@course.CourseID" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="CourseDelete" asp-route-id="@course.CourseID" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                        <input type="hidden" name="id" value="@course.CourseID" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>

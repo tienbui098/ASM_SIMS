@@ -21,6 +21,30 @@ namespace SIMS_ASM.Models
         public virtual Major Major { get; set; }
         public virtual ICollection<ClassCourseFaculty> ClassCourseFaculties { get; set; }
     }
- 
+
+    // Custom validation attribute để kiểm tra EndDate > StartDate
+    public class DateGreaterThanAttribute : ValidationAttribute
+    {
+        private readonly string _otherProperty;
+
+        public DateGreaterThanAttribute(string otherProperty)
+        {
+            _otherProperty = otherProperty;
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var endDate = (DateTime)value;
+            var otherPropertyInfo = validationContext.ObjectType.GetProperty(_otherProperty);
+            var startDate = (DateTime)otherPropertyInfo.GetValue(validationContext.ObjectInstance);
+
+            if (endDate <= startDate)
+            {
+                return new ValidationResult(ErrorMessage);
+            }
+            return ValidationResult.Success;
+        }
+    }
+
 }
 
