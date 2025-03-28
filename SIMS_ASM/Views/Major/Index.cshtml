@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SIMS_ASM.Models.Major>
+
+@{
+    ViewData["Title"] = "Major Management";
+}
+
+<h2>Major Management</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="MajorCreate" class="btn btn-primary">Create New Major</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Major ID</th>
+            <th>Major Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var major in Model)
+        {
+            <tr>
+                <td>@major.MajorID</td>
+                <td>@major.MajorName</td>
+                <td>@major.CourseStartDate.ToString("yyyy-MM-dd")</td>
+                <td>@major.CourseEndDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="MajorEdit" asp-route-id="@major.MajorID" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="MajorDelete" asp-route-id="@major.MajorID" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this major?');">
+                        <input type="hidden" name="id" value="@major.MajorID" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Account" asp-action="Logout" class="btn btn-secondary">Logout</a>
+<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>

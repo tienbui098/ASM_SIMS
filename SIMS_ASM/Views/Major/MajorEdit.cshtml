@@ -1,10 +1,10 @@
-﻿@model SIMS_ASM.Models.Course
+﻿@model SIMS_ASM.Models.Major
 
 @{
-    ViewData["Title"] = "Edit Course";
+    ViewData["Title"] = "Edit Major";
 }
 
-<h2>Edit Course</h2>
+<h2>Edit Major</h2>
 
 @if (TempData["ErrorMessage"] != null)
 {
@@ -13,23 +13,15 @@
     </div>
 }
 
-<form asp-action="CourseEdit" method="post">
+<form asp-action="MajorEdit" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <input type="hidden" asp-for="CourseID" />
+    <input type="hidden" asp-for="MajorID" />
 
     <div class="form-group">
-        <label asp-for="CourseName" class="control-label"></label>
-        <input asp-for="CourseName" class="form-control" />
-        <span asp-validation-for="CourseName" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="MajorID" class="control-label">Major</label>
-        <select asp-for="MajorID" class="form-control" asp-items="@(new SelectList(ViewBag.Majors, "MajorID", "MajorName"))">
-            <option value="">Select a Major</option>
-        </select>
-        <span asp-validation-for="MajorID" class="text-danger"></span>
+        <label asp-for="MajorName" class="control-label"></label>
+        <input asp-for="MajorName" class="form-control" />
+        <span asp-validation-for="MajorName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
