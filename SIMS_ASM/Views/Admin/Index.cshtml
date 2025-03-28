@@ -14,7 +14,22 @@
     <button type="submit" class="btn btn-danger">Logout</button>
 </form>
 
-<a asp-action="AddUser" class="btn btn-primary">Create New Class</a>
+
+<select id="userSelection" class="btn btn-primary">
+    <option value="">Select User Management</option>
+    <option value="/Student/ManageStudent">Manage Student</option>
+    <option value="/Lecturer/ManageLecturer">Manage Lecturer</option>
+    <option value="/Admin/ManageAdmin">Manage Admin</option>
+</select>
+
+
+<a asp-controller="Course" asp-action="Index" class="btn btn-primary">Manage Courses</a>
+
+<a asp-controller="Class" asp-action="Index" class="btn btn-primary">Manage Classes</a>
+
+<a asp-controller="Enrollment" asp-action="Index" class="btn btn-primary">Manage Enrollments</a>
+
+<a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Manage Grades</a>
 
 <h3>All Users</h3>
 <table class="table">
@@ -47,18 +62,13 @@
     </tbody>
 </table>
 
-<a asp-action="ManageUsers" class="btn btn-primary">Manage Users</a>
-
-<a asp-controller="Course" asp-action="Index" class="btn btn-primary">Manage Courses</a>
-
-<a asp-controller="Class" asp-action="Index" class="btn btn-primary">Manage Classes</a>
-
-<a asp-controller="Enrollment" asp-action="Index" class="btn btn-primary">Manage Enrollments</a>
-
-<a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Manage Grades</a>
-
-
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById("userSelection").addEventListener("change", function () {
+        if (this.value) {
+            window.location.href = this.value;
+        }
+    });
+</script>

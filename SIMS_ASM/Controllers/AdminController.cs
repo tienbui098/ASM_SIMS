@@ -27,29 +27,14 @@ namespace SIMS_ASM.Controllers
             return View(users);
         }
 
-        // Quản lý tài khoản người dùng
-        public async Task<IActionResult> ManageUsers()
+        public async Task<IActionResult> ManageAdmin()
         {
             var users = await _context.Users.ToListAsync();
             return View(users);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ManageUsers(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-                _singleton.Log($"User {user.Username} (ID: {id}) deleted by admin");
-            }
-            else
-            {
-                _singleton.Log($"Failed to delete user with ID {id}: User not found");
-            }
-            return RedirectToAction("ManageUsers");
-        }
+
+
 
         private string HashPassword(string password)
         {
