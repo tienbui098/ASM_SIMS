@@ -11,7 +11,8 @@ builder.Services.AddDbContext<ApplicationDbContex>(options =>
 
 // Đăng ký Service
 builder.Services.AddScoped<IAccountService, AccountService>();
-
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IMajorService, MajorService>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
