@@ -27,28 +27,91 @@ namespace SIMS_ASM.Controllers
             return View(users);
         }
 
-        //private readonly ApplicationDbContex _context;
+        [HttpGet]
+        public async Task<IActionResult> UpdateStudent(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-        //public StudentController(ApplicationDbContex context)
-        //{
-        //    _context = context;
-        //}
+            return View(user);
+        }
 
-        //// Trang chính cho sinh viên
-        //public async Task<IActionResult> Index()
-        //{
-        //    var userId = HttpContext.Session.GetInt32("UserId");
-        //    if (userId == null)
-        //    {
-        //        return RedirectToAction("Login", "Account");
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStudent(int id, User updatedUser)
+        {
+            if (id != updatedUser.UserID)
+            {
+                return NotFound();
+            }
 
-        //    var courses = await _context.Courses
-        //        .Where(c => c.UserID == userId)
-        //        .Include(c => c.Grade)
-        //        .ToListAsync();
-        //    return View(courses);
-        //}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingUser = await _context.Users.FindAsync(id);
+                    if (existingUser == null)
+                    {
+                        return NotFound();
+                    }
 
+                    // Update specific fields, keeping sensitive info like password secure
+                    existingUser.FullName = updatedUser.FullName;
+                    existingUser.Email = updatedUser.Email;
+                    existingUser.Date_of_birth = updatedUser.Date_of_birth;
+                    existingUser.Address = updatedUser.Address;
+                    existingUser.Phone_number = updatedUser.Phone_number;
+                    existingUser.Gender = updatedUser.Gender;
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(ManageStudent));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return View(updatedUser);
+        }
+
+        private bool UserExists(int id)
+        {
+            return _context.Users.Any(e => e.UserID == id);
+        }
     }
+
+    //private readonly ApplicationDbContex _context;
+
+    //public StudentController(ApplicationDbContex context)
+    //{
+    //    _context = context;
+    //}
+
+    //// Trang chính cho sinh viên
+    //public async Task<IActionResult> Index()
+    //{
+    //    var userId = HttpContext.Session.GetInt32("UserId");
+    //    if (userId == null)
+    //    {
+    //        return RedirectToAction("Login", "Account");
+    //    }
+
+    //    var courses = await _context.Courses
+    //        .Where(c => c.UserID == userId)
+    //        .Include(c => c.Grade)
+    //        .ToListAsync();
+    //    return View(courses);
+    //}
+
 }

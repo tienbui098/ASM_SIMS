@@ -113,5 +113,68 @@ namespace SIMS_ASM.Controllers
             // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
             return RedirectToAction("Login");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateAdmin(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAdmin(int id, User updatedUser)
+        {
+            if (id != updatedUser.UserID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingUser = await _context.Users.FindAsync(id);
+                    if (existingUser == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Update specific fields, keeping sensitive info like password secure
+                    existingUser.FullName = updatedUser.FullName;
+                    existingUser.Email = updatedUser.Email;
+                    existingUser.Date_of_birth = updatedUser.Date_of_birth;
+                    existingUser.Address = updatedUser.Address;
+                    existingUser.Phone_number = updatedUser.Phone_number;
+                    existingUser.Gender = updatedUser.Gender;
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(ManageAdmin));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return View(updatedUser);
+        }
+
+        private bool UserExists(int id)
+        {
+            return _context.Users.Any(e => e.UserID == id);
+        }
     }
 }
