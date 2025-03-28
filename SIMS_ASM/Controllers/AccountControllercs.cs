@@ -83,22 +83,26 @@ namespace SIMS_ASM.Controllers
             if (!ModelState.IsValid)
             {
                 _singleton.Log($"Failed registration attempt: Invalid data for {user.Username}");
+                ViewBag.SystemName = "Student Information Management System";
                 return View(user);
             }
 
-            var validRoles = new[] { "Student", "Lecturer", "Admin" };
-            if (!validRoles.Contains(user.Role))
-            {
-                ModelState.AddModelError("Role", "Role must be Student, Lecturer, or Admin.");
-                _singleton.Log($"Failed registration attempt: Invalid role {user.Role}");
-                return View(user);
-            }
+            // Gán cứng role là "Student"
+            user.Role = "Student";
+            //var validRoles = new[] { "Student", "Lecturer", "Admin" };
+            //if (!validRoles.Contains(user.Role))
+            //{
+            //    ModelState.AddModelError("Role", "Role must be Student, Lecturer, or Admin.");
+            //    _singleton.Log($"Failed registration attempt: Invalid role {user.Role}");
+            //    return View(user);
+            //}
 
             // Kiểm tra regex cho Username (vì Data Annotations không đủ mạnh để xử lý regex phức tạp)
             if (!Regex.IsMatch(user.Username, "^[a-z0-9]+$"))
             {
                 ModelState.AddModelError("Username", "Username can only contain lowercase letters and numbers.");
                 _singleton.Log($"Failed registration attempt: Invalid username format {user.Username}");
+                ViewBag.SystemName = "Student Information Management System";
                 return View(user);
             }
 
@@ -112,12 +116,14 @@ namespace SIMS_ASM.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
                 _singleton.Log($"Failed registration attempt: {ex.Message}");
+                ViewBag.SystemName = "Student Information Management System";
                 return View(user);
             }
             catch (Exception ex)
             {
                 _singleton.Log($"Failed to register user {user.Username}: {ex.Message}");
                 ModelState.AddModelError("", "An error occurred while registering.");
+                ViewBag.SystemName = "Student Information Management System";
                 return View(user);
             }
 

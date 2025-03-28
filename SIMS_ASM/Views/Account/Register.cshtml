@@ -40,8 +40,8 @@
                                 <label asp-for="Role"></label>
                                 <select asp-for="Role" class="form-control" required>
                                     <option value="Student">Student</option>
-                                    <option value="Lecturer">Lecturer</option>
-                                    <option value="Admin">Admin</option>
+                                    @* <option value="Lecturer">Lecturer</option> *@
+                                    @* <option value="Admin">Admin</option> *@
                                 </select>
                                 <span asp-validation-for="Role" class="text-danger"></span>
                             </div>
