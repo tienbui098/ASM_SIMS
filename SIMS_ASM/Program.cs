@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContex>(options =>
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

@@ -89,15 +89,7 @@ namespace SIMS_ASM.Controllers
 
             // Gán cứng role là "Student"
             user.Role = "Student";
-            //var validRoles = new[] { "Student", "Lecturer", "Admin" };
-            //if (!validRoles.Contains(user.Role))
-            //{
-            //    ModelState.AddModelError("Role", "Role must be Student, Lecturer, or Admin.");
-            //    _singleton.Log($"Failed registration attempt: Invalid role {user.Role}");
-            //    return View(user);
-            //}
 
-            // Kiểm tra regex cho Username (vì Data Annotations không đủ mạnh để xử lý regex phức tạp)
             if (!Regex.IsMatch(user.Username, "^[a-z0-9]+$"))
             {
                 ModelState.AddModelError("Username", "Username can only contain lowercase letters and numbers.");

@@ -6,17 +6,20 @@ using SIMS_ASM.Models;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Cryptography;
+using SIMS_ASM.Services;
 
 namespace SIMS_ASM.Controllers
 {
     public class AdminController : Controller
     {
         private readonly ApplicationDbContex _context;
+        private readonly IUserService _userService; // Thêm IUserService
         private readonly AccountSingleton _singleton;
 
-        public AdminController(ApplicationDbContex context)
+        public AdminController(ApplicationDbContex context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
             _singleton = AccountSingleton.Instance;
         }
 
@@ -33,86 +36,56 @@ namespace SIMS_ASM.Controllers
             return View(users);
         }
 
-
-
-
-        private string HashPassword(string password)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
-        }
-
-
-        // Hiển thị form đăng ký
-        public IActionResult AddUser()
+        // Hiển thị form thêm Admin
+        public IActionResult AddAdmin()
         {
             ViewBag.SystemName = "Student Information Management System";
             return View();
         }
 
-        // Xử lý đăng ký
+        // Xử lý thêm Admin
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(User user)
+        public async Task<IActionResult> AddAdmin(User user)
         {
-
-            // Kiểm tra username chỉ chứa chữ thường và số
-            if (!Regex.IsMatch(user.Username, "^[a-z0-9]+$"))
-            {
-                ModelState.AddModelError("Username", "Username can only contain lowercase letters and numbers.");
-                _singleton.Log($"Failed adding attempt: Invalid username format {user.Username}");
-                return View(user);
-            }
-
-
             if (!ModelState.IsValid)
             {
                 foreach (var entry in ModelState)
                 {
-                    var key = entry.Key; // Tên property
-                    var errors = entry.Value.Errors.Select(e => e.ErrorMessage); // Danh sách lỗi
+                    var key = entry.Key;
+                    var errors = entry.Value.Errors.Select(e => e.ErrorMessage);
                     _singleton.Log($"Property: {key}, Errors: {string.Join(", ", errors)}");
                 }
+                ViewBag.SystemName = "Student Information Management System";
                 return View(user);
             }
 
-            // Kiểm tra username đã tồn tại chưa
-            if (await _context.Users.AnyAsync(u => u.Username == user.Username))
-            {
-                ModelState.AddModelError("Username", "Username already exists.");
-                _singleton.Log($"Failed adding attempt: Username {user.Username} already exists");
-                return View(user);
-            }
-
-            // Kiểm tra email đã tồn tại chưa
-            if (await _context.Users.AnyAsync(u => u.Email == user.Email))
-            {
-                ModelState.AddModelError("Email", "Email already exists.");
-                _singleton.Log($"Failed adding attempt: Email {user.Email} already exists");
-                return View(user);
-            }
-
-            // Thêm người dùng mới vào cơ sở dữ liệu
             try
             {
-                // Mã hóa mật khẩu
-                user.Password = HashPassword(user.Password);
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-                _singleton.Log($"User {user.Username} added successfully with role {user.Role}");
+                await _userService.AddUserAsync(user, "Admin");
+                _singleton.Log($"User {user.Username} added successfully with role Admin");
+                return RedirectToAction("ManageAdmin");
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("Username", ex.Message);
+                _singleton.Log($"Failed adding attempt: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                _singleton.Log($"Failed adding attempt: {ex.Message}");
             }
             catch (Exception ex)
             {
                 _singleton.Log($"Failed to add user {user.Username}: {ex.Message}");
                 ModelState.AddModelError("", "An error occurred while adding. Please try again.");
-                return View(user);
             }
-            // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
-            return RedirectToAction("Login");
+
+            ViewBag.SystemName = "Student Information Management System";
+            return View(user);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> UpdateAdmin(int id)

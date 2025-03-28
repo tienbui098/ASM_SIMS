@@ -1,7 +1,7 @@
 ﻿@model SIMS_ASM.Models.User
 
 @{
-    ViewData["Title"] = "Add User";
+    ViewData["Title"] = "Add Admin";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -20,10 +20,10 @@
             <div class="col-md-8">
                 <div class="card mt-5 shadow">
                     <div class="card-header text-center bg-primary text-white">
-                        <h2>Add User</h2>
+                        <h2>Add Admin</h2>
                     </div>
                     <div class="card-body">
-                        <form asp-controller="Admin" asp-action="AddUser" method="post">
+                        <form asp-controller="Admin" asp-action="AddAdmin" method="post">
                             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                             <div class="form-group">
@@ -41,10 +41,10 @@
                             <div class="form-group">
                                 <label asp-for="Role" class="control-label"></label>
                                 <select asp-for="Role" class="form-control" required>
-                                    <option value="">Select Role</option>
-                                    <option value="Student">Student</option>
-                                    <option value="Lecturer">Lecturer</option>
-                                    <option value="Administrator">Administrator</option>
+                                    @* <option value="">Select Role</option> *@
+                                    @* <option value="Student">Student</option> *@
+                                    @* <option value="Lecturer">Lecturer</option> *@
+                                    <option value="Admin">Admin</option>
                                 </select>
                                 <span asp-validation-for="Role" class="text-danger"></span>
                             </div>
