@@ -3,14 +3,29 @@ using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 using Microsoft.EntityFrameworkCore;
 using SIMS_ASM.Singleton;
+using System.Data.Entity;
 
 namespace SIMS_ASM.Controllers
 {
     public class LecturerController : Controller
     {
+        private readonly ApplicationDbContex _context;
+        private readonly AccountSingleton _singleton;
+
+        public LecturerController(ApplicationDbContex context)
+        {
+            _context = context;
+            _singleton = AccountSingleton.Instance;
+        }
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> ManageLecturer()
+        {
+            var users = await _context.Users.ToListAsync();
+            return View(users);
         }
         //private readonly ApplicationDbContex _context;
         //private readonly AccountSingleton _singleton;
