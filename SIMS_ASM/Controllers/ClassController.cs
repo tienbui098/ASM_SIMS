@@ -7,12 +7,12 @@ namespace SIMS_ASM.Controllers
 {
     public class ClassController : Controller
     {
-        private readonly AdminService _adminService;
+        private readonly ClassService _classService;
         private readonly AccountSingleton _singleton;
 
-        public ClassController(AdminService adminService)
+        public ClassController(ClassService classService)
         {
-            _adminService = adminService;
+            _classService = classService;
             _singleton = AccountSingleton.Instance;
         }
 
@@ -32,7 +32,7 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var classes = _adminService.GetAllClasses();
+            var classes = _classService.GetAllClasses();
             return View(classes);
         }
 
@@ -45,7 +45,7 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            ViewBag.Majors = _adminService.GetAllMajors(); // Để hiển thị dropdown Major
+            ViewBag.Majors = _classService.GetAllMajors(); // Để hiển thị dropdown Major
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace SIMS_ASM.Controllers
             {
                 try
                 {
-                    _adminService.CreateClass(newClass);
+                    _classService.CreateClass(newClass);
                     _singleton.Log($"Class with ID {newClass.ClassID} created by admin");
                     TempData["SuccessMessage"] = "Class created successfully!";
                     return RedirectToAction("Index");
@@ -81,7 +81,7 @@ namespace SIMS_ASM.Controllers
                 _singleton.Log($"Failed to create class: Invalid model state. Errors: {string.Join(", ", errors)}");
             }
 
-            ViewBag.Majors = _adminService.GetAllMajors();
+            ViewBag.Majors = _classService.GetAllMajors();
             return View(newClass);
         }
 
@@ -94,14 +94,14 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var classDetails = _adminService.GetClassDetails(id);
+            var classDetails = _classService.GetClassDetails(id);
             if (classDetails == null)
             {
                 _singleton.Log($"Failed to edit class with ID {id}: Class not found");
                 return NotFound();
             }
 
-            ViewBag.Majors = _adminService.GetAllMajors();
+            ViewBag.Majors = _classService.GetAllMajors();
             return View(classDetails);
         }
 
@@ -126,7 +126,7 @@ namespace SIMS_ASM.Controllers
             {
                 try
                 {
-                    _adminService.UpdateClass(updatedClass);
+                    _classService.UpdateClass(updatedClass);
                     _singleton.Log($"Class {updatedClass.ClassID} updated by admin");
                     TempData["SuccessMessage"] = "Class updated successfully!";
                     return RedirectToAction("Index");
@@ -143,7 +143,7 @@ namespace SIMS_ASM.Controllers
                 _singleton.Log($"Failed to update class: Invalid model state. Errors: {string.Join(", ", errors)}");
             }
 
-            ViewBag.Majors = _adminService.GetAllMajors();
+            ViewBag.Majors = _classService.GetAllMajors();
             return View(updatedClass);
         }
 
@@ -156,14 +156,14 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var classes = _adminService.GetClassesByMajor(majorId);
+            var classes = _classService.GetClassesByMajor(majorId);
             if (!classes.Any())
             {
                 TempData["InfoMessage"] = "No classes found for this major.";
             }
 
             ViewBag.MajorId = majorId;
-            ViewBag.Majors = _adminService.GetAllMajors(); // Để hiển thị dropdown lọc
+            ViewBag.Majors = _classService.GetAllMajors(); // Để hiển thị dropdown lọc
             return View(classes);
         }
 
@@ -180,7 +180,7 @@ namespace SIMS_ASM.Controllers
 
             try
             {
-                _adminService.DeleteClass(id);
+                _classService.DeleteClass(id);
                 _singleton.Log($"Class with ID {id} deleted by admin");
                 TempData["SuccessMessage"] = "Class deleted successfully!";
             }
