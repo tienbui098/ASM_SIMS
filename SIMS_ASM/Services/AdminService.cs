@@ -1,6 +1,8 @@
 ﻿using SIMS_ASM.Data;
 using SIMS_ASM.Factory;
 using SIMS_ASM.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace SIMS_ASM.Services
 {
@@ -52,7 +54,7 @@ namespace SIMS_ASM.Services
         public IEnumerable<Class> GetAllClasses()
         {
             var classRepo = _repositoryFactory.GetSpecificClassRepository();
-            return classRepo.GetAll();
+            return classRepo.GetAll().Include(c => c.Major).ToList(); // Thêm Include
         }
 
         public Class GetClassDetails(int classId)

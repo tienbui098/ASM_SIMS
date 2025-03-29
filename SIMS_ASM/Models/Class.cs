@@ -16,8 +16,8 @@ namespace SIMS_ASM.Models
 
         // Navigation properties
         public virtual Major Major { get; set; }
-        public virtual ICollection<StudentClass> StudentClasses { get; set; }
-        public virtual ICollection<ClassCourseFaculty> ClassCourseFaculties { get; set; }
+        //public virtual ICollection<StudentClass> StudentClasses { get; set; } = new List<StudentClass>();
+        public virtual ICollection<ClassCourseFaculty> ClassCourseFaculties { get; set; } = new List<ClassCourseFaculty>();
 
     }
 }

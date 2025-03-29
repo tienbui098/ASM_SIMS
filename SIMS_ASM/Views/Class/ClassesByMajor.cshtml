@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<SIMS_ASM.Models.Class>
 
 @{
-    ViewData["Title"] = "Class Management";
+    ViewData["Title"] = "Classes by Major";
 }
 
-<h2>Class Management</h2>
+<h2>Classes by Major</h2>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -20,10 +20,23 @@
     </div>
 }
 
-<p>
-    <a asp-action="CreateClass" class="btn btn-primary">Create New Class</a>
-    <a asp-action="ClassesByMajor" class="btn btn-primary">Create New Class</a>
-</p>
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["InfoMessage"]
+    </div>
+}
+
+<div class="form-group">
+    <label for="majorFilter">Filter by Major:</label>
+    <select id="majorFilter" class="form-control" onchange="location.href='/Class/ClassesByMajor?majorId=' + this.value">
+        <option value="">Select a Major</option>
+        @foreach (var major in ViewBag.Majors)
+        {
+            <option value="@major.MajorID" selected="@(major.MajorID == ViewBag.MajorId ? "selected" : null)">@major.MajorName</option>
+        }
+    </select>
+</div>
 
 <table class="table table-striped">
     <thead>
@@ -53,5 +66,5 @@
     </tbody>
 </table>
 
-<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back</a>
-
+<a asp-action="Index" class="btn btn-secondary">Back to All Classes</a>
+<a asp-controller="Account" asp-action="Logout" class="btn btn-secondary">Logout</a>

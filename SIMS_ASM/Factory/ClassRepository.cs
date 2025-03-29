@@ -1,4 +1,5 @@
-﻿using SIMS_ASM.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 
 namespace SIMS_ASM.Factory
@@ -17,6 +18,16 @@ namespace SIMS_ASM.Factory
             return _context.Classes
                 .Where(c => c.MajorID == majorId)
                 .ToList();
+        }
+
+        public IQueryable<Class> GetAll()
+        {
+            return _context.Classes.AsQueryable();
+        }
+
+        public Class GetById(int id)
+        {
+            return _context.Classes.Include(c => c.Major).FirstOrDefault(c => c.ClassID == id);
         }
     }
 }
