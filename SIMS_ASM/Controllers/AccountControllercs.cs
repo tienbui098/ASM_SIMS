@@ -136,18 +136,5 @@ namespace SIMS_ASM.Controllers
             _singleton.Log($"User {username} logged out");
             return RedirectToAction("Login");
         }
-
-
-
-        // Hàm mã hóa password (ví dụ đơn giản)
-        private string HashPassword(string password)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                var base64 = Convert.ToBase64String(hashedBytes);
-                return base64.Length > 50 ? base64.Substring(0, 50) : base64; // Cắt ngắn nếu vượt quá 50
-            }
-        }
     }
 }
