@@ -12,13 +12,13 @@ namespace SIMS_ASM.Factory
             this._context = context;
         }
 
-        // Additional course-specific methods
-        public IEnumerable<Course> GetActiveCourses()
-        {
-            return _context.Courses
-                .Where(c => c.CourseEndDate > DateTime.Now)
-                .ToList();
-        }
+        //// Additional course-specific methods
+        //public IEnumerable<Course> GetActiveCourses()
+        //{
+        //    return _context.Courses
+        //        .Where(c => c.CourseEndDate > DateTime.Now)
+        //        .ToList();
+        //}
 
         public Course GetCourseWithDetails(int courseId)
         {

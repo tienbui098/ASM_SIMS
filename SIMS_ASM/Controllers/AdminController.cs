@@ -23,10 +23,21 @@ namespace SIMS_ASM.Controllers
             _singleton = AccountSingleton.Instance;
         }
 
+        // Kiểm tra quyền Admin
+        private bool IsAdmin()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            return role == "Admin";
+        }
 
         // Trang chính cho quản trị viên
         public async Task<IActionResult> Index()
         {
+            if (!IsAdmin())
+            {
+                _singleton.Log("Unauthorized access to Class Management: User not an admin");
+                return RedirectToAction("Login", "Account");
+            }
             var users = await _context.Users.ToListAsync();
             return View(users);
         }

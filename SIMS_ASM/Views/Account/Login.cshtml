@@ -35,13 +35,14 @@
                                 <button type="submit" class="btn btn-primary btn-block">Login</button>
                                 @* <a asp-action="Register" class="btn btn-secondary btn-block">Register</a> *@
                             </div>
-                            <span asp-validation-summary="ModelOnly" class="text-danger"></span>
                         </form>
                     </div>
                 </div>
                 <div class="text-center mt-3">
                     <p>Don't have an account? <a asp-action="Register">Register here</a></p>
                 </div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                
             </div>
         </div>
     </div>

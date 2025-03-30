@@ -24,6 +24,42 @@
     <a asp-action="CreateClassCourseFaculty" class="btn btn-primary">Create New ClassCourseFaculty</a>
 </p>
 
+<!-- Filters -->
+<form method="get" asp-action="Index">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="classFilter">Class:</label>
+            <select id="classFilter" name="classId" class="form-control" onchange="this.form.submit()">
+                <option value="">-- All Classes --</option>
+                @foreach (var cls in ViewBag.Classes)
+                {
+                    <option value="@cls.ClassID" selected="@(cls.ClassID.ToString() == ViewBag.SelectedClass ? "selected" : null)">@cls.ClassName</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="courseFilter">Course:</label>
+            <select id="courseFilter" name="courseId" class="form-control" onchange="this.form.submit()">
+                <option value="">-- All Courses --</option>
+                @foreach (var course in ViewBag.Courses)
+                {
+                    <option value="@course.CourseID" selected="@(course.CourseID.ToString() == ViewBag.SelectedCourse ? "selected" : null)">@course.CourseName</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="facultyFilter">Faculty:</label>
+            <select id="facultyFilter" name="facultyId" class="form-control" onchange="this.form.submit()">
+                <option value="">-- All Faculties --</option>
+                @foreach (var faculty in ViewBag.Faculties)
+                {
+                    <option value="@faculty.UserID" selected="@(faculty.UserID.ToString() == ViewBag.SelectedFaculty ? "selected" : null)">@faculty.FullName</option>
+                }
+            </select>
+        </div>
+    </div>
+</form>
+
 <table class="table table-striped">
     <thead>
         <tr>
