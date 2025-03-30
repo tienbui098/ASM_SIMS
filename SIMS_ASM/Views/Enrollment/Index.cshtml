@@ -1,0 +1,61 @@
+﻿@model IEnumerable<SIMS_ASM.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "Enrollment Management";
+}
+
+<h2>Enrollment Management</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="CreateEnrollment" class="btn btn-primary">Create New Enrollment</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Enrollment ID</th>
+            <th>Student</th>
+            <th>Class</th>
+            <th>Course</th>
+            <th>Faculty</th>
+            <th>Enrollment Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var enrollment in Model)
+        {
+            <tr>
+                <td>@enrollment.EnrollmentID</td>
+                <td>@enrollment.User?.FullName</td>
+                <td>@enrollment.ClassCourseFaculty?.Class?.ClassName</td>
+                <td>@enrollment.ClassCourseFaculty?.Course?.CourseName</td>
+                <td>@enrollment.ClassCourseFaculty?.User?.FullName</td>
+                <td>@enrollment.EnrollmentDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="EditEnrollment" asp-route-id="@enrollment.EnrollmentID" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="DeleteEnrollment" asp-route-id="@enrollment.EnrollmentID" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this enrollment?');">
+                        <input type="hidden" name="id" value="@enrollment.EnrollmentID" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
