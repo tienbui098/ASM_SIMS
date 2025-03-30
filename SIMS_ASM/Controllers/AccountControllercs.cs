@@ -50,20 +50,29 @@ namespace SIMS_ASM.Controllers
                 return View();
             }
 
-            HttpContext.Session.SetInt32("UserId", user.UserID);
+
+            HttpContext.Session.SetInt32("UserID", user.UserID);
             HttpContext.Session.SetString("Role", user.Role);
             _singleton.Log($"User {username} logged in with role {user.Role}");
 
-            switch (user.Role)
+            if (user != null)
             {
-                case "Student":
-                    return RedirectToAction("Index", "Student");
-                case "Lecturer":
-                    return RedirectToAction("Index", "Lecturer");
-                case "Admin":
-                    return RedirectToAction("Index", "Admin");
-                default:
-                    return RedirectToAction("Index", "Home");
+                HttpContext.Session.SetString("UserID", user.UserID.ToString());
+                switch (user.Role)
+                {
+                    case "Student":
+                        return RedirectToAction("Index", "Student");
+                    case "Lecturer":
+                        return RedirectToAction("Index", "Lecturer");
+                    case "Admin":
+                        return RedirectToAction("Index", "Admin");
+                    default:
+                        return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
             }
         }
 
@@ -123,18 +132,11 @@ namespace SIMS_ASM.Controllers
 
 
 
-        // Đăng xuất
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            var username = userId.HasValue
-                ? _accountService.AuthenticateAsync("", "").Result?.Username ?? "Unknown"
-                : "Unknown";
-            HttpContext.Session.Clear();
-            _singleton.Log($"User {username} logged out");
-            return RedirectToAction("Login");
+            await _accountService.LogoutAsync();
+            return RedirectToAction("Login", "Account"); // Hoặc chuyển về trang chủ
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 using System.Security.Cryptography;
@@ -9,11 +11,14 @@ namespace SIMS_ASM.Services
     public class AccountService : IAccountService
     {
         private readonly ApplicationDbContex _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(ApplicationDbContex context)
+        public AccountService(ApplicationDbContex context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
+
 
         public async Task<User> AuthenticateAsync(string username, string password)
         {
@@ -36,6 +41,20 @@ namespace SIMS_ASM.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
+        }
+
+        public Task LogoutAsync()
+        {
+            // Xóa tất cả các session
+            _httpContextAccessor.HttpContext.Session.Clear();
+
+            return Task.CompletedTask;
+        }
+
+        public bool IsAuthenticated()
+        {
+            // Kiểm tra session có chứa thông tin người dùng hay không
+            return _httpContextAccessor.HttpContext.Session.GetString("UserID") != null;
         }
 
         private string HashPassword(string password)
