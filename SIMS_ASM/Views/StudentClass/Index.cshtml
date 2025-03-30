@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SIMS_ASM.Models.StudentClass>
+
+@{
+    ViewData["Title"] = "Student-Class Assignment Management";
+}
+
+<h2>Student-Class Assignment Management</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="CreateStudentClass" class="btn btn-primary">Assign Student to Class</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>StudentClass ID</th>
+            <th>Student</th>
+            <th>Class</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var studentClass in Model)
+        {
+            <tr>
+                <td>@studentClass.StudentClassID</td>
+                <td>@studentClass.User?.FullName</td>
+                <td>@studentClass.Class?.ClassName</td>
+                <td>
+                    <a asp-action="EditStudentClass" asp-route-id="@studentClass.StudentClassID" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="DeleteStudentClass" asp-route-id="@studentClass.StudentClassID" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this student-class assignment?');">
+                        <input type="hidden" name="id" value="@studentClass.StudentClassID" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
