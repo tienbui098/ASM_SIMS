@@ -20,15 +20,15 @@
     </div>
 }
 
-<p>
-    <a asp-action="CreateClassCourseFaculty" class="btn btn-primary">Create New ClassCourseFaculty</a>
-</p>
+
+<a asp-action="CreateClassCourseFaculty" class="btn btn-primary">Create New ClassCourseFaculty</a>
+
 
 <!-- Filters -->
 <form method="get" asp-action="Index">
     <div class="row">
         <div class="col-md-4">
-            <label for="classFilter">Class:</label>
+            <label for="classFilter">Filter by Class:</label>
             <select id="classFilter" name="classId" class="form-control" onchange="this.form.submit()">
                 <option value="">-- All Classes --</option>
                 @foreach (var cls in ViewBag.Classes)
@@ -38,7 +38,7 @@
             </select>
         </div>
         <div class="col-md-4">
-            <label for="courseFilter">Course:</label>
+            <label for="courseFilter">Filter by Course:</label>
             <select id="courseFilter" name="courseId" class="form-control" onchange="this.form.submit()">
                 <option value="">-- All Courses --</option>
                 @foreach (var course in ViewBag.Courses)
@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="col-md-4">
-            <label for="facultyFilter">Faculty:</label>
+            <label for="facultyFilter">Filter by Lecturer:</label>
             <select id="facultyFilter" name="facultyId" class="form-control" onchange="this.form.submit()">
                 <option value="">-- All Faculties --</option>
                 @foreach (var faculty in ViewBag.Faculties)
@@ -60,13 +60,15 @@
     </div>
 </form>
 
+<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ClassCourseFaculty ID</th>
             <th>Class</th>
             <th>Course</th>
-            <th>Faculty</th>
+            <th>Lecturers</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -90,4 +92,3 @@
     </tbody>
 </table>
 
-<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
