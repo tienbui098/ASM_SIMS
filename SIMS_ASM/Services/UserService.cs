@@ -10,7 +10,7 @@ namespace SIMS_ASM.Services
     public class UserService : IUserService
     {
         private readonly ApplicationDbContex _context;
-
+        
         public UserService(ApplicationDbContex context)
         {
             _context = context;
@@ -54,6 +54,20 @@ namespace SIMS_ASM.Services
             // Thêm người dùng vào cơ sở dữ liệu
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetLecturersAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role == "Lecturer")
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetStudentsAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role == "Student")
+                .ToListAsync();
         }
 
         private string HashPassword(string password)
