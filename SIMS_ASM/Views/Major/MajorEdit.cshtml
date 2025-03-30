@@ -25,18 +25,6 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="CourseStartDate" class="control-label"></label>
-        <input asp-for="CourseStartDate" type="date" class="form-control" value="@Model.CourseStartDate.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="CourseStartDate" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CourseEndDate" class="control-label"></label>
-        <input asp-for="CourseEndDate" type="date" class="form-control" value="@Model.CourseEndDate.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="CourseEndDate" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
         <input type="submit" value="Save" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>

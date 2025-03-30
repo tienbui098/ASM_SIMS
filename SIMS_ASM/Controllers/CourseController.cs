@@ -27,7 +27,19 @@ namespace SIMS_ASM.Controllers
             return role == "Admin";
         }
 
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    if (!IsAdmin())
+        //    {
+        //        _singleton.Log("Unauthorized access to Course Management: User not an admin");
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    var courses = await _courseService.GetAllCoursesAsync();
+        //    return View(courses);
+        //}
+
+        public async Task<IActionResult> Index(int? majorId)
         {
             if (!IsAdmin())
             {
@@ -36,8 +48,18 @@ namespace SIMS_ASM.Controllers
             }
 
             var courses = await _courseService.GetAllCoursesAsync();
+
+            if (majorId.HasValue && majorId.Value > 0)
+            {
+                courses = courses.Where(c => c.MajorID == majorId.Value).ToList();
+            }
+
+            ViewBag.Majors = await _majorService.GetAllMajorsAsync();
+            ViewBag.SelectedMajor = majorId;
+
             return View(courses);
         }
+
 
         public async Task<IActionResult> CourseCreate()
         {
@@ -163,6 +185,40 @@ namespace SIMS_ASM.Controllers
             return View(course);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> CourseDelete(int id)
+        //{
+        //    if (!IsAdmin())
+        //    {
+        //        _singleton.Log("Unauthorized attempt to delete course: User not an admin");
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    var success = await _courseService.DeleteCourseAsync(id);
+        //    if (!success)
+        //    {
+        //        //var hasClasses = await _courseService.HasAssociatedClassesAsync(id);
+        //        //if (hasClasses)
+        //        //{
+        //            _singleton.Log($"Failed to delete course with ID {id}: Course is associated with classes and faculty.");
+        //            TempData["ErrorMessage"] = "Cannot delete course because it is associated with classes and faculty.";
+        //        //}
+        //        //else
+        //        //{
+        //        //    _singleton.Log($"Failed to delete course with ID {id}: Course not found");
+        //        //    TempData["ErrorMessage"] = "Course not found.";
+        //        //}
+        //    }
+        //    else
+        //    {
+        //        _singleton.Log($"Course with ID {id} deleted by admin");
+        //        TempData["SuccessMessage"] = "Course deleted successfully!";
+        //    }
+
+        //    return RedirectToAction("Index");
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CourseDelete(int id)
@@ -173,25 +229,17 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var success = await _courseService.DeleteCourseAsync(id);
+            var (success, message) = await _courseService.DeleteCourseAsync(id);
+
             if (!success)
             {
-                var hasClasses = await _courseService.HasAssociatedClassesAsync(id);
-                if (hasClasses)
-                {
-                    _singleton.Log($"Failed to delete course with ID {id}: Course is associated with classes and faculty.");
-                    TempData["ErrorMessage"] = "Cannot delete course because it is associated with classes and faculty.";
-                }
-                else
-                {
-                    _singleton.Log($"Failed to delete course with ID {id}: Course not found");
-                    TempData["ErrorMessage"] = "Course not found.";
-                }
+                _singleton.Log($"Failed to delete course with ID {id}: {message}");
+                TempData["ErrorMessage"] = message;
             }
             else
             {
                 _singleton.Log($"Course with ID {id} deleted by admin");
-                TempData["SuccessMessage"] = "Course deleted successfully!";
+                TempData["SuccessMessage"] = message;
             }
 
             return RedirectToAction("Index");

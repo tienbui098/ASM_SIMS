@@ -29,8 +29,20 @@ namespace SIMS_ASM.Controllers
             return role == "Admin";
         }
 
-        // Hiển thị danh sách ClassCourseFaculty
-        public async Task<IActionResult> Index()
+        //Hiển thị danh sách ClassCourseFaculty
+        //public async Task<IActionResult> Index()
+        //{
+        //    if (!IsAdmin())
+        //    {
+        //        _singleton.Log("Unauthorized access to ClassCourseFaculty Management: User not an admin");
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    var classCourseFaculties = await _classCourseFacultyService.GetAllClassCourseFacultiesAsync();
+        //    return View(classCourseFaculties);
+        //}
+
+        public async Task<IActionResult> Index(int? classId, int? courseId, int? facultyId)
         {
             if (!IsAdmin())
             {
@@ -39,8 +51,34 @@ namespace SIMS_ASM.Controllers
             }
 
             var classCourseFaculties = await _classCourseFacultyService.GetAllClassCourseFacultiesAsync();
+
+            if (classId.HasValue)
+            {
+                classCourseFaculties = classCourseFaculties.Where(ccf => ccf.ClassID == classId.Value).ToList();
+            }
+
+            if (courseId.HasValue)
+            {
+                classCourseFaculties = classCourseFaculties.Where(ccf => ccf.CourseID == courseId.Value).ToList();
+            }
+
+            if (facultyId.HasValue)
+            {
+                classCourseFaculties = classCourseFaculties.Where(ccf => ccf.UserID == facultyId.Value).ToList();
+            }
+
+            ViewBag.Classes = _classService.GetAllClasses();
+            ViewBag.Courses = await _courseService.GetAllCoursesAsync();
+            ViewBag.Faculties = await _userService.GetLecturersAsync();
+
+            ViewBag.SelectedClass = classId?.ToString();
+            ViewBag.SelectedCourse = courseId?.ToString();
+            ViewBag.SelectedFaculty = facultyId?.ToString();
+
             return View(classCourseFaculties);
         }
+
+
 
         // Hiển thị form tạo ClassCourseFaculty mới
         public async Task<IActionResult> CreateClassCourseFaculty()

@@ -29,10 +29,10 @@ namespace SIMS_ASM.Data
                 entity.Property(m => m.MajorName)
                       .HasMaxLength(100) // VARCHAR(100)
                       .IsRequired(); // NOT NULL
-                entity.Property(m => m.CourseStartDate)
-                      .IsRequired(); // NOT NULL
-                entity.Property(m => m.CourseEndDate)
-                      .IsRequired(); // NOT NULL
+                //entity.Property(m => m.CourseStartDate)
+                //      .IsRequired(); // NOT NULL
+                //entity.Property(m => m.CourseEndDate)
+                //      .IsRequired(); // NOT NULL
 
                 // Quan hệ 1-n với Course
                 entity.HasMany(m => m.Courses)
@@ -54,10 +54,10 @@ namespace SIMS_ASM.Data
                 entity.Property(c => c.CourseName)
                       .HasMaxLength(100) // VARCHAR(100)
                       .IsRequired(); // NOT NULL
-                entity.Property(c => c.CourseStartDate)
-                      .IsRequired(); // NOT NULL
-                entity.Property(c => c.CourseEndDate)
-                      .IsRequired(); // NOT NULL
+                //entity.Property(c => c.CourseStartDate)
+                //      .IsRequired(); // NOT NULL
+                //entity.Property(c => c.CourseEndDate)
+                //      .IsRequired(); // NOT NULL
                 entity.Property(c => c.MajorID)
                       .IsRequired(); // NOT NULL cho khóa ngoại
             });

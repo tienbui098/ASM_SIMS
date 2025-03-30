@@ -42,6 +42,14 @@ namespace SIMS_ASM.Controllers
                 return View();
             }
 
+            // Kiểm tra username chỉ chứa chữ thường và số
+            if (!Regex.IsMatch(username, "^[a-z0-9]+$"))
+            {
+                ModelState.AddModelError("", "Wrong username. PLease try again!");
+                _singleton.Log($"Failed login attempt: Invalid username format ({username})");
+                return View();
+            }
+
             var user = await _accountService.AuthenticateAsync(username, password);
             if (user == null)
             {
