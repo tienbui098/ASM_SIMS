@@ -10,8 +10,8 @@ namespace SIMS_ASM.Models
         [StringLength(100)]
         public string MajorName { get; set; }
 
-        public DateTime CourseStartDate { get; set; }
-        public DateTime CourseEndDate { get; set; }
+        //public DateTime CourseStartDate { get; set; }
+        //public DateTime CourseEndDate { get; set; }
 
         // Navigation properties
         public virtual ICollection<Course> Courses { get; set; } = new List<Course>();

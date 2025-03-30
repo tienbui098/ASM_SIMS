@@ -19,7 +19,7 @@ namespace SIMS_ASM.Services
         public IEnumerable<Course> GetAllCourses()
         {
             var courseRepo = _repositoryFactory.GetSpecificCourseRepository();
-            return courseRepo.GetActiveCourses();
+            return courseRepo.GetAll(); 
         }
 
         public Course GetCourseDetails(int courseId)

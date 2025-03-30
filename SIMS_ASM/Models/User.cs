@@ -24,7 +24,7 @@ namespace SIMS_ASM.Models
         [StringLength(100)]
         public string Email { get; set; }
 
-        public DateTime Date_of_birth { get; set; }
+        public DateOnly Date_of_birth { get; set; }
 
         [StringLength(255)]
         public string Address { get; set; }

@@ -19,6 +19,12 @@ namespace SIMS_ASM.Controllers
             _userService = userService;
             _singleton = AccountSingleton.Instance;
         }
+        private bool IsAdmin()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            return role == "Admin";
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -26,6 +32,11 @@ namespace SIMS_ASM.Controllers
 
         public async Task<IActionResult> ManageLecturer()
         {
+            if (!IsAdmin())
+            {
+                _singleton.Log("Unauthorized access to Class Management: User not an admin");
+                return RedirectToAction("Login", "Account");
+            }
             var users = await _context.Users.ToListAsync();
             return View(users);
         }
