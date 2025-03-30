@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SIMS_ASM.Models.ClassCourseFaculty>
+
+@{
+    ViewData["Title"] = "ClassCourseFaculty Management";
+}
+
+<h2>ClassCourseFaculty Management</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="CreateClassCourseFaculty" class="btn btn-primary">Create New ClassCourseFaculty</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ClassCourseFaculty ID</th>
+            <th>Class</th>
+            <th>Course</th>
+            <th>Faculty</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ccf in Model)
+        {
+            <tr>
+                <td>@ccf.ClassCourseFacultyID</td>
+                <td>@ccf.Class?.ClassName</td>
+                <td>@ccf.Course?.CourseName</td>
+                <td>@ccf.User?.FullName</td>
+                <td>
+                    <a asp-action="EditClassCourseFaculty" asp-route-id="@ccf.ClassCourseFacultyID" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="DeleteClassCourseFaculty" asp-route-id="@ccf.ClassCourseFacultyID" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this ClassCourseFaculty?');">
+                        <input type="hidden" name="id" value="@ccf.ClassCourseFacultyID" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
