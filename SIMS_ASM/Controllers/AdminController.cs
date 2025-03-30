@@ -23,6 +23,7 @@ namespace SIMS_ASM.Controllers
             _singleton = AccountSingleton.Instance;
         }
 
+
         // Trang chính cho quản trị viên
         public async Task<IActionResult> Index()
         {
