@@ -4,15 +4,9 @@
 @{
     ViewData["Title"] = "Admin Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
 
 <h2>Admin User Management</h2>
-
-<form asp-controller="Admin" asp-action="Index" method="post" style="display:inline;">
-    @Html.AntiForgeryToken()  <!-- Bảo mật chống CSRF -->
-    <button type="submit" class="btn btn-danger">Logout</button>
-</form>
 
 @* <a asp-action="AddUser" class="btn btn-primary">Add User</a> *@
 

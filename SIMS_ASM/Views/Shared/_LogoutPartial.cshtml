@@ -1,0 +1,10 @@
+﻿@inject SIMS_ASM.Services.IAccountService AccountService
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@if (AccountService.IsAuthenticated())
+{
+    <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="d-inline">
+        <button type="submit" class="btn btn-link nav-link">Đăng xuất</button>
+    </form>
+}

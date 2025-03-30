@@ -6,5 +6,7 @@ namespace SIMS_ASM.Services
     {
         Task<User> AuthenticateAsync(string username, string password);
         Task<User> RegisterAsync(User user);
+        Task LogoutAsync();
+        bool IsAuthenticated();
     }
 }

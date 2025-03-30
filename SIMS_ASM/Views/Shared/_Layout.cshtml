@@ -26,6 +26,16 @@
                         @*     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
                         @* </li> *@
                     </ul>
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetString("UserID") != null)
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Đăng xuất</button>
+                                </form>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
