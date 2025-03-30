@@ -1,0 +1,51 @@
+﻿@model SIMS_ASM.Models.ClassCourseFaculty
+
+@{
+    ViewData["Title"] = "Create ClassCourseFaculty";
+}
+
+<h2>Create New ClassCourseFaculty</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<form asp-action="CreateClassCourseFaculty" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="ClassID" class="control-label">Class</label>
+        <select asp-for="ClassID" class="form-control" asp-items="@(new SelectList(ViewBag.Classes, "ClassID", "ClassName"))">
+            <option value="">Select a Class</option>
+        </select>
+        <span asp-validation-for="ClassID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CourseID" class="control-label">Course</label>
+        <select asp-for="CourseID" class="form-control" asp-items="@(new SelectList(ViewBag.Courses, "CourseID", "CourseName"))">
+            <option value="">Select a Course</option>
+        </select>
+        <span asp-validation-for="CourseID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UserID" class="control-label">Lecturer</label>
+        <select asp-for="UserID" class="form-control" asp-items="@(new SelectList(ViewBag.Lectureres, "UserID", "FullName"))">
+            <option value="">Select a Lecturer</option>
+        </select>
+        <span asp-validation-for="UserID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

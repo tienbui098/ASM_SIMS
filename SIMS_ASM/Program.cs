@@ -16,6 +16,7 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ClassService>();
+builder.Services.AddScoped<IClassCourseFacultyService, ClassCourseFacultyService>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
