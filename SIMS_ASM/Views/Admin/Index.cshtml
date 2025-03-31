@@ -1,79 +1,207 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<SIMS_ASM.Models.User>
+@using SIMS_ASM.Services
+@inject IUserService UserService
+
 @{
-    ViewData["Title"] = "Admin Management";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-<h2>Admin User Management</h2>
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="m-0 font-weight-bold">
+                    <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+                </h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cog me-1"></i> Management
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" asp-controller="Student" asp-action="ManageStudent"><i class="fas fa-user-graduate me-2"></i>Students</a></li>
+                        <li><a class="dropdown-item" asp-controller="Lecturer" asp-action="ManageLecturer"><i class="fas fa-chalkboard-teacher me-2"></i>Lecturers</a></li>
+                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="ManageAdmin"><i class="fas fa-user-shield me-2"></i>Admins</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" asp-controller="Major" asp-action="Index"><i class="fas fa-bookmark me-2"></i>Majors</a></li>
+                        <li><a class="dropdown-item" asp-controller="Course" asp-action="Index"><i class="fas fa-book me-2"></i>Courses</a></li>
+                        <li><a class="dropdown-item" asp-controller="Class" asp-action="Index"><i class="fas fa-users-class me-2"></i>Classes</a></li>
+                        <li><a class="dropdown-item" asp-controller="Grade" asp-action="Index"><i class="fas fa-star me-2"></i>Grades</a></li>
+                        <li><a class="dropdown-item" asp-controller="ClassCourseFaculty" asp-action="Index"><i class="fas fa-link me-2"></i>Class Courses</a></li>
+                        <li><a class="dropdown-item" asp-controller="Enrollment" asp-action="Index"><i class="fas fa-clipboard-list me-2"></i>Enrollments</a></li>
+                        <li><a class="dropdown-item" asp-controller="StudentClass" asp-action="Index"><i class="fas fa-users me-2"></i>Student Classes</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Students
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.StudentCount</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Total Lecturers
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.LecturerCount</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Total Courses
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CourseCount</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-book fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-@* <a asp-action="AddUser" class="btn btn-primary">Add User</a> *@
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white py-2">
+                        <h6 class="m-0 font-weight-bold">
+                            <i class="fas fa-users me-2"></i>All Users Overview
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="userTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Role</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Date Of Birth</th>
+                                        <th>Address</th>
+                                        <th>Phone Number</th>
+                                        <th>Gender</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in Model)
+                                    {
+                                        <tr>
+                                            <td>@user.Username</td>
+                                            <td>
+                                                <span class="badge @(user.Role == "Admin" ? "bg-danger" : user.Role == "Lecturer" ? "bg-warning" : "bg-primary")">
+                                                    @user.Role
+                                                </span>
+                                            </td>
+                                            <td>@user.FullName</td>
+                                            <td>@user.Email</td>
+                                            <td>@user.Date_of_birth</td>
+                                            <td>@user.Address</td>
+                                            <td>@user.Phone_number</td>
+                                            <td>@user.Gender</td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    @if (user.Role == "Admin")
+                                                    {
+                                                        <a asp-action="UpdateAdmin" asp-route-id="@user.UserID" class="btn btn-warning" title="Edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <a asp-action="Delete" asp-route-id="@user.UserID" class="btn btn-danger" title="Delete"
+                                                           onclick="return confirm('Are you sure you want to delete this user?');">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    }
+                                                    <a href="#" class="btn btn-info" title="View Profile">
+                                                        <i class="fas fa-user"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<select id="userSelection" class="btn btn-primary">
-    <option value="">-- User --</option>
-    <option value="/Student/ManageStudent">Student</option>
-    <option value="/Lecturer/ManageLecturer">Lecturer</option>
-    <option value="/Admin/ManageAdmin">Admin</option>
-</select>
-
-<a asp-controller="Major" asp-action="Index" class="btn btn-primary">Major</a>
-
-<a asp-controller="Course" asp-action="Index" class="btn btn-primary">Courses</a>
-
-<a asp-controller="Class" asp-action="Index" class="btn btn-primary">Classes</a>
-
-<a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Grades</a>
-
-<a asp-controller="ClassCourseFaculty" asp-action="Index" class="btn btn-primary">Class Course Faculty</a>
-
-
-<a asp-controller="Enrollment" asp-action="Index" class="btn btn-primary">Enrollments</a>
-
-<a asp-controller="StudentClass" asp-action="Index" class="btn btn-primary">Manage Student Class</a>
-
-<a asp-controller="Enrollment" asp-action="Index" class="btn btn-primary">Manage Enrollments</a>
-
-
-
-<h3>All Users</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Role</th>
-            <th>FullName</th>
-            <th>Email</th>
-            <th>Date_of_birth</th>
-            <th>Address</th>
-            <th>Phone_number</th>
-            <th>Gender</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.Username</td>
-                <td>@user.Role</td>
-                <td>@user.FullName</td>
-                <td>@user.Email</td>
-                <td>@user.Date_of_birth</td>
-                <td>@user.Address</td>
-                <td>@user.Phone_number</td>
-                <td>@user.Gender</td>
-            </tr>
+@section Styles {
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        .card-header {
+            padding: 1rem 1.5rem;
         }
-    </tbody>
-</table>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    document.getElementById("userSelection").addEventListener("change", function () {
-        if (this.value) {
-            window.location.href = this.value;
+        /* Hide default DataTables controls */
+        .dataTables_length, .dataTables_filter {
+            display: none;
         }
-    });
-</script>
+
+        .badge {
+            font-size: 0.85em;
+            font-weight: 500;
+            min-width: 70px;
+        }
+
+        .btn-group-sm .btn {
+            padding: 0.25rem 0.5rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#userTable').DataTable({
+                responsive: true,
+                dom: '<"top"f>rt<"bottom"ip>',
+                columnDefs: [
+                    { orderable: false, targets: [4] } // Disable sorting for Actions column
+                ],
+                language: {
+                    info: "Showing _START_ to _END_ of _TOTAL_ users",
+                    infoEmpty: "No users found",
+                    emptyTable: "No user data available"
+                }
+            });
+        });
+    </script>
+}
