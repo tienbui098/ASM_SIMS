@@ -15,14 +15,12 @@ namespace SIMS_ASM.Controllers
         private readonly ApplicationDbContex _context;
         private readonly IUserService _userService; // Thêm IUserService
         private readonly AccountSingleton _singleton;
-        private readonly IAccountService _accountService;
 
-        public AdminController(ApplicationDbContex context, IUserService userService, IAccountService accountService)
+        public AdminController(ApplicationDbContex context, IUserService userService)
         {
             _context = context;
             _userService = userService;
             _singleton = AccountSingleton.Instance;
-            _accountService = accountService;
         }
 
         // Kiểm tra quyền Admin
