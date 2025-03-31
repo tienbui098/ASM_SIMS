@@ -56,6 +56,34 @@ namespace SIMS_ASM.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            var user = await _context.Users
+               .Include(u => u.StudentClasses)
+               .Include(u => u.ClassCourseFaculties)
+               .Include(u => u.Enrollments)
+               .FirstOrDefaultAsync(u => u.UserID == id);
+
+            if (user == null)
+                return false;
+
+            if (user.StudentClasses.Any() || user.ClassCourseFaculties.Any() || user.Enrollments.Any())
+                return false; // Không xóa được nếu có liên kết
+
+            try
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error deleting user: {ex.Message}");
+                return false;
+            }
+        }
+
         public async Task<IEnumerable<User>> GetLecturersAsync()
         {
             return await _context.Users
