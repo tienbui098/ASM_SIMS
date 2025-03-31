@@ -90,5 +90,50 @@ namespace SIMS_ASM.Services
                 .Select(sc => sc.ClassID)
                 .ToListAsync();
         }
+
+
+        public async Task AddMultipleStudentsToClassAsync(List<int> studentIds, int classId)
+        {
+            var existingStudents = await _context.StudentClasses
+                .Where(sc => sc.ClassID == classId)
+                .Select(sc => sc.UserID)
+                .ToListAsync();
+
+            var newStudents = studentIds.Except(existingStudents).ToList();
+
+            foreach (var studentId in newStudents)
+            {
+                if (await IsStudentAlreadyInClassAsync(studentId, classId))
+                    continue;
+
+                var studentClass = new StudentClass
+                {
+                    UserID = studentId,
+                    ClassID = classId
+                };
+                _context.StudentClasses.Add(studentClass);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<User>> GetStudentsInClassAsync(int classId)
+        {
+            return await _context.StudentClasses
+                .Where(sc => sc.ClassID == classId)
+                .Include(sc => sc.User)
+                .Select(sc => sc.User)
+                .ToListAsync();
+        }
+
+        public async Task RemoveAllStudentsFromClassAsync(int classId)
+        {
+            var studentsInClass = await _context.StudentClasses
+                .Where(sc => sc.ClassID == classId)
+                .ToListAsync();
+
+            _context.StudentClasses.RemoveRange(studentsInClass);
+            await _context.SaveChangesAsync();
+        }
     }
 }

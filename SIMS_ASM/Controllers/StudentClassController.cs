@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SIMS_ASM.Models;
 using SIMS_ASM.Services;
 using SIMS_ASM.Singleton;
@@ -203,5 +204,82 @@ namespace SIMS_ASM.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // Hiển thị form thêm nhiều sinh viên vào lớp
+        public async Task<IActionResult> AddMultipleStudents(int? classId)
+        {
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+
+            ViewBag.Classes = _classService.GetAllClasses();
+
+            // Load all students
+            var allStudents = await _userService.GetStudentsAsync();
+
+            // Nếu có classId, load danh sách sinh viên đã trong lớp đó
+            if (classId.HasValue)
+            {
+                var studentsInClass = await _studentClassService.GetStudentsInClassAsync(classId.Value);
+                var studentIdsInClass = studentsInClass.Select(s => s.UserID).ToList();
+
+                ViewBag.SelectedClassId = classId.Value;
+                ViewBag.Students = allStudents.Select(s => new SelectListItem
+                {
+                    Value = s.UserID.ToString(),
+                    Text = s.FullName,
+                    Selected = studentIdsInClass.Contains(s.UserID)
+                }).ToList();
+            }
+            else
+            {
+                ViewBag.Students = allStudents.Select(s => new SelectListItem
+                {
+                    Value = s.UserID.ToString(),
+                    Text = s.FullName
+                }).ToList();
+            }
+
+            return View();
+        }
+
+
+        // Xử lý thêm nhiều sinh viên vào lớp
+        [HttpPost]
+        public async Task<IActionResult> AddMultipleStudents(int classId, List<int> studentIds, string action)
+        {
+            if (!IsAdmin()) return RedirectToAction("Login", "Account");
+
+            try
+            {
+                if (action == "addAll")
+                {
+                    // Thêm toàn bộ sinh viên
+                    var allStudents = await _userService.GetStudentsAsync();
+                    studentIds = allStudents.Select(s => s.UserID).ToList();
+                }
+                else if (action == "removeAll")
+                {
+                    // Xóa toàn bộ sinh viên khỏi lớp
+                    await _studentClassService.RemoveAllStudentsFromClassAsync(classId);
+                    TempData["SuccessMessage"] = "All students have been removed from the class";
+                    return RedirectToAction("Index");
+                }
+
+                if (studentIds == null || !studentIds.Any())
+                {
+                    TempData["ErrorMessage"] = "Please select at least one student";
+                    return RedirectToAction("AddMultipleStudents", new { classId });
+                }
+
+                await _studentClassService.AddMultipleStudentsToClassAsync(studentIds, classId);
+                TempData["SuccessMessage"] = $"Successfully updated students in class";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                return RedirectToAction("AddMultipleStudents", new { classId });
+            }
+        }
+
     }
 }
