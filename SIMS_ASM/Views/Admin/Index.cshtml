@@ -11,25 +11,29 @@
 @* <a asp-action="AddUser" class="btn btn-primary">Add User</a> *@
 
 <select id="userSelection" class="btn btn-primary">
-    <option value="">Select User Management</option>
-    <option value="/Student/ManageStudent">Manage Student</option>
-    <option value="/Lecturer/ManageLecturer">Manage Lecturer</option>
-    <option value="/Admin/ManageAdmin">Manage Admin</option>
+    <option value="">-- User --</option>
+    <option value="/Student/ManageStudent">Student</option>
+    <option value="/Lecturer/ManageLecturer">Lecturer</option>
+    <option value="/Admin/ManageAdmin">Admin</option>
 </select>
 
-<a asp-controller="Major" asp-action="Index" class="btn btn-primary">Manage Major</a>
+<a asp-controller="Major" asp-action="Index" class="btn btn-primary">Major</a>
 
-<a asp-controller="Course" asp-action="Index" class="btn btn-primary">Manage Courses</a>
+<a asp-controller="Course" asp-action="Index" class="btn btn-primary">Courses</a>
 
-<a asp-controller="Class" asp-action="Index" class="btn btn-primary">Manage Classes</a>
+<a asp-controller="Class" asp-action="Index" class="btn btn-primary">Classes</a>
 
-<a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Manage Grades</a>
+<a asp-controller="Grade" asp-action="Index" class="btn btn-primary">Grades</a>
 
-<a asp-controller="ClassCourseFaculty" asp-action="Index" class="btn btn-primary">Manage Class Course Faculty</a>
+<a asp-controller="ClassCourseFaculty" asp-action="Index" class="btn btn-primary">Class Course Faculty</a>
+
+
+<a asp-controller="Enrollment" asp-action="Index" class="btn btn-primary">Enrollments</a>
 
 <a asp-controller="StudentClass" asp-action="Index" class="btn btn-primary">Manage Student Class</a>
 
 <a asp-controller="Enrollment" asp-action="Index" class="btn btn-primary">Manage Enrollments</a>
+
 
 
 <h3>All Users</h3>

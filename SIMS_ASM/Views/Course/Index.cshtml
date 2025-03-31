@@ -21,9 +21,9 @@
     </div>
 }
 
-<p>
-    <a asp-action="CourseCreate" class="btn btn-primary">Create New Course</a>
-</p>
+
+<a asp-action="CourseCreate" class="btn btn-primary">Create New Course</a>
+<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
 
 <form method="get" asp-action="Index">
     <label for="majorId">Filter by Major:</label>
@@ -66,4 +66,3 @@
     </tbody>
 </table>
 
-<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>

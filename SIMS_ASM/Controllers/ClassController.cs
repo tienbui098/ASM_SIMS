@@ -23,8 +23,20 @@ namespace SIMS_ASM.Controllers
             return role == "Admin";
         }
 
-        // Hiển thị danh sách lớp học
-        public IActionResult Index()
+        //// Hiển thị danh sách lớp học
+        //public IActionResult Index()
+        //{
+        //    if (!IsAdmin())
+        //    {
+        //        _singleton.Log("Unauthorized access to Class Management: User not an admin");
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    var classes = _classService.GetAllClasses();
+        //    return View(classes);
+        //}
+
+        public IActionResult Index(int? majorId)
         {
             if (!IsAdmin())
             {
@@ -32,7 +44,13 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var classes = _classService.GetAllClasses();
+            var classes = majorId.HasValue && majorId > 0
+                ? _classService.GetClassesByMajor(majorId.Value)
+                : _classService.GetAllClasses();
+
+            ViewBag.Majors = _classService.GetAllMajors();
+            ViewBag.SelectedMajor = majorId;
+
             return View(classes);
         }
 
