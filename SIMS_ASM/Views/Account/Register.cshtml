@@ -142,6 +142,15 @@
                         </div>
                     </div>
                     <div class="input-group">
+                        <label asp-for="Role"></label>
+                        <div class="input-field">
+                            <i class="fas fa-user-tag"></i>
+                            <select asp-for="Role" required>
+                                <option value="Student">Student</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
                         <label asp-for="Email"></label>
                         <div class="input-field">
                             <i class="fas fa-envelope"></i>
@@ -160,6 +169,13 @@
                         <div class="input-field">
                             <i class="fas fa-calendar"></i>
                             <input asp-for="Date_of_birth" type="date" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label asp-for="Address"></label>
+                        <div class="input-field">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input asp-for="Address" placeholder="Enter your address" required>
                         </div>
                     </div>
                     <div class="input-group">
