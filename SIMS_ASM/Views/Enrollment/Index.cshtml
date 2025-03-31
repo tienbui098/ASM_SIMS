@@ -21,6 +21,24 @@
                 <a asp-action="CreateEnrollment" class="btn btn-light">
                     <i class="fas fa-plus-circle me-1"></i> Create New
                 </a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cog me-1"></i> Management
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" asp-controller="Student" asp-action="ManageStudent"><i class="fas fa-user-graduate me-2"></i>Students</a></li>
+                        <li><a class="dropdown-item" asp-controller="Lecturer" asp-action="ManageLecturer"><i class="fas fa-chalkboard-teacher me-2"></i>Lecturers</a></li>
+                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="ManageAdmin"><i class="fas fa-user-shield me-2"></i>Admins</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" asp-controller="Major" asp-action="Index"><i class="fas fa-bookmark me-2"></i>Majors</a></li>
+                        <li><a class="dropdown-item" asp-controller="Course" asp-action="Index"><i class="fas fa-book me-2"></i>Courses</a></li>
+                        <li><a class="dropdown-item" asp-controller="Class" asp-action="Index"><i class="fas fa-user-group me-2"></i>Classes</a></li>
+                        <li><a class="dropdown-item" asp-controller="Grade" asp-action="Index"><i class="fas fa-star me-2"></i>Grades</a></li>
+                        <li><a class="dropdown-item" asp-controller="ClassCourseFaculty" asp-action="Index"><i class="fas fa-link me-2"></i>Class Courses</a></li>
+                        <li><a class="dropdown-item" asp-controller="Enrollment" asp-action="Index"><i class="fas fa-clipboard-list me-2"></i>Enrollments</a></li>
+                        <li><a class="dropdown-item" asp-controller="StudentClass" asp-action="Index"><i class="fas fa-users me-2"></i>Student Classes</a></li>
+                    </ul>
+                </div>
                 <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-light ms-2">
                     <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
                 </a>

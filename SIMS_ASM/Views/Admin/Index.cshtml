@@ -17,11 +17,6 @@
             </div>
             <div class="col-md-6 text-end">
                 <div class="btn-group">
-                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                </div>
-                <div class="btn-group">
                     <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-cog me-1"></i> Management
                     </button>
@@ -38,6 +33,11 @@
                         <li><a class="dropdown-item" asp-controller="Enrollment" asp-action="Index"><i class="fas fa-clipboard-list me-2"></i>Enrollments</a></li>
                         <li><a class="dropdown-item" asp-controller="StudentClass" asp-action="Index"><i class="fas fa-users me-2"></i>Student Classes</a></li>
                     </ul>
+                </div>
+                <div class="btn-group">
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
                 </div>
             </div>
         </div>
