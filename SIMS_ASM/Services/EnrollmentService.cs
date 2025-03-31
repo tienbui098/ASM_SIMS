@@ -82,34 +82,32 @@ namespace SIMS_ASM.Services
 
         public async Task UpdateEnrollmentAsync(Enrollment enrollment)
         {
+            var classCourseFaculty = await _context.ClassCourseFaculties
+                .Include(ccf => ccf.Class)
+                .FirstOrDefaultAsync(ccf => ccf.ClassCourseFacultyID == enrollment.ClassCourseFacultyID);
+            var student = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserID == enrollment.UserID);
+
+            if (classCourseFaculty == null || student == null || student.Role != "Student")
             {
-                var classCourseFaculty = await _context.ClassCourseFaculties
-                    .Include(ccf => ccf.Class)
-                    .FirstOrDefaultAsync(ccf => ccf.ClassCourseFacultyID == enrollment.ClassCourseFacultyID);
-                var student = await _context.Users
-                    .FirstOrDefaultAsync(u => u.UserID == enrollment.UserID);
-
-                if (classCourseFaculty == null || student == null || student.Role != "Student")
-                {
-                    throw new InvalidOperationException("Invalid student or ClassCourseFaculty.");
-                }
-                var studentClassIds = await _studentClassService.GetClassIdsByStudentAsync(student.UserID);
-                if (!studentClassIds.Any())
-                {
-                    throw new InvalidOperationException($"Student (UserID: {student.UserID}) has not been assigned to any class. Please assign the student to a class first.");
-                }
-
-                if (!studentClassIds.Contains(classCourseFaculty.ClassID))
-                {
-                    var studentClassesLog = string.Join(", ", studentClassIds);
-                    throw new InvalidOperationException(
-                        $"Student (UserID: {student.UserID}) does not belong to the class (ClassID: {classCourseFaculty.ClassID}) associated with this ClassCourseFaculty. " +
-                        $"Student's classes: [{studentClassesLog}]");
-                }
-
-                _context.Entry(enrollment).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException("Invalid student or ClassCourseFaculty.");
             }
+            var studentClassIds = await _studentClassService.GetClassIdsByStudentAsync(student.UserID);
+            if (!studentClassIds.Any())
+            {
+                throw new InvalidOperationException($"Student (UserID: {student.UserID}) has not been assigned to any class. Please assign the student to a class first.");
+            }
+
+            if (!studentClassIds.Contains(classCourseFaculty.ClassID))
+            {
+                var studentClassesLog = string.Join(", ", studentClassIds);
+                throw new InvalidOperationException(
+                    $"Student (UserID: {student.UserID}) does not belong to the class (ClassID: {classCourseFaculty.ClassID}) associated with this ClassCourseFaculty. " +
+                    $"Student's classes: [{studentClassesLog}]");
+            }
+
+            _context.Entry(enrollment).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteEnrollmentAsync(int id)

@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SIMS_ASM</title>
+
+    <!-- Thêm các CSS chung của ứng dụng -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- Render section Styles từ các view -->
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Header và các phần layout khác -->
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer và các phần layout khác -->
+    <!-- Thêm các JS chung của ứng dụng -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Render section Scripts từ các view -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

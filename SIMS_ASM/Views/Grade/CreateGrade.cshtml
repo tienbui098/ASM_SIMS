@@ -1,13 +1,69 @@
 ﻿@model SIMS_ASM.Models.Grade
 
 @{
-    ViewData["Title"] = "Add Grade";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Create Grade";
 }
 
-<h2>Add Grade</h2>
+<h1>Create Grade</h1>
 
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateGrade">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="control-label">Class</label>
+                <select id="ClassID" class="form-control" asp-items="ViewBag.Classes">
+                    <option value="">-- Select Class --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EnrollmentID" class="control-label"></label>
+                <select asp-for="EnrollmentID" class="form-control" asp-items="ViewBag.Enrollments">
+                    <option value="">-- Select Enrollment --</option>
+                </select>
+                <span asp-validation-for="EnrollmentID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Score" class="control-label"></label>
+                <input asp-for="Score" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            $('#ClassID').change(function() {
+                var classId = $(this).val();
+                if (classId) {
+                    $.getJSON('/Grade/GetEnrollmentsByClass', { classId: classId }, function(data) {
+                        var items = '<option value="">-- Select Enrollment --</option>';
+                        $.each(data, function(i, item) {
+                            items += '<option value="' + item.value + '">' + item.text + '</option>';
+                        });
+                        $('#EnrollmentID').html(items);
+                    });
+                } else {
+                    $('#EnrollmentID').html('<option value="">-- Select Enrollment --</option>');
+                }
+            });
+        });
+    </script>
 }

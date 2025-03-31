@@ -57,14 +57,14 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            ViewBag.Students = await _userService.GetStudentsAsync();
+            ViewBag.Classes = await _context.Classes.ToListAsync();
             ViewBag.ClassCourseFaculties = await _classCourseFacultyService.GetAllClassCourseFacultiesAsync();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateEnrollment(Enrollment enrollment)
+        public async Task<IActionResult> CreateEnrollment(int classId, int classCourseFacultyId)
         {
             if (!IsAdmin())
             {
@@ -72,35 +72,66 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    await _enrollmentService.AddEnrollmentAsync(enrollment);
-                    _singleton.Log($"Enrollment {enrollment.EnrollmentID} created by admin for student {enrollment.UserID}");
-                    TempData["SuccessMessage"] = "Enrollment created successfully!";
-                    return RedirectToAction("Index");
-                }
-                catch (InvalidOperationException ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                    _singleton.Log($"Failed to create enrollment: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    _singleton.Log($"Failed to create enrollment: {ex.Message}");
-                    ModelState.AddModelError("", "An error occurred while creating the enrollment.");
-                }
-            }
-            else
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                _singleton.Log($"Failed to create enrollment: Invalid model state. Errors: {string.Join(", ", errors)}");
-            }
+                // Lấy danh sách sinh viên trong lớp
+                var studentsInClass = await _studentClassService.GetStudentsInClassAsync(classId);
 
-            ViewBag.Students = await _userService.GetStudentsAsync();
-            ViewBag.ClassCourseFaculties = await _classCourseFacultyService.GetAllClassCourseFacultiesAsync();
-            return View(enrollment);
+                if (!studentsInClass.Any())
+                {
+                    TempData["ErrorMessage"] = "No students found in the selected class";
+                    return RedirectToAction("CreateEnrollment");
+                }
+
+                // Lấy thông tin ClassCourseFaculty để kiểm tra
+                var classCourseFaculty = await _classCourseFacultyService.GetClassCourseFacultyByIdAsync(classCourseFacultyId);
+                if (classCourseFaculty == null)
+                {
+                    TempData["ErrorMessage"] = "Selected course not found";
+                    return RedirectToAction("CreateEnrollment");
+                }
+
+                // Kiểm tra xem ClassCourseFaculty có cùng ClassID với lớp được chọn không
+                if (classCourseFaculty.ClassID != classId)
+                {
+                    TempData["ErrorMessage"] = "Selected course does not belong to the selected class";
+                    return RedirectToAction("CreateEnrollment");
+                }
+
+                int enrollmentCount = 0;
+                foreach (var student in studentsInClass)
+                {
+                    // Kiểm tra xem sinh viên đã được ghi danh chưa
+                    if (!await _enrollmentService.IsStudentAlreadyEnrolledAsync(student.UserID, classCourseFacultyId))
+                    {
+                        var enrollment = new Enrollment
+                        {
+                            UserID = student.UserID,
+                            ClassCourseFacultyID = classCourseFacultyId,
+                            EnrollmentDate = DateTime.Now
+                        };
+                        await _enrollmentService.AddEnrollmentAsync(enrollment);
+                        enrollmentCount++;
+                    }
+                }
+
+                if (enrollmentCount > 0)
+                {
+                    TempData["SuccessMessage"] = $"Successfully enrolled {enrollmentCount} students to the course";
+                }
+                else
+                {
+                    TempData["InfoMessage"] = "All students in the class are already enrolled in this course";
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _singleton.Log($"Failed to create enrollments: {ex.Message}");
+                TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+                return RedirectToAction("CreateEnrollment");
+            }
         }
 
         public async Task<IActionResult> EditEnrollment(int id)
@@ -139,7 +170,7 @@ namespace SIMS_ASM.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
@@ -205,27 +236,20 @@ namespace SIMS_ASM.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetClassCourseFacultiesByStudent(int userId)
+        public async Task<IActionResult> GetCoursesByClass(int classId)
         {
-            var studentClasses = await _studentClassService.GetClassIdsByStudentAsync(userId);
-            if (!studentClasses.Any())
-            {
-                return Json(new { success = false, message = "Student has not been assigned to any class. Please assign the student to a class first.", redirectUrl = Url.Action("CreateStudentClass", "StudentClass") });
-            }
-
-            var classCourseFaculties = await _context.ClassCourseFaculties
-                .Include(ccf => ccf.Class)
+            var courses = await _context.ClassCourseFaculties
                 .Include(ccf => ccf.Course)
                 .Include(ccf => ccf.User)
-                .Where(ccf => studentClasses.Contains(ccf.ClassID))
+                .Where(ccf => ccf.ClassID == classId)
                 .Select(ccf => new
                 {
                     ccf.ClassCourseFacultyID,
-                    DisplayText = $"{ccf.Class.ClassName} - {ccf.Course.CourseName} (Faculty: {ccf.User.FullName})"
+                    DisplayText = $"{ccf.Course.CourseName} (Faculty: {ccf.User.FullName})"
                 })
                 .ToListAsync();
 
-            return Json(new { success = true, data = classCourseFaculties });
+            return Json(new { success = true, data = courses });
         }
     }
 }

@@ -12,5 +12,8 @@ namespace SIMS_ASM.Services
         Task<bool> IsStudentAlreadyInClassAsync(int userId, int classId);
         Task<IEnumerable<int>> GetClassIdsByStudentAsync(int userId); // Thêm phương thức để lấy danh sách ClassID của sinh viên
         Task<bool> HasAssociatedEnrollmentsAsync(int userID, int classID);
+        Task AddMultipleStudentsToClassAsync(List<int> studentIds, int classId);
+        Task<List<User>> GetStudentsInClassAsync(int classId);
+        Task RemoveAllStudentsFromClassAsync(int classId);
     }
 }
