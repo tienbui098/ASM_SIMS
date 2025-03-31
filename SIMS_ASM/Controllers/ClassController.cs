@@ -23,19 +23,6 @@ namespace SIMS_ASM.Controllers
             return role == "Admin";
         }
 
-        //// Hiển thị danh sách lớp học
-        //public IActionResult Index()
-        //{
-        //    if (!IsAdmin())
-        //    {
-        //        _singleton.Log("Unauthorized access to Class Management: User not an admin");
-        //        return RedirectToAction("Login", "Account");
-        //    }
-
-        //    var classes = _classService.GetAllClasses();
-        //    return View(classes);
-        //}
-
         public IActionResult Index(int? majorId)
         {
             if (!IsAdmin())
