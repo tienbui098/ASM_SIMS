@@ -138,13 +138,11 @@ namespace SIMS_ASM.Controllers
 
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _accountService.LogoutAsync();
-            return RedirectToAction("Login", "Account"); // Hoặc chuyển về trang chủ
+            return RedirectToAction("Login", "Account");
         }
     }
 }

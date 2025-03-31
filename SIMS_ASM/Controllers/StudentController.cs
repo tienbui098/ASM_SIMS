@@ -147,14 +147,23 @@ namespace SIMS_ASM.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            if (!IsAdmin())
             {
-                return NotFound();
+                _singleton.Log("Unauthorized attempt to delete major: User not an admin");
+                return RedirectToAction("Login", "Account");
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            var success = await _userService.DeleteUserAsync(id);
+            if (!success)
+            {
+                _singleton.Log($"Failed to delete user with ID {id}: User not found or has associated StudentClass/ClassCourseFaculty/Enrollment");
+                TempData["ErrorMessage"] = "Cannot delete user because it is associated with Class Courses or Student Classes or Enrollments, or it was not found.";
+            }
+            else
+            {
+                _singleton.Log($"User with ID {id} deleted by admin");
+                TempData["SuccessMessage"] = "User deleted successfully!";
+            }
 
             return RedirectToAction(nameof(ManageStudent));
         }

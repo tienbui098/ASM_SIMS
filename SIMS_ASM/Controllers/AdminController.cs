@@ -15,12 +15,14 @@ namespace SIMS_ASM.Controllers
         private readonly ApplicationDbContex _context;
         private readonly IUserService _userService; // Thêm IUserService
         private readonly AccountSingleton _singleton;
+        private readonly IAccountService _accountService;
 
-        public AdminController(ApplicationDbContex context, IUserService userService)
+        public AdminController(ApplicationDbContex context, IUserService userService, IAccountService accountService)
         {
             _context = context;
             _userService = userService;
             _singleton = AccountSingleton.Instance;
+            _accountService = accountService;
         }
 
         // Kiểm tra quyền Admin
@@ -39,6 +41,9 @@ namespace SIMS_ASM.Controllers
                 return RedirectToAction("Login", "Account");
             }
             var users = await _context.Users.ToListAsync();
+            ViewBag.StudentCount = users.Count(u => u.Role == "Student");
+            ViewBag.LecturerCount = users.Count(u => u.Role == "Lecturer");
+            ViewBag.CourseCount = await _context.Courses.CountAsync();
             return View(users);
         }
 
@@ -96,6 +101,30 @@ namespace SIMS_ASM.Controllers
 
             ViewBag.SystemName = "Student Information Management System";
             return View(user);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!IsAdmin())
+            {
+                _singleton.Log("Unauthorized attempt to delete major: User not an admin");
+                return RedirectToAction("Login", "Account");
+            }
+
+            var success = await _userService.DeleteUserAsync(id);
+            if (!success)
+            {
+                _singleton.Log($"Failed to delete user with ID {id}: User not found or has associated StudentClass/ClassCourseFaculty/Enrollment");
+                TempData["ErrorMessage"] = "Cannot delete user because it is associated with Class Courses or Student Classes or Enrollments, or it was not found.";
+            }
+            else
+            {
+                _singleton.Log($"User with ID {id} deleted by admin");
+                TempData["SuccessMessage"] = "User deleted successfully!";
+            }
+
+            return RedirectToAction(nameof(ManageAdmin));
         }
 
 
@@ -161,5 +190,6 @@ namespace SIMS_ASM.Controllers
         {
             return _context.Users.Any(e => e.UserID == id);
         }
+
     }
 }
