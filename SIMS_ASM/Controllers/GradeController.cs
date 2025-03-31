@@ -3,279 +3,263 @@ using SIMS_ASM.Data;
 using SIMS_ASM.Models;
 using SIMS_ASM.Singleton;
 using Microsoft.EntityFrameworkCore;
+using SIMS_ASM.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data.Entity;
 
 
 namespace SIMS_ASM.Controllers
 {
     public class GradeController : Controller
     {
-        public IActionResult Index()
+        private readonly IGradeService _gradeService;
+        private readonly IEnrollmentService _enrollmentService;
+        private readonly IStudentClassService _studentClassService;
+        private readonly ClassService _classService;
+        private readonly AccountSingleton _singleton;
+        private readonly ICourseService _courseService;
+
+        public GradeController(
+            IGradeService gradeService,
+            IEnrollmentService enrollmentService,
+            IStudentClassService studentClassService,
+            ClassService classService,
+            ICourseService courseService)
         {
+            _gradeService = gradeService;
+            _enrollmentService = enrollmentService;
+            _studentClassService = studentClassService;
+            _classService = classService;
+            _courseService = courseService;
+            _singleton = AccountSingleton.Instance;
+        }
+
+        private bool IsAdmin()
+        {
+            return HttpContext.Session.GetString("Role") == "Admin";
+        }
+
+        private bool IsLecturer()
+        {
+            return HttpContext.Session.GetString("Role") == "Lecturer";
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            if (!IsAdmin() && !IsLecturer())
+            {
+                _singleton.Log("Unauthorized access to Grade Management");
+                return RedirectToAction("Login", "Account");
+            }
+
+            var grades = await _gradeService.GetAllGradesAsync();
+
+            // Thêm dữ liệu filter
+            ViewBag.Classes = _classService.GetAllClasses();
+            ViewBag.Courses = await _courseService.GetAllCoursesAsync();
+
+            return View(grades);
+        }
+
+        public async Task<IActionResult> CreateGrade()
+        {
+            if (!IsAdmin() && !IsLecturer())
+            {
+                _singleton.Log("Unauthorized access to Create Grade");
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Lấy danh sách lớp học
+            var classes = _classService.GetAllClasses();
+            ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
+
+            // Khởi tạo danh sách enrollment rỗng
+            ViewBag.Enrollments = new List<SelectListItem>();
+
             return View();
         }
-        //private readonly ApplicationDbContex _context;
-        //private readonly AccountSingleton _singleton;
 
-        //public GradeController(ApplicationDbContex context)
-        //{
-        //    _context = context;
-        //    _singleton = AccountSingleton.Instance;
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateGrade(Grade grade)
+        {
+            if (!IsAdmin() && !IsLecturer())
+            {
+                _singleton.Log("Unauthorized attempt to create grade");
+                return RedirectToAction("Login", "Account");
+            }
 
-        //// Kiểm tra vai trò người dùng
-        //private bool IsAuthorized()
-        //{
-        //    var role = HttpContext.Session.GetString("Role");
-        //    return role == "Administrator" || role == "Lecturer";
-        //}
+            if (!ModelState.IsValid)
+            {
+                try
+                {
+                    await _gradeService.AddGradeAsync(grade);
+                    _singleton.Log($"Grade created for enrollment {grade.EnrollmentID}");
+                    TempData["SuccessMessage"] = "Grade created successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error creating grade: " + ex.Message);
+                    _singleton.Log($"Error creating grade: {ex.Message}");
+                }
+            }
 
-        //private bool IsAdmin()
-        //{
-        //    var role = HttpContext.Session.GetString("Role");
-        //    return role == "Administrator";
-        //}
+            // Nếu có lỗi, cần load lại dropdown
+            var classes = _classService.GetAllClasses();
+            ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
 
-        //// Hiển thị danh sách điểm
-        //public async Task<IActionResult> Index()
-        //{
-        //    if (!IsAuthorized())
-        //    {
-        //        _singleton.Log("Unauthorized access to Grade Management: User not authorized");
-        //        return RedirectToAction("Login", "Account");
-        //    }
+            if (grade.EnrollmentID > 0)
+            {
+                var enrollment = await _enrollmentService.GetEnrollmentByIdAsync(grade.EnrollmentID);
+                if (enrollment != null)
+                {
+                    var enrollments = await GetEnrollmentsByClassAsync(enrollment.ClassCourseFaculty.ClassID);
+                    ViewBag.Enrollments = enrollments;
+                }
+            }
+            else
+            {
+                ViewBag.Enrollments = new List<SelectListItem>();
+            }
 
-        //    var grades = await _context.Grades
-        //        .Include(g => g.User)
-        //        .Include(g => g.Course)
-        //        .ToListAsync();
+            return View(grade);
+        }
 
-        //    // Nếu là giảng viên, chỉ hiển thị điểm của các khóa học mà họ phụ trách
-        //    if (HttpContext.Session.GetString("Role") == "Lecturer")
-        //    {
-        //        var userId = HttpContext.Session.GetInt32("UserId");
-        //        grades = grades.Where(g => g.Course.UserID == userId).ToList();
-        //    }
+        [HttpGet]
+        public async Task<JsonResult> GetEnrollmentsByClass(int classId)
+        {
+            var enrollments = await GetEnrollmentsByClassAsync(classId);
+            return Json(enrollments);
+        }
 
-        //    return View(grades);
-        //}
+        private async Task<List<SelectListItem>> GetEnrollmentsByClassAsync(int classId)
+        {
+            var enrollments = await _enrollmentService.GetAllEnrollmentsAsync();
 
-        //// Thêm điểm: Hiển thị form
-        //public async Task<IActionResult> CreateGrade()
-        //{
-        //    if (!IsAuthorized())
-        //    {
-        //        _singleton.Log("Unauthorized access to Create Grade: User not authorized");
-        //        return RedirectToAction("Login", "Account");
-        //    }
+            // Lọc enrollments theo classId
+            var filteredEnrollments = enrollments
+                .Where(e => e.ClassCourseFaculty.ClassID == classId)
+                .Select(e => new SelectListItem
+                {
+                    Value = e.EnrollmentID.ToString(),
+                    Text = $"{e.User.FullName} - {e.ClassCourseFaculty.Course.CourseName}"
+                })
+                .ToList();
 
-        //    ViewBag.Students = await _context.Users
-        //        .Where(u => u.Role == "Student")
-        //        .ToListAsync();
+            return filteredEnrollments;
+        }
 
-        //    if (HttpContext.Session.GetString("Role") == "Lecturer")
-        //    {
-        //        var userId = HttpContext.Session.GetInt32("UserId");
-        //        ViewBag.Courses = await _context.Courses
-        //            .Where(c => c.UserID == userId)
-        //            .ToListAsync();
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Courses = await _context.Courses.ToListAsync();
-        //    }
+        public async Task<IActionResult> EditGrade(int id)
+        {
+            if (!IsAdmin() && !IsLecturer())
+            {
+                _singleton.Log("Unauthorized access to Edit Grade");
+                return RedirectToAction("Login", "Account");
+            }
 
-        //    return View();
-        //}
+            var grade = await _gradeService.GetGradeByIdAsync(id);
+            if (grade == null)
+            {
+                return NotFound();
+            }
 
-        //// Thêm điểm: Xử lý form
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> CreateGrade(Grade grade)
-        //{
-        //    if (!IsAuthorized())
-        //    {
-        //        _singleton.Log("Unauthorized attempt to create grade: User not authorized");
-        //        return RedirectToAction("Login", "Account");
-        //    }
+            // Lấy danh sách lớp học
+            var classes = _classService.GetAllClasses();
+            ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Grades.Add(grade);
-        //            await _context.SaveChangesAsync();
-        //            _singleton.Log($"Grade for student ID {grade.UserID} in course ID {grade.CourseID} created with value {grade.GradeValue}");
-        //            return RedirectToAction("Index");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            _singleton.Log($"Failed to create grade: {ex.Message}");
-        //            ModelState.AddModelError("", "An error occurred while creating the grade.");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-        //        _singleton.Log($"Failed to create grade: Invalid model state. Errors: {string.Join(", ", errors)}");
-        //    }
+            // Lấy danh sách enrollments cho lớp học của grade hiện tại
+            var enrollment = await _enrollmentService.GetEnrollmentByIdAsync(grade.EnrollmentID);
+            var enrollments = await GetEnrollmentsByClassAsync(enrollment.ClassCourseFaculty.ClassID);
+            ViewBag.Enrollments = new SelectList(enrollments, "Value", "Text", grade.EnrollmentID);
 
-        //    ViewBag.Students = await _context.Users
-        //        .Where(u => u.Role == "Student")
-        //        .ToListAsync();
+            return View(grade);
+        }
 
-        //    if (HttpContext.Session.GetString("Role") == "Lecturer")
-        //    {
-        //        var userId = HttpContext.Session.GetInt32("UserId");
-        //        ViewBag.Courses = await _context.Courses
-        //            .Where(c => c.UserID == userId)
-        //            .ToListAsync();
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Courses = await _context.Courses.ToListAsync();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditGrade(int id, Grade grade)
+        {
+            if (!IsAdmin() && !IsLecturer())
+            {
+                _singleton.Log("Unauthorized attempt to edit grade");
+                return RedirectToAction("Login", "Account");
+            }
 
-        //    return View(grade);
-        //}
+            if (id != grade.GradeID)
+            {
+                return NotFound();
+            }
 
-        //// Sửa điểm: Hiển thị form
-        //public async Task<IActionResult> EditGrade(int id)
-        //{
-        //    if (!IsAuthorized())
-        //    {
-        //        _singleton.Log("Unauthorized access to Edit Grade: User not authorized");
-        //        return RedirectToAction("Login", "Account");
-        //    }
+            if (!ModelState.IsValid)
+            {
+                try
+                {
+                    await _gradeService.UpdateGradeAsync(grade);
+                    _singleton.Log($"Grade {grade.GradeID} updated");
+                    TempData["SuccessMessage"] = "Grade updated successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    _singleton.Log($"Error updating grade {grade.GradeID}: {ex.Message}");
+                    ModelState.AddModelError("", "Error updating grade: " + ex.Message);
+                }
+            }
 
-        //    var grade = await _context.Grades.FindAsync(id);
-        //    if (grade == null)
-        //    {
-        //        _singleton.Log($"Failed to edit grade with ID {id}: Grade not found");
-        //        return NotFound();
-        //    }
+            // Nếu có lỗi, cần load lại dropdown
+            var classes = _classService.GetAllClasses();
+            ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
 
-        //    // Kiểm tra quyền của giảng viên
-        //    if (HttpContext.Session.GetString("Role") == "Lecturer")
-        //    {
-        //        var userId = HttpContext.Session.GetInt32("UserId");
-        //        var course = await _context.Courses.FindAsync(grade.CourseID);
-        //        if (course.UserID != userId)
-        //        {
-        //            _singleton.Log($"Unauthorized attempt to edit grade with ID {id}: Lecturer not assigned to this course");
-        //            return RedirectToAction("Index");
-        //        }
-        //    }
+            if (grade.EnrollmentID > 0)
+            {
+                var enrollment = await _enrollmentService.GetEnrollmentByIdAsync(grade.EnrollmentID);
+                if (enrollment != null)
+                {
+                    var enrollments = await GetEnrollmentsByClassAsync(enrollment.ClassCourseFaculty.ClassID);
+                    ViewBag.Enrollments = new SelectList(enrollments, "Value", "Text", grade.EnrollmentID);
+                }
+            }
 
-        //    ViewBag.Students = await _context.Users
-        //        .Where(u => u.Role == "Student")
-        //        .ToListAsync();
+            return View(grade);
+        }
 
-        //    if (HttpContext.Session.GetString("Role") == "Lecturer")
-        //    {
-        //        var userId = HttpContext.Session.GetInt32("UserId");
-        //        ViewBag.Courses = await _context.Courses
-        //            .Where(c => c.UserID == userId)
-        //            .ToListAsync();
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Courses = await _context.Courses.ToListAsync();
-        //    }
+        public async Task<IActionResult> DeleteGrade(int? id)
+        {
+            if (!IsAdmin() && !IsLecturer())
+            {
+                _singleton.Log("Unauthorized access to Delete Grade");
+                return RedirectToAction("Login", "Account");
+            }
 
-        //    return View(grade);
-        //}
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //// Sửa điểm: Xử lý form
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditGrade(int id, Grade grade)
-        //{
-        //    if (!IsAuthorized())
-        //    {
-        //        _singleton.Log("Unauthorized attempt to edit grade: User not authorized");
-        //        return RedirectToAction("Login", "Account");
-        //    }
+            var grade = await _gradeService.GetGradeByIdAsync(id.Value);
+            if (grade == null)
+            {
+                return NotFound();
+            }
 
-        //    if (id != grade.GradeID)
-        //    {
-        //        _singleton.Log($"Invalid grade edit attempt: ID mismatch for GradeID {id}");
-        //        return NotFound();
-        //    }
+            return View(grade);
+        }
 
-        //    // Kiểm tra quyền của giảng viên
-        //    if (HttpContext.Session.GetString("Role") == "Lecturer")
-        //    {
-        //        var userId = HttpContext.Session.GetInt32("UserId");
-        //        var course = await _context.Courses.FindAsync(grade.CourseID);
-        //        if (course.UserID != userId)
-        //        {
-        //            _singleton.Log($"Unauthorized attempt to edit grade with ID {id}: Lecturer not assigned to this course");
-        //            return RedirectToAction("Index");
-        //        }
-        //    }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (!IsAdmin() && !IsLecturer())
+            {
+                _singleton.Log("Unauthorized attempt to delete grade");
+                return RedirectToAction("Login", "Account");
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(grade);
-        //            await _context.SaveChangesAsync();
-        //            _singleton.Log($"Grade for student ID {grade.UserID} in course ID {grade.CourseID} updated to {grade.GradeValue}");
-        //            return RedirectToAction("Index");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            _singleton.Log($"Failed to update grade: {ex.Message}");
-        //            ModelState.AddModelError("", "An error occurred while updating the grade.");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-        //        _singleton.Log($"Failed to update grade: Invalid model state. Errors: {string.Join(", ", errors)}");
-        //    }
-
-        //    ViewBag.Students = await _context.Users
-        //        .Where(u => u.Role == "Student")
-        //        .ToListAsync();
-
-        //    if (HttpContext.Session.GetString("Role") == "Lecturer")
-        //    {
-        //        var userId = HttpContext.Session.GetInt32("UserId");
-        //        ViewBag.Courses = await _context.Courses
-        //            .Where(c => c.UserID == userId)
-        //            .ToListAsync();
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Courses = await _context.Courses.ToListAsync();
-        //    }
-
-        //    return View(grade);
-        //}
-
-        //// Xóa điểm (chỉ Admin được phép)
-        //[HttpPost]
-        //public async Task<IActionResult> DeleteGrade(int id)
-        //{
-        //    if (!IsAdmin())
-        //    {
-        //        _singleton.Log("Unauthorized attempt to delete grade: User not an admin");
-        //        return RedirectToAction("Login", "Account");
-        //    }
-
-        //    var grade = await _context.Grades.FindAsync(id);
-        //    if (grade == null)
-        //    {
-        //        _singleton.Log($"Failed to delete grade with ID {id}: Grade not found");
-        //        return NotFound();
-        //    }
-
-        //    _context.Grades.Remove(grade);
-        //    await _context.SaveChangesAsync();
-        //    _singleton.Log($"Grade with ID {id} deleted by admin");
-        //    return RedirectToAction("Index");
-        //}
-
+            await _gradeService.DeleteGradeAsync(id);
+            _singleton.Log($"Grade with ID {id} deleted");
+            TempData["SuccessMessage"] = "Grade deleted successfully!";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
