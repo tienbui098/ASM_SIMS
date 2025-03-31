@@ -1,55 +1,136 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@* @{ *@
+@*     ViewData["Title"] = "Login"; *@
+@*     Layout = "~/Views/Shared/_Layout.cshtml"; *@
+@* } *@
+@* <html lang="en"> *@
+@* <head> *@
+@*     <meta charset="UTF-8"> *@
+@*     <meta name="viewport" content="width=device-width, initial-scale=1.0"> *@
+@*     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> *@
+@*     <link rel="stylesheet" href="~/css/Login.css"> <!-- Đường dẫn đến file CSS tùy chỉnh --> *@
+@*     <title>Login</title> *@
+@* </head> *@
+@* <body class="bg-light"> *@
+@*     <div class="container"> *@
+@*         <div class="row justify-content-center"> *@
+@*             <div class="col-md-6"> *@
+@*                 <div class="card mt-5"> *@
+@*                     <div class="card-header text-center"> *@
+@*                         <h2>Login</h2> *@
+@*                     </div> *@
+@*                     <div class="card-body"> *@
+@*                         <form asp-controller="Account" asp-action="Login" method="post"> *@
+@*                             <div class="form-group"> *@
+@*                                 <label for="username">Username</label> *@
+@*                                 <input type="text" name="username" class="form-control" required /> *@
+@*                             </div> *@
+@*                             <div class="form-group"> *@
+@*                                 <label for="password">Password</label> *@
+@*                                 <input type="password" name="password" class="form-control" required /> *@
+@*                             </div> *@
+@*                             <div class="form-group"> *@
+@*                                 <button type="submit" class="btn btn-primary btn-block">Login</button> *@
+@*                                 @* <a asp-action="Register" class="btn btn-secondary btn-block">Register</a> *@ 
+@*                             </div> *@
+@*                         </form> *@
+@*                     </div> *@
+@*                 </div> *@
+@*                 <div class="text-center mt-3"> *@
+@*                     <p>Don't have an account? <a asp-action="Register">Register here</a></p> *@
+@*                 </div> *@
+@*                 <div asp-validation-summary="All" class="text-danger"></div> *@
+                
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+
+@*     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> *@
+@*     <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script> *@
+@*     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> *@
+@* </body> *@
+@* </html> *@
+
 @{
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/Login.css"> <!-- Đường dẫn đến file CSS tùy chỉnh -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true">
     <title>Login</title>
 </head>
-<body class="bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card mt-5">
-                    <div class="card-header text-center">
-                        <h2>Login</h2>
-                    </div>
-                    <div class="card-body">
-                        <form asp-controller="Account" asp-action="Login" method="post">
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" name="username" class="form-control" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" name="password" class="form-control" required />
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block">Login</button>
-                                @* <a asp-action="Register" class="btn btn-secondary btn-block">Register</a> *@
-                            </div>
-                        </form>
+<body>
+    <div class="full-width-container">
+        <div class="login-container">
+            <div class="login-container">
+                <div class="login-image">
+                    <div class="login-image-content">
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to continue to your account</p>
                     </div>
                 </div>
-                <div class="text-center mt-3">
-                    <p>Don't have an account? <a asp-action="Register">Register here</a></p>
+                <div class="login-form">
+                    <div class="login-header">
+                        <h1>Sign In</h1>
+                        <p>Please enter your credentials to continue</p>
+                    </div>
+
+                    <form asp-controller="Account" asp-action="Login" method="post">
+                        <div class="input-group">
+                            <label for="username">Username</label>
+                            <div class="input-field">
+                                <i class="fas fa-user"></i>
+                                <input type="text" name="username" id="username" placeholder="Enter your username" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="password">Password</label>
+                            <div class="input-field">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+
+                        <div class="remember-forgot">
+                            <div class="remember">
+                                <input type="checkbox" id="remember" name="remember">
+                                <label for="remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+
+                        <button type="submit" class="login-button">Sign In</button>
+
+                        <div class="register-link">
+                            <p>Don't have an account? <a asp-action="Register">Register here</a></p>
+                        </div>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="validation-summary-errors"></div>
+                        }
+                    </form>
                 </div>
-                <div asp-validation-summary="All" class="text-danger"></div>
-                
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 </body>
 </html>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var validationSummary = document.querySelector('.validation-summary-errors');
+      if (validationSummary) {
+        var errorList = validationSummary.querySelector('ul');
+        if (!errorList || errorList.children.length === 0) {
+          validationSummary.style.display = 'none';
+        }
+      }
+    });
+</script>
