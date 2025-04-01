@@ -11,5 +11,6 @@ namespace SIMS_ASM.Services
         Task DeleteEnrollmentAsync(int id);
         Task<bool> IsStudentAlreadyEnrolledAsync(int userId, int classCourseFacultyId);
         Task<bool> HasAssociatedGradesAsync(int enrollmentId);
+        Task<IEnumerable<Enrollment>> GetEnrollmentsByUserIdAsync(int userId);
     }
 }

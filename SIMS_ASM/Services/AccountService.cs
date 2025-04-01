@@ -19,6 +19,10 @@ namespace SIMS_ASM.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        //public AccountService()
+        //{
+
+        //}
 
         public async Task<User> AuthenticateAsync(string username, string password)
         {

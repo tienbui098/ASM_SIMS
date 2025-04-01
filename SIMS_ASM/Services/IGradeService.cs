@@ -11,6 +11,7 @@ namespace SIMS_ASM.Services
         Task DeleteGradeAsync(int id);
         Task<bool> GradeExistsAsync(int id);
         Task<IEnumerable<Grade>> GetGradesByEnrollmentAsync(int enrollmentId);
+        Task<IEnumerable<Grade>> GetGradesByUserId(int userId);
     }
 }
 
