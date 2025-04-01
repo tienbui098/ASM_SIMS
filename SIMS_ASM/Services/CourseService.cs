@@ -16,30 +16,35 @@ namespace SIMS_ASM.Services
             _singleton = AccountSingleton.Instance;
         }
 
+        // Lấy tất cả các khóa học từ database
         public async Task<IEnumerable<Course>> GetAllCoursesAsync()
         {
             return await _context.Courses
-                .Include(c => c.Major)
+                .Include(c => c.Major) // Bao gồm thông tin ngành học
                 .ToListAsync();
         }
 
+        // Lấy thông tin khóa học theo ID
         public async Task<Course> GetCourseByIdAsync(int id)
         {
             return await _context.Courses
-                .Include(c => c.Major)
+                .Include(c => c.Major) // Bao gồm thông tin ngành học
                 .FirstOrDefaultAsync(c => c.CourseID == id);
         }
 
+        // Lấy danh sách khóa học theo ngành học
         public async Task<IEnumerable<Course>> GetCoursesByMajorAsync(int majorId)
         {
             return await _context.Courses
-                .Where(c => c.MajorID == majorId)
-                .Include(c => c.Major)
+                .Where(c => c.MajorID == majorId) // Lọc theo MajorID
+                .Include(c => c.Major) // Bao gồm thông tin ngành học
                 .ToListAsync();
         }
 
+        // Tạo mới một khóa học
         public async Task<Course> CreateCourseAsync(Course course)
         {
+            // Kiểm tra ngành học có tồn tại không
             var major = await _context.Majors.FindAsync(course.MajorID);
             if (major == null)
                 throw new ArgumentException("Invalid Major ID");
@@ -49,8 +54,10 @@ namespace SIMS_ASM.Services
             return course;
         }
 
+        // Cập nhật thông tin khóa học
         public async Task UpdateCourseAsync(Course course)
         {
+            // Kiểm tra ngành học có tồn tại không
             var major = await _context.Majors.FindAsync(course.MajorID);
             if (major == null)
                 throw new ArgumentException("Invalid Major ID");
@@ -59,32 +66,17 @@ namespace SIMS_ASM.Services
             await _context.SaveChangesAsync();
         }
 
-        //public async Task<bool> DeleteCourseAsync(int id)
-        //{
-        //    var course = await _context.Courses
-        //        .Include(c => c.ClassCourseFaculties)
-        //        .FirstOrDefaultAsync(c => c.CourseID == id);
-
-        //    if (course == null)
-        //        return false;
-
-        //    if (course.ClassCourseFaculties.Any())
-        //        return false;
-
-        //    _context.Courses.Remove(course);
-        //    await _context.SaveChangesAsync();
-        //    return true;
-        //}
-
+        // Xóa khóa học với thông báo chi tiết
         public async Task<(bool Success, string Message)> DeleteCourseAsync(int id)
         {
             var course = await _context.Courses
-                .Include(c => c.ClassCourseFaculties)
+                .Include(c => c.ClassCourseFaculties) // Bao gồm thông tin lớp học và giảng viên liên quan
                 .FirstOrDefaultAsync(c => c.CourseID == id);
 
             if (course == null)
                 return (false, "Course not found.");
 
+            // Kiểm tra nếu khóa học đang được sử dụng trong các lớp học
             if (course.ClassCourseFaculties.Any())
                 return (false, "Cannot delete course because it is associated with classes and faculty.");
 
@@ -104,10 +96,11 @@ namespace SIMS_ASM.Services
             }
         }
 
+        // Kiểm tra xem khóa học có liên kết với lớp học nào không
         public async Task<bool> HasAssociatedClassesAsync(int courseId)
         {
             var course = await _context.Courses
-                .Include(c => c.ClassCourseFaculties)
+                .Include(c => c.ClassCourseFaculties) // Bao gồm thông tin lớp học
                 .FirstOrDefaultAsync(c => c.CourseID == courseId);
             return course != null && course.ClassCourseFaculties.Any();
         }

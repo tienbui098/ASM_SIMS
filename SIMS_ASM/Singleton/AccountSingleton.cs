@@ -4,6 +4,7 @@
     {
         // Biến tĩnh để lưu trữ instance duy nhất
         private static AccountSingleton _instance;
+        // Đối tượng lock để đảm bảo thread-safety khi tạo instance
         private static readonly object _lock = new object();
 
         // Đường dẫn file log
@@ -27,9 +28,10 @@
                 // Kiểm tra nếu instance chưa được tạo
                 if (_instance == null)
                 {
-                    // Sử dụng lock để đảm bảo thread-safety
+                    // Sử dụng lock để đảm bảo chỉ có 1 thread được tạo instance
                     lock (_lock)
                     {
+                        // Kiểm tra lần thứ hai sau khi có lock (double-check pattern)
                         if (_instance == null)
                         {
                             _instance = new AccountSingleton();
@@ -43,7 +45,9 @@
         // Phương thức ghi log
         public void Log(string message)
         {
+            // Định dạng thông điệp log gồm thời gian và nội dung
             string logEntry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}{Environment.NewLine}";
+            // Ghi thông điệp vào cuối file log
             File.AppendAllText(_logFilePath, logEntry);
         }
     }

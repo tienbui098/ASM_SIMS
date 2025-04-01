@@ -13,12 +13,14 @@ namespace SIMS_ASM.Services
             _context = context;
         }
 
+        // Thêm mới một điểm số
         public async Task AddGradeAsync(Grade grade)
         {
             _context.Grades.Add(grade);
             await _context.SaveChangesAsync();
         }
 
+        // Xóa một điểm số theo ID
         public async Task DeleteGradeAsync(int id)
         {
             var grade = await _context.Grades.FindAsync(id);
@@ -29,22 +31,25 @@ namespace SIMS_ASM.Services
             }
         }
 
+        // Kiểm tra xem điểm số có tồn tại không
         public async Task<bool> GradeExistsAsync(int id)
         {
             return await _context.Grades.AnyAsync(e => e.GradeID == id);
         }
 
+        // Lấy tất cả điểm số từ database
         public async Task<IEnumerable<Grade>> GetAllGradesAsync()
         {
             return await _context.Grades
+                .Include(g => g.Enrollment) // Bao gồm thông tin đăng ký
+                    .ThenInclude(e => e.User) // Bao gồm thông tin người dùng
                 .Include(g => g.Enrollment)
-                    .ThenInclude(e => e.User)
-                .Include(g => g.Enrollment)
-                    .ThenInclude(e => e.ClassCourseFaculty)
-                        .ThenInclude(ccf => ccf.Course)
+                    .ThenInclude(e => e.ClassCourseFaculty) // Bao gồm thông tin lớp học phần
+                        .ThenInclude(ccf => ccf.Course) // Bao gồm thông tin môn học
                 .ToListAsync();
         }
 
+        // Lấy điểm số theo ID
         public async Task<Grade> GetGradeByIdAsync(int id)
         {
             return await _context.Grades
@@ -56,13 +61,15 @@ namespace SIMS_ASM.Services
                 .FirstOrDefaultAsync(m => m.GradeID == id);
         }
 
+        // Lấy danh sách điểm theo EnrollmentID
         public async Task<IEnumerable<Grade>> GetGradesByEnrollmentAsync(int enrollmentId)
         {
             return await _context.Grades
-                .Where(g => g.EnrollmentID == enrollmentId)
+                .Where(g => g.EnrollmentID == enrollmentId) // Lọc theo EnrollmentID
                 .ToListAsync();
         }
 
+        // Cập nhật thông tin điểm số
         public async Task UpdateGradeAsync(Grade grade)
         {
             _context.Update(grade);
@@ -74,10 +81,10 @@ namespace SIMS_ASM.Services
         {
             return await _context.Grades
                 .Include(g => g.Enrollment) // Gồm thông tin đăng ký
-                    .ThenInclude(e => e.ClassCourseFaculty) // Gồm thông tin khóa học
-                        .ThenInclude(cc => cc.Course) // Gồm thông tin khóa học
+                .ThenInclude(e => e.ClassCourseFaculty) // Gồm thông tin lớp học phần
+                .ThenInclude(cc => cc.Course) // Gồm thông tin môn học
                 .Include(g => g.Enrollment.User) // Gồm thông tin người dùng (sinh viên)
-                .Where(g => g.Enrollment.User.UserID == userId)
+                .Where(g => g.Enrollment.User.UserID == userId) // Lọc theo UserID
                 .ToListAsync();
         }
     }
