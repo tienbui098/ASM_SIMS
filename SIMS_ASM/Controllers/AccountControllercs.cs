@@ -176,7 +176,7 @@ namespace SIMS_ASM.Controllers
             // Gọi phương thức đăng xuất từ dịch vụ
             await _accountService.LogoutAsync();
             //Chuyển hướng về trang login
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Account");
         }
     }
 }
