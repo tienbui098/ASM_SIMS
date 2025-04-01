@@ -10,5 +10,6 @@ namespace SIMS_ASM.Services
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<User>> GetLecturersAsync(); // Thêm phương thức mới
         Task<IEnumerable<User>> GetStudentsAsync();
+        Task<User> GetUserByUsernameAsync(string username); // Add this method
     }
 }
