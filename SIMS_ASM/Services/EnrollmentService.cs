@@ -130,5 +130,18 @@ namespace SIMS_ASM.Services
         {
             return await _context.Grades.AnyAsync(g => g.EnrollmentID == enrollmentId);
         }
+
+        public async Task<IEnumerable<Enrollment>> GetEnrollmentsByUserIdAsync(int userId)
+        {
+            return await _context.Enrollments
+                .Include(e => e.ClassCourseFaculty)
+                    .ThenInclude(cc => cc.Class)
+                .Include(e => e.ClassCourseFaculty)
+                    .ThenInclude(cc => cc.Course)
+                .Include(e => e.ClassCourseFaculty)
+                    .ThenInclude(cc => cc.User) // Thông tin giảng viên
+                .Where(e => e.UserID == userId) // Giả sử Enrollment có thuộc tính StudentId
+                .ToListAsync();
+        }
     }
 }

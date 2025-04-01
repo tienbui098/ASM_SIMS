@@ -2,6 +2,8 @@
 using SIMS_ASM.Data;
 using SIMS_ASM.Factory;
 using SIMS_ASM.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace SIMS_ASM.Services
 {
@@ -9,10 +11,13 @@ namespace SIMS_ASM.Services
     {
 
         private RepositoryFactory _repositoryFactory;
+        private readonly ApplicationDbContex _context;
+
 
         public ClassService(ApplicationDbContex context)
         {
             _repositoryFactory = new RepositoryFactory(context);
+            _context = context;
         }
 
         // Class Management Methods
@@ -60,6 +65,14 @@ namespace SIMS_ASM.Services
         {
             var majorRepo = _repositoryFactory.GetSpecificMajorRepository();
             return majorRepo.GetAll();
+        }
+
+        public async Task<List<StudentClass>> GetStudentClassesByUserIdAsync(int userId)
+        {
+            return await _context.StudentClasses
+                .Where(sc => sc.UserID == userId)
+                .Include(sc => sc.Class) // Giả sử `Class` là lớp mô tả thông tin lớp học
+                .ToListAsync();
         }
     }
 }

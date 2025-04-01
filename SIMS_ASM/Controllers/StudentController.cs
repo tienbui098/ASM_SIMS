@@ -12,12 +12,20 @@ namespace SIMS_ASM.Controllers
         private readonly ApplicationDbContex _context;
         private readonly IUserService _userService;
         private readonly AccountSingleton _singleton;
+        private readonly ClassService _classService;
+        private readonly IEnrollmentService _enrollmentService;
+        private readonly IGradeService _gradeService;
 
-        public StudentController(ApplicationDbContex context, IUserService userService)
+        public StudentController(ApplicationDbContex context, IUserService userService,
+            ClassService classService, IEnrollmentService enrollmentService,
+            IGradeService gradeService)
         {
             _context = context;
             _userService = userService;
             _singleton = AccountSingleton.Instance;
+            _classService = classService;
+            _enrollmentService = enrollmentService;
+            _gradeService = gradeService;
         }
 
         private bool IsAdmin()
@@ -56,6 +64,75 @@ namespace SIMS_ASM.Controllers
 
             return View(user);
         }
+
+        public async Task<IActionResult> ViewStudent()
+        {
+            if (!IsStudent()) // Giả sử IsStudent() kiểm tra vai trò học sinh
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var username = GetCurrentUsername();
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Giả sử bạn có phương thức nào đó để lấy danh sách lớp học của sinh viên
+            user.StudentClasses = await _classService.GetStudentClassesByUserIdAsync(user.UserID);
+
+            return View(user); // Trả về thông tin người dùng cùng với danh sách lớp học
+        }
+
+
+        public async Task<IActionResult> ViewEnrollment()
+        {
+            if (!IsStudent())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var username = GetCurrentUsername();
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Giả sử có phương thức lấy danh sách đăng ký của sinh viên
+            var enrollments = await _enrollmentService.GetEnrollmentsByUserIdAsync(user.UserID);
+
+            // Trả về danh sách đăng ký cho view
+            return View(enrollments);
+        }
+
+
+        public async Task<IActionResult> ViewGrade()
+        {
+            if (!IsStudent())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var username = GetCurrentUsername();
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var enrollments = await _enrollmentService.GetEnrollmentsByUserIdAsync(user.UserID);
+
+            // Giả sử bạn có dịch vụ để lấy điểm của sinh viên
+            var grades = await _gradeService.GetGradesByUserId(user.UserID); // Cần phải cài đặt phương thức này trong GradeService
+
+            return View(grades);
+        }
+
 
 
         public async Task<IActionResult> ManageStudent()

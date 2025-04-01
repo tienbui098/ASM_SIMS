@@ -23,6 +23,10 @@ namespace SIMS_ASM.Controllers
             _singleton = AccountSingleton.Instance;
         }
 
+        //public AccountController()
+        //{
+        //}
+
         // Hiển thị form đăng nhập
         [HttpGet]
         public IActionResult Login()

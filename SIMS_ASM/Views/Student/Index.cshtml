@@ -23,11 +23,12 @@
                 </div>
                 <div class="btn-group">
                     <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-cog me-1"></i>Tài Khoản
+                        <i class="fas fa-cog me-1"></i> View Information
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" asp-controller="ChangePassword" asp-action="Index"><i class="fas fa-key me-2"></i>Đổi Mật Khẩu</a></li>
-                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="fas fa-user-circle me-2"></i>Xem Hồ Sơ</a></li>
+                        <li><a class="dropdown-item" asp-controller="Student" asp-action="ViewStudent"><i class="fas fa-key me-2"></i>View Student Class</a></li>
+                        <li><a class="dropdown-item" asp-controller="Student" asp-action="ViewEnrollment"><i class="fas fa-user-circle me-2"></i>View Enrollment</a></li>
+                        <li><a class="dropdown-item" asp-controller="Student" asp-action="ViewGrade"><i class="fas fa-user-circle me-2"></i>View Grade</a></li>
                     </ul>
                 </div>
             </div>

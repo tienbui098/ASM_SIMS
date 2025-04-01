@@ -68,5 +68,17 @@ namespace SIMS_ASM.Services
             _context.Update(grade);
             await _context.SaveChangesAsync();
         }
+
+        // Lấy danh sách điểm của sinh viên dựa trên UserID
+        public async Task<IEnumerable<Grade>> GetGradesByUserId(int userId)
+        {
+            return await _context.Grades
+                .Include(g => g.Enrollment) // Gồm thông tin đăng ký
+                    .ThenInclude(e => e.ClassCourseFaculty) // Gồm thông tin khóa học
+                        .ThenInclude(cc => cc.Course) // Gồm thông tin khóa học
+                .Include(g => g.Enrollment.User) // Gồm thông tin người dùng (sinh viên)
+                .Where(g => g.Enrollment.User.UserID == userId)
+                .ToListAsync();
+        }
     }
 }
