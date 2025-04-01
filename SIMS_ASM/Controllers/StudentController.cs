@@ -25,10 +25,38 @@ namespace SIMS_ASM.Controllers
             var role = HttpContext.Session.GetString("Role");
             return role == "Admin";
         }
-        public IActionResult Index()
+
+
+        // Kiểm tra quyền Student
+        private bool IsStudent()
         {
-            return View();
+            var role = HttpContext.Session.GetString("Role");
+            return role == "Student";
         }
+        // Lấy thông tin người dùng hiện tại
+        private string GetCurrentUsername()
+        {
+            return HttpContext.Session.GetString("Username");
+        }
+        // Trang chính cho sinh viên
+        public async Task<IActionResult> Index()
+        {
+            if (!IsStudent())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var username = GetCurrentUsername();
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
 
         public async Task<IActionResult> ManageStudent()
         {

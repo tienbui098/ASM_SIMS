@@ -61,6 +61,7 @@ namespace SIMS_ASM.Controllers
 
             HttpContext.Session.SetInt32("UserID", user.UserID);
             HttpContext.Session.SetString("Role", user.Role);
+            HttpContext.Session.SetString("Username", user.Username); // thiết lập này khi đăng nhập thành công
             _singleton.Log($"User {username} logged in with role {user.Role}");
 
             if (user != null)
