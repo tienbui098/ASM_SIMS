@@ -96,7 +96,16 @@ namespace SIMS_ASM.Controllers
                     await _gradeService.AddGradeAsync(grade);
                     _singleton.Log($"Grade created for enrollment {grade.EnrollmentID}");
                     TempData["SuccessMessage"] = "Grade created successfully!";
-                    return RedirectToAction(nameof(Index));
+
+                    // Kiểm tra vai trò và điều hướng
+                    if (IsAdmin())
+                    {
+                        return RedirectToAction("Index"); // Redirect to Grade Index for Admin
+                    }
+                    else if (IsLecturer())
+                    {
+                        return RedirectToAction("ViewGrade", "Lecturer"); // Redirect to ViewGrade for Lecturer
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -105,24 +114,10 @@ namespace SIMS_ASM.Controllers
                 }
             }
 
-            // Nếu có lỗi, cần load lại dropdown
+            // Load lại dropdown nếu có lỗi
             var classes = _classService.GetAllClasses();
             ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
-
-            if (grade.EnrollmentID > 0)
-            {
-                var enrollment = await _enrollmentService.GetEnrollmentByIdAsync(grade.EnrollmentID);
-                if (enrollment != null)
-                {
-                    var enrollments = await GetEnrollmentsByClassAsync(enrollment.ClassCourseFaculty.ClassID);
-                    ViewBag.Enrollments = enrollments;
-                }
-            }
-            else
-            {
-                ViewBag.Enrollments = new List<SelectListItem>();
-            }
-
+            ViewBag.Enrollments = new List<SelectListItem>(); // Reset enrollments if necessary
             return View(grade);
         }
 
@@ -198,7 +193,16 @@ namespace SIMS_ASM.Controllers
                     await _gradeService.UpdateGradeAsync(grade);
                     _singleton.Log($"Grade {grade.GradeID} updated");
                     TempData["SuccessMessage"] = "Grade updated successfully!";
-                    return RedirectToAction(nameof(Index));
+
+                    // Kiểm tra vai trò và điều hướng
+                    if (IsAdmin())
+                    {
+                        return RedirectToAction("Index"); // Redirect to Grade Index for Admin
+                    }
+                    else if (IsLecturer())
+                    {
+                        return RedirectToAction("ViewGrade", "Lecturer"); // Redirect to ViewGrade for Lecturer
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -207,7 +211,7 @@ namespace SIMS_ASM.Controllers
                 }
             }
 
-            // Nếu có lỗi, cần load lại dropdown
+            // Load lại dropdown nếu có lỗi
             var classes = _classService.GetAllClasses();
             ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
 

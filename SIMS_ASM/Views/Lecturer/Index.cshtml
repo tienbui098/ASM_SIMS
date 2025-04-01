@@ -3,7 +3,7 @@
 @inject IUserService UserService
 
 @{
-    ViewData["Title"] = "Bảng Điều Khiển Sinh Viên";
+    ViewData["Title"] = "Lecturer Information";
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
@@ -12,22 +12,23 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h5 class="m-0 font-weight-bold">
-                    <i class="fas fa-tachometer-alt me-2"></i>Bảng Điều Khiển Sinh Viên
+                    <i class="fas fa-tachometer-alt me-2"></i> Lecturer Information
                 </h5>
             </div>
             <div class="col-md-6 text-end">
                 <div class="btn-group">
                     <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Đăng Xuất</button>
+                        <button type="submit" class="btn btn-danger">Log Out</button>
                     </form>
                 </div>
                 <div class="btn-group">
                     <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-cog me-1"></i>Tài Khoản
+                        <i class="fas fa-cog me-1"></i>View Information
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" asp-controller="ChangePassword" asp-action="Index"><i class="fas fa-key me-2"></i>Đổi Mật Khẩu</a></li>
-                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="fas fa-user-circle me-2"></i>Xem Hồ Sơ</a></li>
+                        <li><a class="dropdown-item" asp-controller="Lecturer" asp-action="ViewGrade"><i class="fas fa-star me-2"></i>Grades</a></li>
+                        <li><a class="dropdown-item" asp-controller="Lecturer" asp-action="ViewClassCourseFaculty"><i class="fas fa-link me-2"></i>Class Courses </a></li>
+                        <li><a class="dropdown-item" asp-controller="Lecturer" asp-action="ViewEnrollment"><i class="fas fa-clipboard-list me-2"></i>Enrollments</a></li>
                     </ul>
                 </div>
             </div>
@@ -40,7 +41,7 @@
                 <div class="card shadow">
                     <div class="card-header bg-secondary text-white py-2">
                         <h6 class="m-0 font-weight-bold">
-                            <i class="fas fa-user me-2"></i>Thông Tin Của Tôi
+                            <i class="fas fa-user me-2"></i>Lecturer Information
                         </h6>
                     </div>
                     <div class="card-body">
