@@ -1,0 +1,552 @@
+﻿@{
+    ViewData["Title"] = "Login/Register";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Login & Register</title>
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #f8f9fc;
+            --accent-color: #4e73df;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --text-color: #5a5c69;
+            --error-color: #e74a3b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-color);
+        }
+
+        .container {
+            position: relative;
+            width: 900px;
+            height: 600px;
+            margin: 20px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+            .container .user {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+            }
+
+            .container .side-image {
+                position: relative;
+                width: 40%;
+                height: 100%;
+                background: linear-gradient(135deg, rgba(78, 115, 223, 0.8) 0%, rgba(78, 115, 223, 0.6) 100%);
+                transition: 0.5s;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1;
+            }
+
+            .container .side-image-content {
+                color: white;
+                text-align: left;
+                padding: 40px;
+            }
+
+                .container .side-image-content h2 {
+                    font-size: 32px;
+                    margin-bottom: 15px;
+                    font-weight: 600;
+                }
+
+                .container .side-image-content p {
+                    font-size: 16px;
+                    margin-bottom: 30px;
+                    font-weight: 300;
+                    max-width: 80%;
+                }
+
+            .container .form-box {
+                position: relative;
+                width: 60%;
+                height: 100%;
+                background: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 40px;
+                transition: 0.5s;
+            }
+
+                .container .form-box h2 {
+                    font-size: 26px;
+                    color: #333;
+                    margin-bottom: 10px;
+                    font-weight: 600;
+                }
+
+                .container .form-box p {
+                    color: #777;
+                    margin-bottom: 30px;
+                    font-size: 14px;
+                }
+
+        .form-content {
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+            .input-group label {
+                display: block;
+                color: #333;
+                margin-bottom: 8px;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+        .input-field {
+            position: relative;
+            width: 100%;
+        }
+
+            .input-field i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #aaa;
+                font-size: 16px;
+            }
+
+            .input-field input,
+            .input-field select {
+                width: 100%;
+                padding: 15px 15px 15px 45px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                outline: none;
+                font-size: 14px;
+                transition: 0.3s;
+                background-color: var(--secondary-color);
+            }
+
+                .input-field input:focus,
+                .input-field select:focus {
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
+                }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+        }
+
+            .remember input {
+                margin-right: 8px;
+            }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: 0.3s;
+            margin-bottom: 25px;
+        }
+
+            button:hover {
+                background-color: #375ad3;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(78, 115, 223, 0.2);
+            }
+
+        .toggle-container {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+            .toggle-container p {
+                margin-bottom: 0;
+            }
+
+            .toggle-container a {
+                color: var(--primary-color);
+                text-decoration: none;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+        /* Signup Form Styles */
+        .signup-form {
+            display: none;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 10px;
+            /* Fix cho vấn đề input bị khuất */
+            width: 100%;
+            padding-left: 5px;
+        }
+
+            .signup-form::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            .signup-form::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+
+            .signup-form::-webkit-scrollbar-thumb {
+                background: var(--primary-color);
+                border-radius: 10px;
+            }
+
+            /* Đảm bảo các phần tử trong form không bị tràn */
+            .signup-form .input-group {
+                width: calc(100% - 5px);
+            }
+
+        .login-form {
+            display: block;
+            width: 100%;
+        }
+
+        .validation-summary-errors {
+            color: var(--error-color);
+            font-size: 14px;
+            background-color: rgba(231, 74, 59, 0.1);
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--error-color);
+            display: none;
+        }
+
+            .validation-summary-errors ul {
+                list-style-type: none;
+                padding-left: 10px;
+            }
+
+        /* Animation Classes */
+        .slide-left {
+            transform: translateX(0);
+        }
+
+        .slide-right {
+            transform: translateX(100%);
+        }
+
+        .container.active .side-image {
+            transform: translateX(150%);
+        }
+
+        .container.active .form-box {
+            transform: translateX(-66.6%);
+        }
+
+        /* Social login buttons from old design */
+        .login-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+            .login-divider span {
+                flex: 1;
+                height: 1px;
+                background-color: #ddd;
+            }
+
+            .login-divider p {
+                margin: 0 15px;
+                color: #777;
+                font-size: 14px;
+            }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .social-button:hover {
+                background-color: #f8f9fc;
+                transform: translateY(-2px);
+            }
+
+            .social-button i {
+                font-size: 18px;
+                color: #555;
+            }
+
+        /* Fix scrolling trong form đăng ký */
+        .form-content {
+            width: 100%;
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="user">
+            <div class="side-image" id="side-image">
+                <div class="side-image-content">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to continue to your account</p>
+                </div>
+            </div>
+            <div class="form-box">
+                <div class="form-content">
+                    <!-- Login Form -->
+                    <div class="login-form" id="login-form">
+                        <h2>Sign In</h2>
+                        <p>Please enter your credentials to continue</p>
+                        <form asp-controller="Account" asp-action="Login" method="post">
+                            <div class="input-group">
+                                <label for="username">Username</label>
+                                <div class="input-field">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" name="username" id="username" placeholder="Enter your username" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="password">Password</label>
+                                <div class="input-field">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                                </div>
+                            </div>
+                            <div class="remember-forgot">
+                                <div class="remember">
+                                    <input type="checkbox" id="remember" name="remember">
+                                    <label for="remember">Remember me</label>
+                                </div>
+                                <a href="#" class="forgot-password">Forgot Password?</a>
+                            </div>
+                            <button type="submit" class="login-button">Sign In</button>
+                            <div class="toggle-container">
+                                <p>Don't have an account? <a id="signup-link">Register here</a></p>
+                            </div>
+                            <div class="validation-summary-errors" id="login-errors"></div>
+                        </form>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div class="signup-form" id="signup-form">
+                        <h2>Sign Up</h2>
+                        <p>Fill in the details to create your account</p>
+                        <form asp-controller="Account" asp-action="Register" method="post">
+                            <div class="input-group">
+                                <label for="Username">Username</label>
+                                <div class="input-field">
+                                    <i class="fas fa-user"></i>
+                                    <input id="Username" name="Username" placeholder="Enter your username" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="Password">Password</label>
+                                <div class="input-field">
+                                    <i class="fas fa-lock"></i>
+                                    <input id="Password" name="Password" type="password" placeholder="Enter your password" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="Role">Role</label>
+                                <div class="input-field">
+                                    <i class="fas fa-user-tag"></i>
+                                    <select id="Role" name="Role" required>
+                                        <option value="Student">Student</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="Email">Email</label>
+                                <div class="input-field">
+                                    <i class="fas fa-envelope"></i>
+                                    <input id="Email" name="Email" placeholder="Enter your email" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="FullName">Full Name</label>
+                                <div class="input-field">
+                                    <i class="fas fa-user-circle"></i>
+                                    <input id="FullName" name="FullName" placeholder="Enter your full name" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="Date_of_birth">Date of Birth</label>
+                                <div class="input-field">
+                                    <i class="fas fa-calendar"></i>
+                                    <input id="Date_of_birth" name="Date_of_birth" type="date" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="Address">Address</label>
+                                <div class="input-field">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <input id="Address" name="Address" placeholder="Enter your address" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="Phone_number">Phone Number</label>
+                                <div class="input-field">
+                                    <i class="fas fa-phone"></i>
+                                    <input id="Phone_number" name="Phone_number" placeholder="Enter your phone number" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="Gender">Gender</label>
+                                <div class="input-field">
+                                    <i class="fas fa-venus-mars"></i>
+                                    <select id="Gender" name="Gender" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="register-button">Sign Up</button>
+                            <div class="toggle-container">
+                                <p>Already have an account? <a id="login-link">Sign in</a></p>
+                            </div>
+                            <div class="validation-summary-errors" id="register-errors"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            const sideImage = document.getElementById('side-image');
+            const sideImageContent = document.querySelector('.side-image-content');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const signupLink = document.getElementById('signup-link');
+            const loginLink = document.getElementById('login-link');
+
+            // Check validation errors
+            const loginErrors = document.getElementById('login-errors');
+            const registerErrors = document.getElementById('register-errors');
+
+            // Handle form switching
+            signupLink.addEventListener('click', function() {
+                container.classList.add('active');
+                setTimeout(function() {
+                    loginForm.style.display = 'none';
+                    signupForm.style.display = 'block';
+                    sideImageContent.innerHTML = `
+                        <h2>Join Us</h2>
+                        <p>Create an account to manage your profile</p>
+                    `;
+                }, 300);
+            });
+
+            loginLink.addEventListener('click', function() {
+                container.classList.remove('active');
+                setTimeout(function() {
+                    signupForm.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    sideImageContent.innerHTML = `
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to continue to your account</p>
+                    `;
+                }, 300);
+            });
+
+            // Check validation errors and display them
+            const validateErrors = function(validationSummary, errorContainer) {
+                if (validationSummary) {
+                    const errorList = validationSummary.querySelector('ul');
+                    if (errorList && errorList.children.length > 0) {
+                        errorContainer.innerHTML = validationSummary.innerHTML;
+                        errorContainer.style.display = 'block';
+                    } else {
+                        errorContainer.style.display = 'none';
+                    }
+                }
+            };
+
+            // Get any existing validation errors
+            const validationSummaries = document.querySelectorAll('.validation-summary-errors');
+            validationSummaries.forEach(function(summary) {
+                const formId = summary.closest('form').id;
+                if (formId.includes('login')) {
+                    validateErrors(summary, loginErrors);
+                } else if (formId.includes('register')) {
+                    validateErrors(summary, registerErrors);
+                    // If register has errors, show register form
+                    if (registerErrors.style.display === 'block') {
+                        container.classList.add('active');
+                        loginForm.style.display = 'none';
+                        signupForm.style.display = 'block';
+                        sideImageContent.innerHTML = `
+                            <h2>Join Us</h2>
+                            <p>Create an account to manage your profile</p>
+                        `;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
