@@ -120,7 +120,11 @@ namespace SIMS_ASM.Controllers
             {
                 await _accountService.RegisterAsync(user);
                 _singleton.Log($"User {user.Username} registered successfully with role {user.Role}");
-                return RedirectToAction("Login");
+                // Gửi thông báo thành công
+                ViewBag.SuccessMessage = "Registration successful!";
+
+                // Trả về view nhưng giữ nguyên trang đăng ký
+                return RedirectToAction("Index", "Account");
             }
             catch (InvalidOperationException ex)
             {
@@ -138,6 +142,12 @@ namespace SIMS_ASM.Controllers
             }
 
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
