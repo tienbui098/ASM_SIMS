@@ -79,5 +79,16 @@ namespace SIMS_ASM.Services
             return await _context.ClassCourseFaculties
                 .AnyAsync(ccf => ccf.ClassID == classId && ccf.CourseID == courseId && ccf.UserID == userId);
         }
+
+        public async Task<IEnumerable<ClassCourseFaculty>> GetClassCourseFacultiesByUserId(int userId)
+        {
+            // Giả định rằng ClassCourseFaculty có thuộc tính UserId để xác định giảng viên nào dạy lớp nào
+            return await _context.ClassCourseFaculties
+                .Include(ccf => ccf.Class)
+                .Include(ccf => ccf.Course)
+                .Include(ccf => ccf.User) // Ngoài ra, có thể bao gồm thông tin người dùng
+                .Where(ccf => ccf.UserID == userId) // Lọc theo userId
+                .ToListAsync();
+        }
     }
 }

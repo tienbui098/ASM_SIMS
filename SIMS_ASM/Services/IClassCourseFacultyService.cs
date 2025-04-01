@@ -10,5 +10,6 @@ namespace SIMS_ASM.Services
         Task UpdateClassCourseFacultyAsync(ClassCourseFaculty classCourseFaculty);
         Task DeleteClassCourseFacultyAsync(int id);
         Task<bool> IsClassCourseFacultyExistsAsync(int classId, int courseId, int userId);
+        Task<IEnumerable<ClassCourseFaculty>> GetClassCourseFacultiesByUserId(int userId);
     }
 }

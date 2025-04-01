@@ -12,12 +12,29 @@ namespace SIMS_ASM.Controllers
         private readonly ApplicationDbContex _context;
         private readonly IUserService _userService;
         private readonly AccountSingleton _singleton;
+        private readonly IEnrollmentService _enrollmentService;
+        private readonly IGradeService _gradeService;
+        private readonly IClassCourseFacultyService _classCourseFacultyService;
+        private readonly ICourseService _courseService;
+        private readonly ClassService _classService;
 
-        public LecturerController(ApplicationDbContex context, IUserService userService)
+
+        public LecturerController(ApplicationDbContex context,
+            IUserService userService,
+            IEnrollmentService enrollmentService,
+            IGradeService gradeService,
+            IClassCourseFacultyService classCourseFacultyService,
+            ICourseService courseService,
+            ClassService classService)
         {
             _context = context;
             _userService = userService;
             _singleton = AccountSingleton.Instance;
+            _enrollmentService = enrollmentService;
+            _gradeService = gradeService;
+            _classCourseFacultyService = classCourseFacultyService;
+            _courseService = courseService;
+            _classService = classService;
         }
         private bool IsAdmin()
         {
@@ -53,6 +70,44 @@ namespace SIMS_ASM.Controllers
             }
 
             return View(user);
+        }
+
+        public async Task<IActionResult> ViewGrade()
+        {
+            if (!IsLecturer())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var grades = await _gradeService.GetAllGradesAsync();
+
+            // Thêm dữ liệu filter
+            ViewBag.Classes = _classService.GetAllClasses();
+            ViewBag.Courses = await _courseService.GetAllCoursesAsync();
+
+            return View(grades);
+        }
+
+
+        public async Task<IActionResult> ViewClassCourseFaculty(int? classId, int? courseId, int? facultyId)
+        {
+            if (!IsLecturer())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var username = GetCurrentUsername();
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            // Lấy danh sách các Class Course Faculty mà người dùng có quyền truy cập
+            var classCourseFaculties = await _classCourseFacultyService.GetClassCourseFacultiesByUserId(user.UserID);
+            ViewBag.CurrentUser = user;
+
+            return View(classCourseFaculties); // Trả lại danh sách ClassCourseFaculty
         }
 
         public async Task<IActionResult> ManageLecturer()
@@ -110,8 +165,8 @@ namespace SIMS_ASM.Controllers
         }
 
         [HttpGet]
-            public async Task<IActionResult> Delete(int id)
-            {
+        public async Task<IActionResult> Delete(int id)
+        {
             if (!IsAdmin())
             {
                 _singleton.Log("Unauthorized attempt to delete major: User not an admin");
