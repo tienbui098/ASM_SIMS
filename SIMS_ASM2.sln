@@ -5,7 +5,9 @@ VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIMS_ASM", "SIMS_ASM\SIMS_ASM.csproj", "{23B8C3E9-7823-4F98-9294-F8019D22A89B}"
 EndProject
+
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject_SIMS", "TestProject_SIMS\TestProject_SIMS.csproj", "{390287ED-37FC-4CFB-993E-737A53570B46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{C7C4DD16-0D95-4FEF-9B02-BD330F54939F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,11 @@ Global
 		{23B8C3E9-7823-4F98-9294-F8019D22A89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23B8C3E9-7823-4F98-9294-F8019D22A89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23B8C3E9-7823-4F98-9294-F8019D22A89B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{390287ED-37FC-4CFB-993E-737A53570B46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{390287ED-37FC-4CFB-993E-737A53570B46}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{390287ED-37FC-4CFB-993E-737A53570B46}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{390287ED-37FC-4CFB-993E-737A53570B46}.Release|Any CPU.Build.0 = Release|Any CPU
+
+		{C7C4DD16-0D95-4FEF-9B02-BD330F54939F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C4DD16-0D95-4FEF-9B02-BD330F54939F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7C4DD16-0D95-4FEF-9B02-BD330F54939F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7C4DD16-0D95-4FEF-9B02-BD330F54939F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
