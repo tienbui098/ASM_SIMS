@@ -3,7 +3,7 @@
 @inject IUserService UserService
 
 @{
-    ViewData["Title"] = "Bảng Điều Khiển Sinh Viên";
+    ViewData["Title"] = "Student Information";
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
@@ -18,7 +18,9 @@
             <div class="col-md-6 text-end">
                 <div class="btn-group">
                     <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+
                         <button type="submit" class="btn btn-danger">Logout</button>
+
                     </form>
                 </div>
                 <div class="btn-group">
@@ -41,7 +43,7 @@
                 <div class="card shadow">
                     <div class="card-header bg-secondary text-white py-2">
                         <h6 class="m-0 font-weight-bold">
-                            <i class="fas fa-user me-2"></i>Student Information
+                            <i class="fas fa-user me-2"></i>My Information
                         </h6>
                     </div>
                     <div class="card-body">
