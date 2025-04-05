@@ -4,15 +4,12 @@ using SIMS_ASM.Models;
 
 namespace SIMS_ASM.Factory
 {
-    public class ClassRepository : Repository<Class>
+    public class ClassRepository : Repository<Class>, IClassRepository
     {
-        private ApplicationDbContex _context;
         public ClassRepository(ApplicationDbContex context) : base(context)
         {
-            this._context = context;
         }
 
-        // Additional class-specific methods
         public IEnumerable<Class> GetClassesByMajor(int majorId)
         {
             return _context.Classes
@@ -20,14 +17,16 @@ namespace SIMS_ASM.Factory
                 .ToList();
         }
 
-        public IQueryable<Class> GetAll()
+        public Class GetClassWithMajor(int id)
         {
-            return _context.Classes.AsQueryable();
+            return _context.Classes
+                .Include(c => c.Major)
+                .FirstOrDefault(c => c.ClassID == id);
         }
 
-        public Class GetById(int id)
+        public IQueryable<Class> GetAllQueryable()
         {
-            return _context.Classes.Include(c => c.Major).FirstOrDefault(c => c.ClassID == id);
+            return _context.Classes.AsQueryable();
         }
     }
 }

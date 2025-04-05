@@ -7,64 +7,65 @@ namespace SIMS_ASM.Services
 {
     public class ClassService
     {
-        // Khai báo RepositoryFactory và context để quản lý dữ liệu
-        private RepositoryFactory _repositoryFactory; // Factory để tạo các repository
-        private readonly ApplicationDbContex _context; // Context để truy cập cơ sở dữ liệu trực tiếp
+        private readonly IClassRepository _classRepository;
+        private readonly IMajorRepository _majorRepository;
+        private readonly ApplicationDbContex _context;
 
-        // Constructor: Inject ApplicationDbContex và khởi tạo RepositoryFactory
-        public ClassService(ApplicationDbContex context)
+        // Constructor: Inject các repository và context cần thiết
+        public ClassService(IClassRepository classRepository,
+                          IMajorRepository majorRepository,
+                          ApplicationDbContex context)
         {
-            _repositoryFactory = new RepositoryFactory(context); // Khởi tạo factory với context
-            _context = context; // Gán context để sử dụng trực tiếp khi cần
+            _classRepository = classRepository;
+            _majorRepository = majorRepository;
+            _context = context;
         }
 
         // QUẢN LÝ LỚP HỌC (Class Management Methods)
 
-        // Lấy danh sách tất cả lớp học
+        // Lấy danh sách tất cả lớp học với thông tin Major
         public IEnumerable<Class> GetAllClasses()
         {
-            var classRepo = _repositoryFactory.GetSpecificClassRepository(); // Lấy repository chuyên biệt cho Class
-            return classRepo.GetAll()
-                .Include(c => c.Major) // Bao gồm thông tin ngành học liên quan
-                .ToList(); // Trả về danh sách lớp học dưới dạng List
+            return _classRepository.GetAllQueryable()
+                .Include(c => c.Major)
+                .ToList();
         }
 
-        // Lấy chi tiết lớp học theo ID
+        // Lấy chi tiết lớp học theo ID với thông tin Major
         public Class GetClassDetails(int classId)
         {
-            var classRepo = _repositoryFactory.GetSpecificClassRepository(); // Lấy repository chuyên biệt cho Class
-            return classRepo.GetById(classId); // Trả về thông tin lớp học theo ID
+            return _classRepository.GetClassWithMajor(classId);
         }
 
         // Lấy danh sách lớp học theo MajorID
         public IEnumerable<Class> GetClassesByMajor(int majorId)
         {
-            var classRepo = _repositoryFactory.GetSpecificClassRepository(); // Lấy repository chuyên biệt cho Class
-            return classRepo.GetClassesByMajor(majorId); // Trả về các lớp học thuộc ngành học cụ thể
+            return _classRepository.GetClassesByMajor(majorId);
         }
 
         // Tạo lớp học mới
         public void CreateClass(Class newClass)
         {
-            var classRepo = _repositoryFactory.GetClassRepository(); // Lấy repository cơ bản cho Class
-            classRepo.Insert(newClass); // Thêm lớp học mới vào cơ sở dữ liệu
-            classRepo.Save(); // Lưu thay đổi
+            _classRepository.Add(newClass);
+            _classRepository.SaveChanges();
         }
 
         // Cập nhật thông tin lớp học
         public void UpdateClass(Class updatedClass)
         {
-            var classRepo = _repositoryFactory.GetClassRepository(); // Lấy repository cơ bản cho Class
-            classRepo.Update(updatedClass); // Cập nhật thông tin lớp học
-            classRepo.Save(); // Lưu thay đổi
+            _classRepository.Update(updatedClass);
+            _classRepository.SaveChanges();
         }
 
         // Xóa lớp học theo ID
         public void DeleteClass(int classId)
         {
-            var classRepo = _repositoryFactory.GetClassRepository(); // Lấy repository cơ bản cho Class
-            classRepo.Delete(classId); // Xóa lớp học theo ID
-            classRepo.Save(); // Lưu thay đổi
+            var classToDelete = _classRepository.GetById(classId);
+            if (classToDelete != null)
+            {
+                _classRepository.Delete(classToDelete);
+                _classRepository.SaveChanges();
+            }
         }
 
         // QUẢN LÝ NGÀNH HỌC (Major Management Methods)
@@ -72,17 +73,16 @@ namespace SIMS_ASM.Services
         // Lấy danh sách tất cả ngành học
         public IEnumerable<Major> GetAllMajors()
         {
-            var majorRepo = _repositoryFactory.GetSpecificMajorRepository(); // Lấy repository chuyên biệt cho Major
-            return majorRepo.GetAll(); // Trả về tất cả ngành học
+            return _majorRepository.GetAll();
         }
 
         // Lấy danh sách StudentClass theo UserID (sinh viên)
         public async Task<List<StudentClass>> GetStudentClassesByUserIdAsync(int userId)
         {
             return await _context.StudentClasses
-                .Where(sc => sc.UserID == userId) // Lọc các bản ghi StudentClass theo UserID
-                .Include(sc => sc.Class) // Bao gồm thông tin lớp học liên quan
-                .ToListAsync(); // Trả về danh sách bất đồng bộ
+                .Where(sc => sc.UserID == userId)
+                .Include(sc => sc.Class)
+                .ToListAsync();
         }
     }
 }
