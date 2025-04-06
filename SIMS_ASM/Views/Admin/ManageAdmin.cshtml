@@ -8,7 +8,7 @@
 }
 
 <div class="card shadow mb-4">
-    <div class="card-header bg-primary text-white py-3">
+    <div class="CARD-HEADER">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h5 class="m-0 font-weight-bold">
@@ -80,7 +80,7 @@
                     @foreach (var user in Model.Where(u => u.Role == "Admin"))
                     {
                         <tr>
-							<td>@user.UserID</td>
+                            <td>@user.UserID</td>
                             <td>@user.Username</td>
                             <td>@user.FullName</td>
                             <td>@user.Email</td>
@@ -112,19 +112,7 @@
 @section Styles {
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <style>
-        .card-header {
-            padding: 1rem 1.5rem;
-        }
-
-        .input-group-text {
-            background-color: #e9ecef;
-        }
-        /* Ẩn các control mặc định của DataTables */
-        .dataTables_length, .dataTables_filter {
-            display: none;
-        }
-    </style>
+    <link href="~/css/ManageAdmin.css" rel="stylesheet" />
 }
 
 @section Scripts {
@@ -132,37 +120,5 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var table = $('#adminTable').DataTable({
-                responsive: true,
-                dom: '<"top"B>rt<"bottom"ip>', // Loại bỏ 'l' (length) và 'f' (filter)
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: '<i class="fas fa-file-excel me-1"></i> Excel',
-                        className: 'btn btn-success btn-sm',
-                        title: 'Admins_Export'
-                    }
-                ],
-                columnDefs: [
-                    { orderable: false, targets: [7] } // Actions column
-                ],
-                language: {
-                    info: "Showing _START_ to _END_ of _TOTAL_ admins", // Customize info text
-                    infoEmpty: "No admins found",
-                    emptyTable: "No admin data available in table"
-                }
-            });
-
-            // Áp dụng tìm kiếm từ search box tùy chỉnh
-            $('#customSearch').keyup(function () {
-                table.search(this.value).draw();
-            });
-
-            $('#exportBtn').click(function () {
-                $('.buttons-excel').click();
-            });
-        });
-    </script>
+    <script src="~/js/ManageAdmin.js"></script>
 }

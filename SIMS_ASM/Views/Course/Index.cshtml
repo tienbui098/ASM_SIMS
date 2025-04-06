@@ -20,7 +20,7 @@
                 <a asp-action="CourseCreate" class="btn btn-light">
                     <i class="fas fa-plus-circle me-1"></i> Create New Course
                 </a>
-                
+
                 <div class="btn-group">
                     <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-cog me-1"></i> Management
@@ -124,44 +124,10 @@
         </div>
     </div>
 </div>
-
 @section Styles {
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <style>
-        .card-header {
-            padding: 1rem 1.5rem;
-        }
-
-        .input-group-text {
-            background-color: #e9ecef;
-        }
-        /* Hide default DataTables controls */
-        .dataTables_length, .dataTables_filter {
-            display: none;
-        }
-
-        .badge {
-            font-size: 0.85em;
-            font-weight: 500;
-            min-width: 25px;
-        }
-
-        .btn-group-sm .btn {
-            padding: 0.25rem 0.5rem;
-        }
-
-        #resetFiltersBtn {
-            height: 100%; /* Cùng chiều cao với các input */
-            white-space: nowrap; /* Ngăn text bị xuống dòng */
-        }
-
-        /* Đảm bảo các phần tử form có chiều cao đồng nhất */
-        .form-select, .form-control, #resetFiltersBtn {
-            height: calc(1.5em + 1rem + 2px);
-            padding: 0.5rem 1rem;
-        }
-    </style>
+    <link href="~/css/CourseIndex.css" rel="stylesheet" />
 }
 
 @section Scripts {
@@ -169,77 +135,5 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var table = $('#courseTable').DataTable({
-                responsive: true,
-                dom: '<"top"B>rt<"bottom"ip>',
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: '<i class="fas fa-file-excel me-1"></i> Excel',
-                        className: 'btn btn-success btn-sm',
-                        title: 'Courses_Export',
-                        exportOptions: {
-                            columns: [0, 1, 2] // Export các cột 0,1,2 (bỏ cột Action)
-                        }
-                    }
-                ],
-                columnDefs: [
-                    {
-                        orderable: false,
-                        targets: [3] // Cột Action không sort được
-                    },
-                    {
-                        targets: [2], // Cột Major
-                        render: function(data, type, row) {
-                            // Chỉ hiển thị tên Major, nhưng filter theo MajorID
-                            if (type === 'filter') {
-                                return $(row[2]).data('major') || data;
-                            }
-                            return data;
-                        }
-                    }
-                ],
-                language: {
-                    info: "Showing _START_ to _END_ of _TOTAL_ courses",
-                    infoEmpty: "No courses found",
-                    emptyTable: "No course data available"
-                }
-            });
-
-            // Custom search
-            $('#customSearch').on('keyup', function() {
-                table.search(this.value).draw();
-            });
-
-            // Major filter - cải tiến
-            $('#majorFilter').on('change', function() {
-                var majorId = $(this).val();
-                table.rows().every(function() {
-                    var rowMajor = $(this.node()).find('td[data-major]').data('major');
-                    $(this.node()).toggle(!majorId || rowMajor == majorId);
-                });
-            });
-
-            // Export button
-            $('#exportBtn').click(function() {
-                table.button('.buttons-excel').trigger();
-            });
-
-            $('#resetFiltersBtn').on('click', function() {
-                $(this).find('i').addClass('fa-spin');
-
-                // Thực hiện reset
-                $('#customSearch').val('');
-                $('#majorFilter').val('').trigger('change');
-                table.search('').columns().search('').draw();
-
-                // Dừng hiệu ứng sau 1s
-                setTimeout(() => {
-                    $(this).find('i').removeClass('fa-spin');
-                }, 1000);
-            });
-        });
-    </script>
+    <script src="~/js/CourseIndex.js"></script>
 }

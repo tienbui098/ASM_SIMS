@@ -2,40 +2,71 @@
 
 @{
     ViewData["Title"] = "Create Course";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-<h2>Create New Course</h2>
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="m-0 font-weight-bold">
+                    <i class="fas fa-plus-circle me-2"></i>Create New Course
+                </h5>
+            </div>
+        </div>
     </div>
+    <div class="card-body">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form asp-action="CourseCreate" method="post" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CourseName" class="form-label fw-bold">Course Name</label>
+                        <input asp-for="CourseName" class="form-control" placeholder="Enter course name" required />
+                        <span asp-validation-for="CourseName" class="text-danger"></span>
+                        <div class="invalid-feedback">
+                            Please provide a valid course name.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="MajorID" class="form-label fw-bold">Major</label>
+                        <select asp-for="MajorID" class="form-select" asp-items="@(new SelectList(ViewBag.Majors, "MajorID", "MajorName"))" required>
+                            <option value="">Select a Major</option>
+                        </select>
+                        <span asp-validation-for="MajorID" class="text-danger"></span>
+                        <div class="invalid-feedback">
+                            Please select a major.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-save me-1"></i> Create Course
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Styles {
+    <link href="~/css/CourseCreate.css" rel="stylesheet" />
 }
-
-<form asp-action="CourseCreate" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="form-group">
-        <label asp-for="CourseName" class="control-label"></label>
-        <input asp-for="CourseName" class="form-control" />
-        <span asp-validation-for="CourseName" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="MajorID" class="control-label">Major</label>
-        <select asp-for="MajorID" class="form-control" asp-items="@(new SelectList(ViewBag.Majors, "MajorID", "MajorName"))">
-            <option value="">Select a Major</option>
-        </select>
-        <span asp-validation-for="MajorID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </div>
-</form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/CourseCreate.js"></script>
 }

@@ -2,86 +2,90 @@
 
 @{
     ViewData["Title"] = "Add Lecturer";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/AddUser.css"> <!-- Đường dẫn đến file CSS tùy chỉnh -->
-    <title>Add User</title>
-</head>
-<body class="bg-light">
-    <div class="container">
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="m-0 font-weight-bold">
+                    <i class="fas fa-chalkboard-teacher me-2"></i>Add New Lecturer
+                </h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <a asp-controller="Lecturer" asp-action="ManageLecturer" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Lecturer List
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card mt-5 shadow">
-                    <div class="card-header text-center bg-primary text-white">
-                        <h2>Add Lecturer</h2>
+                <form asp-controller="Lecturer" asp-action="AddLecturer" method="post" class="needs-validation" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="card-body">
-                        <form asp-controller="Lecturer" asp-action="AddLecturer" method="post">
-                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="Username" class="control-label"></label>
-                                <input asp-for="Username" class="form-control" required />
+                                <label asp-for="Username" class="form-label fw-bold">Username</label>
+                                <input asp-for="Username" class="form-control" placeholder="Enter username" required />
                                 <span asp-validation-for="Username" class="text-danger"></span>
+                                <div class="invalid-feedback">
+                                    Please provide a username.
+                                </div>
                             </div>
-
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="Password" class="control-label"></label>
-                                <input asp-for="Password" class="form-control" type="password" required />
+                                <label asp-for="Password" class="form-label fw-bold">Password</label>
+                                <input asp-for="Password" class="form-control" type="password" placeholder="Enter password" required />
                                 <span asp-validation-for="Password" class="text-danger"></span>
+                                <div class="invalid-feedback">
+                                    Please provide a password.
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="Role" class="control-label"></label>
-                                <select asp-for="Role" class="form-control" required>
-                                    @* <option value="">Select Role</option> *@
-                                    @* <option value="Student">Student</option> *@
-                                    <option value="Lecturer">Lecturer</option> 
-                                    @* <option value="Admin">Admin</option> *@
-                                </select>
-                                <span asp-validation-for="Role" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="FullName"></label>
-                                <input asp-for="FullName" class="form-control" required />
+                                <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+                                <input asp-for="FullName" class="form-control" placeholder="Enter full name" required />
                                 <span asp-validation-for="FullName" class="text-danger"></span>
+                                <div class="invalid-feedback">
+                                    Please provide a full name.
+                                </div>
                             </div>
-
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="Email" class="control-label"></label>
-                                <input asp-for="Email" class="form-control" required />
+                                <label asp-for="Email" class="form-label fw-bold">Email</label>
+                                <input asp-for="Email" class="form-control" type="email" placeholder="Enter email" required />
                                 <span asp-validation-for="Email" class="text-danger"></span>
+                                <div class="invalid-feedback">
+                                    Please provide a valid email.
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="Date_of_birth" class="control-label"></label>
+                                <label asp-for="Date_of_birth" class="form-label fw-bold">Date of Birth</label>
                                 <input asp-for="Date_of_birth" class="form-control" type="date" />
                                 <span asp-validation-for="Date_of_birth" class="text-danger"></span>
                             </div>
-
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="Address" class="control-label"></label>
-                                <input asp-for="Address" class="form-control" />
-                                <span asp-validation-for="Address" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="Phone_number" class="control-label"></label>
-                                <input asp-for="Phone_number" class="form-control" />
-                                <span asp-validation-for="Phone_number" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="Gender" class="control-label"></label>
-                                <select asp-for="Gender" class="form-control">
+                                <label asp-for="Gender" class="form-label fw-bold">Gender</label>
+                                <select asp-for="Gender" class="form-select">
                                     <option value="">Select Gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
@@ -89,18 +93,106 @@
                                 </select>
                                 <span asp-validation-for="Gender" class="text-danger"></span>
                             </div>
-
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block">Add</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Phone_number" class="form-label fw-bold">Phone Number</label>
+                                <input asp-for="Phone_number" class="form-control" placeholder="Enter phone number" />
+                                <span asp-validation-for="Phone_number" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Role" class="form-label fw-bold">Role</label>
+                                <select asp-for="Role" class="form-select" required>
+                                    <option value="Lecturer">Lecturer</option>
+                                </select>
+                                <span asp-validation-for="Role" class="text-danger"></span>
+                                <div class="invalid-feedback">
+                                    Please select a role.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label asp-for="Address" class="form-label fw-bold">Address</label>
+                            <input asp-for="Address" class="form-control" placeholder="Enter address" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save me-2"></i>Add Lecturer
+                        </button>
+                        <a asp-controller="Lecturer" asp-action="ManageLecturer" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
-</body>
-</html>
+</div>
+
+@section Styles {
+    <style>
+        .card-header {
+            padding: 1rem 1.5rem;
+        }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            padding: 0.5rem 1rem;
+            height: calc(1.5em + 1rem + 2px);
+            border: 1px solid #000;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+        }
+
+        /* Validation states */
+        .needs-validation .form-control:invalid,
+        .needs-validation .form-select:invalid {
+            border-color: #000;
+        }
+
+        .needs-validation .form-control:valid,
+        .needs-validation .form-select:valid {
+            border-color: #000;
+        }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Bootstrap 5 validation
+        (function () {
+            'use strict'
+
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}

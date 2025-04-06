@@ -1,0 +1,15 @@
+﻿.CARD-HEADER {
+    padding: 1rem 1.5rem;
+    background-color: #007bff; /* Màu của bg-primary trong Bootstrap */
+    color: white; /* Màu của text-white trong Bootstrap */
+}
+
+.input-group-text {
+    background-color: #e9ecef;
+}
+
+/* Ẩn các control mặc định của DataTables */
+.dataTables_length,
+.dataTables_filter {
+    display: none;
+}
