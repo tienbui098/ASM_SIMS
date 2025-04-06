@@ -2,7 +2,6 @@
 @using SIMS_ASM.Services
 @inject IMajorService MajorService
 
-
 @{
     ViewData["Title"] = "Class Management";
     Layout = "~/Views/Shared/_Layout1.cshtml";
@@ -134,106 +133,11 @@
 @section Styles {
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <style>
-        .card-header {
-            padding: 1rem 1.5rem;
-        }
-
-        .input-group-text {
-            background-color: #e9ecef;
-        }
-
-        /* Hide default DataTables controls */
-        .dataTables_length, .dataTables_filter {
-            display: none;
-        }
-
-        .badge {
-            font-size: 0.85em;
-            font-weight: 500;
-            min-width: 25px;
-        }
-
-        .btn-group-sm .btn {
-            padding: 0.25rem 0.5rem;
-        }
-
-        #resetFiltersBtn {
-            height: 100%;
-            white-space: nowrap;
-        }
-
-        .form-select, .form-control, #resetFiltersBtn {
-            height: calc(1.5em + 1rem + 2px);
-            padding: 0.5rem 1rem;
-        }
-    </style>
+    <link href="~/css/ClassIndex.css" rel="stylesheet" />
 }
 
 @section Scripts {
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var table = $('#classTable').DataTable({
-                responsive: true,
-                dom: '<"top"f>rt<"bottom"ip>',
-                columnDefs: [
-                    { 
-                        orderable: false, 
-                        targets: [3] // Disable sorting for Actions column (index 3)
-                    },
-                    {
-                        targets: [2], // Major column (index 2)
-                        render: function(data, type, row) {
-                            // Khi filter, sử dụng data-major thay vì text hiển thị
-                            if (type === 'filter') {
-                                return $(row[2]).data('major') || data;
-                            }
-                            return data;
-                        }
-                    }
-                ],
-                language: {
-                    info: "Showing _START_ to _END_ of _TOTAL_ classes",
-                    infoEmpty: "No classes found",
-                    emptyTable: "No class data available"
-                }
-            });
-
-            // Custom search
-            $('#customSearch').on('keyup', function() {
-                table.search(this.value).draw();
-            });
-
-// Major filter - cải tiến
-            $('#majorFilter').on('change', function() {
-                var majorId = $(this).val();
-                table.rows().every(function() {
-                    var rowMajor = $(this.node()).find('td[data-major]').data('major');
-                    $(this.node()).toggle(!majorId || rowMajor == majorId);
-                });
-            });
-
-            // Export button
-            $('#exportBtn').click(function() {
-                table.button('.buttons-excel').trigger();
-            });
-
-            // Reset Filters button
-            $('#resetFiltersBtn').on('click', function() {
-                $(this).find('i').addClass('fa-spin');
-
-                // Thực hiện reset
-                $('#customSearch').val('');
-                $('#majorFilter').val('').trigger('change');
-                table.search('').columns().search('').draw();
-
-                // Dừng hiệu ứng sau 1s
-                setTimeout(() => {
-                    $(this).find('i').removeClass('fa-spin');
-                }, 1000);
-            });
-        });
-    </script>
+    <script src="~/js/ClassIndex.js"></script>
 }

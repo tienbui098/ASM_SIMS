@@ -2,42 +2,145 @@
 
 @{
     ViewData["Title"] = "Assign Student to Class";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-<h2>Assign Student to Class</h2>
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="m-0 font-weight-bold">
+                    <i class="fas fa-user-graduate me-2"></i>Assign Student to Class
+                </h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <a asp-action="Index" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-1"></i> Back to List
+                </a>
+            </div>
+        </div>
     </div>
+    <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="CreateStudentClass" method="post" class="needs-validation" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="UserID" class="form-label fw-bold">Student</label>
+                                <select asp-for="UserID" class="form-select" required>
+                                    <option value="">Select a Student</option>
+                                    @foreach (var student in ViewBag.Students)
+                                    {
+                                        <option value="@student.UserID">@student.FullName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="UserID" class="text-danger"></span>
+                                <div class="invalid-feedback">
+                                    Please select a student.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ClassID" class="form-label fw-bold">Class</label>
+                                <select asp-for="ClassID" class="form-select" required>
+                                    <option value="">Select a Class</option>
+                                    @foreach (var classItem in ViewBag.Classes)
+                                    {
+                                        <option value="@classItem.ClassID">@classItem.ClassName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ClassID" class="text-danger"></span>
+                                <div class="invalid-feedback">
+                                    Please select a class.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-link me-2"></i>Assign Student
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card-header {
+            padding: 1rem 1.5rem;
+        }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            padding: 0.5rem 1rem;
+            height: calc(1.5em + 1rem + 2px);
+            border: 1px solid #000;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+        }
+
+        /* Validation states */
+        .needs-validation .form-control:invalid,
+        .needs-validation .form-select:invalid {
+            border-color: #000;
+        }
+
+        .needs-validation .form-control:valid,
+        .needs-validation .form-select:valid {
+            border-color: #000;
+        }
+    </style>
 }
-
-<form asp-action="CreateStudentClass" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="form-group">
-        <label asp-for="UserID" class="control-label">Student</label>
-        <select asp-for="UserID" class="form-control" asp-items="@(new SelectList(ViewBag.Students, "UserID", "FullName"))">
-            <option value="">Select a Student</option>
-        </select>
-        <span asp-validation-for="UserID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ClassID" class="control-label">Class</label>
-        <select asp-for="ClassID" class="form-control" asp-items="@(new SelectList(ViewBag.Classes, "ClassID", "ClassName"))">
-            <option value="">Select a Class</option>
-        </select>
-        <span asp-validation-for="ClassID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <input type="submit" value="Assign" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </div>
-</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Bootstrap 5 validation
+        (function () {
+            'use strict'
+
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 }

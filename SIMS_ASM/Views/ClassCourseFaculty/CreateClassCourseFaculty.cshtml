@@ -2,50 +2,74 @@
 
 @{
     ViewData["Title"] = "Create ClassCourseFaculty";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; // Giả định sử dụng layout giống các trang trước
 }
 
-<h2>Create New ClassCourseFaculty</h2>
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="m-0 font-weight-bold">
+                    <i class="fas fa-chalkboard-teacher me-2"></i>Create New Class Course Faculty
+                </h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <a asp-action="Index" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                </a>
+            </div>
+        </div>
     </div>
+    <div class="card-body">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form asp-action="CreateClassCourseFaculty" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ClassID" class="control-label fw-bold">Class</label>
+                <select asp-for="ClassID" class="form-select" asp-items="@(new SelectList(ViewBag.Classes, "ClassID", "ClassName"))">
+                    <option value="">Select a Class</option>
+                </select>
+                <span asp-validation-for="ClassID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CourseID" class="control-label fw-bold">Course</label>
+                <select asp-for="CourseID" class="form-select" asp-items="@(new SelectList(ViewBag.Courses, "CourseID", "CourseName"))">
+                    <option value="">Select a Course</option>
+                </select>
+                <span asp-validation-for="CourseID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="UserID" class="control-label fw-bold">Lecturer</label>
+                <select asp-for="UserID" class="form-select" asp-items="@(new SelectList(ViewBag.Lectureres, "UserID", "FullName"))">
+                    <option value="">Select a Lecturer</option>
+                </select>
+                <span asp-validation-for="UserID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary me-2" />
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/CreateClassCourseFaculty.css" rel="stylesheet" />
 }
-
-<form asp-action="CreateClassCourseFaculty" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="form-group">
-        <label asp-for="ClassID" class="control-label">Class</label>
-        <select asp-for="ClassID" class="form-control" asp-items="@(new SelectList(ViewBag.Classes, "ClassID", "ClassName"))">
-            <option value="">Select a Class</option>
-        </select>
-        <span asp-validation-for="ClassID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CourseID" class="control-label">Course</label>
-        <select asp-for="CourseID" class="form-control" asp-items="@(new SelectList(ViewBag.Courses, "CourseID", "CourseName"))">
-            <option value="">Select a Course</option>
-        </select>
-        <span asp-validation-for="CourseID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="UserID" class="control-label">Lecturer</label>
-        <select asp-for="UserID" class="form-control" asp-items="@(new SelectList(ViewBag.Lectureres, "UserID", "FullName"))">
-            <option value="">Select a Lecturer</option>
-        </select>
-        <span asp-validation-for="UserID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </div>
-</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/CreateClassCourseFaculty.js"></script>
 }

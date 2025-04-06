@@ -1,63 +1,132 @@
 ﻿@model SIMS_ASM.Models.Enrollment
 @{
     ViewData["Title"] = "Create Enrollment";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-<h1>Create Enrollment</h1>
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="m-0 font-weight-bold">
+                    <i class="fas fa-user-graduate me-2"></i>Create Enrollment
+                </h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <a asp-action="Index" class="btn btn-light">
+                    <i class="fas fa-list me-1"></i> View All Enrollments
+                </a>
+            </div>
+        </div>
     </div>
+    <div class="card-body">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["InfoMessage"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show">
+                @TempData["InfoMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form asp-action="CreateEnrollment" method="post" class="needs-validation" novalidate>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="classId" class="form-label fw-bold">Select Class</label>
+                        <select id="classId" name="classId" class="form-select" required>
+                            <option value="">-- Select Class --</option>
+                            @foreach (var cls in ViewBag.Classes)
+                            {
+                                <option value="@cls.ClassID">@cls.ClassName</option>
+                            }
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a class.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="classCourseFacultyId" class="form-label fw-bold">Select Course</label>
+                        <select id="classCourseFacultyId" name="classCourseFacultyId" class="form-select" required>
+                            <option value="">-- Select Course --</option>
+                            @foreach (var ccf in ViewBag.ClassCourseFaculties)
+                            {
+                                <option value="@ccf.ClassCourseFacultyID" data-class-id="@ccf.ClassID" style="display:none;">
+                                    @ccf.Course.CourseName (Faculty: @ccf.User.FullName)
+                                </option>
+                            }
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a course.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-save me-1"></i> Enroll All Students
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card-header {
+            padding: 1rem 1.5rem;
+        }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            padding: 0.5rem 1rem;
+            height: calc(1.5em + 1rem + 2px);
+            border: 1px solid #000;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+        }
+
+        /* Validation states */
+        .needs-validation .form-control:invalid,
+        .needs-validation .form-select:invalid {
+            border-color: #000;
+        }
+
+        .needs-validation .form-control:valid,
+        .needs-validation .form-select:valid {
+            border-color: #000;
+        }
+    </style>
 }
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
-
-@if (TempData["InfoMessage"] != null)
-{
-    <div class="alert alert-info">
-        @TempData["InfoMessage"]
-    </div>
-}
-
-<form asp-action="CreateEnrollment" method="post">
-    <div class="form-group">
-        <label for="classId">Select Class:</label>
-        <select id="classId" name="classId" class="form-control" required>
-            <option value="">-- Select Class --</option>
-            @foreach (var cls in ViewBag.Classes)
-            {
-                <option value="@cls.ClassID">@cls.ClassName</option>
-            }
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="classCourseFacultyId">Select Course:</label>
-        <select id="classCourseFacultyId" name="classCourseFacultyId" class="form-control" required>
-            <option value="">-- Select Course --</option>
-            @foreach (var ccf in ViewBag.ClassCourseFaculties)
-            {
-                <option value="@ccf.ClassCourseFacultyID" data-class-id="@ccf.ClassID" style="display:none;">
-                    @ccf.Course.CourseName (Faculty: @ccf.User.FullName)
-                </option>
-            }
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Enroll All Students in Class</button>
-</form>
-<a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
+            // Class-Course dropdown logic
             $('#classId').change(function () {
                 var classId = $(this).val();
                 $('#classCourseFacultyId option').each(function () {
@@ -73,6 +142,25 @@
                 });
                 $('#classCourseFacultyId').val('');
             });
+
+            // Bootstrap 5 validation
+            (function () {
+                'use strict'
+
+                var forms = document.querySelectorAll('.needs-validation')
+
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
         });
     </script>
 }

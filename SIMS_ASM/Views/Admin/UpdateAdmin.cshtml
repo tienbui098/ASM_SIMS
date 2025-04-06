@@ -1,76 +1,106 @@
-﻿@model User
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model SIMS_ASM.Models.User
+
 @{
+    ViewData["Title"] = "Edit Admin Profile";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
-<div class="container">
-    <h2>Edit User Profile</h2>
-    <form asp-action="UpdateAdmin" method="post">
-        <input type="hidden" asp-for="UserID" />
-        <input type="hidden" asp-for="Username" />
-        <input type="hidden" asp-for="Role" />
-        <input type="hidden" asp-for="Password" />
 
-        <div class="form-group">
-            <label asp-for="Username"></label>
-            <input asp-for="Username" class="form-control" readonly />
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="m-0 font-weight-bold">
+                    <i class="fas fa-user-edit me-2"></i>Edit Admin Profile
+                </h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <a asp-controller="Admin" asp-action="ManageAdmin" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Admin List
+                </a>
+            </div>
         </div>
+    </div>
+    <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form asp-action="UpdateAdmin" method="post">
+                    <input type="hidden" asp-for="UserID" />
+                    <input type="hidden" asp-for="Username" />
+                    <input type="hidden" asp-for="Role" />
+                    <input type="hidden" asp-for="Password" />
 
-        <div class="form-group">
-            <label>Current Role</label>
-            <input value="@Model.Role" class="form-control" readonly />
-        </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Username" class="form-label"></label>
+                            <input asp-for="Username" class="form-control" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Current Role</label>
+                            <input value="@Model.Role" class="form-control" readonly />
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label asp-for="FullName"></label>
-            <input asp-for="FullName" class="form-control" required />
-            <span asp-validation-for="FullName" class="text-danger"></span>
-        </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label"></label>
+                            <input asp-for="FullName" class="form-control" required />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label asp-for="Email"></label>
-            <input asp-for="Email" class="form-control" required />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Date_of_birth" class="form-label"></label>
+                            <input asp-for="Date_of_birth" type="date" class="form-control" required />
+                            <span asp-validation-for="Date_of_birth" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Gender" class="form-label"></label>
+                            <select asp-for="Gender" class="form-select" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label asp-for="Date_of_birth"></label>
-            <input asp-for="Date_of_birth" type="date" class="form-control" required />
-            <span asp-validation-for="Date_of_birth" class="text-danger"></span>
-        </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Phone_number" class="form-label"></label>
+                            <input asp-for="Phone_number" class="form-control" required />
+                            <span asp-validation-for="Phone_number" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input asp-for="Address" class="form-control" required />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label asp-for="Address"></label>
-            <input asp-for="Address" class="form-control" required />
-            <span asp-validation-for="Address" class="text-danger"></span>
+                    <div class="form-group text-center mt-4">
+                        <button type="submit" class="btn btn-primary px-4 me-2">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                        <a asp-action="ManageAdmin" class="btn btn-secondary px-4">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label asp-for="Phone_number"></label>
-            <input asp-for="Phone_number" class="form-control" required />
-            <span asp-validation-for="Phone_number" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Gender"></label>
-            <select asp-for="Gender" class="form-control" required>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-            <span asp-validation-for="Gender" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Save Changes" class="btn btn-primary" />
-            <a asp-action="ManageAdmin" class="btn btn-secondary">Cancel</a>
-        </div>
-    </form>
+    </div>
 </div>
 
+@section Styles {
+    <link href="~/css/edit-admin.css" rel="stylesheet" />
+}
+
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }
