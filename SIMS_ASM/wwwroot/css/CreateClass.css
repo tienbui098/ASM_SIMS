@@ -1,0 +1,25 @@
+﻿.card-header {
+    padding: 1rem 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.control-label {
+    font-weight: bold;
+}
+
+.form-control,
+.form-select {
+    height: calc(1.5em + 1rem + 2px);
+    padding: 0.5rem 1rem;
+}
+
+.text-danger {
+    font-size: 0.875em;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+}

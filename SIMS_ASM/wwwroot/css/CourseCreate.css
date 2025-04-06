@@ -1,0 +1,37 @@
+﻿.card-header {
+    padding: 1rem 1.5rem;
+}
+
+.form-label {
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    padding: 0.5rem 1rem;
+    height: calc(1.5em + 1rem + 2px);
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+}
+
+/* Additional styling for validation */
+.needs-validation .form-control:invalid,
+.needs-validation .form-select:invalid {
+    border-color: #000000;
+}
+
+.needs-validation .form-control:valid,
+.needs-validation .form-select:valid {
+    border-color: #28a745;
+}
+
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: #000000;
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+    border-color: #28a745;
+}

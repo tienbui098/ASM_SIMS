@@ -1,0 +1,35 @@
+﻿.card-header {
+    padding: 1rem 1.5rem;
+}
+
+.input-group-text {
+    background-color: #e9ecef;
+}
+
+/* Hide default DataTables controls */
+.dataTables_length,
+.dataTables_filter {
+    display: none;
+}
+
+.badge {
+    font-size: 0.85em;
+    font-weight: 500;
+    min-width: 25px;
+}
+
+.btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+#resetFiltersBtn {
+    height: 100%;
+    white-space: nowrap;
+}
+
+.form-select,
+.form-control,
+#resetFiltersBtn {
+    height: calc(1.5em + 1rem + 2px);
+    padding: 0.5rem 1rem;
+}

@@ -1,0 +1,53 @@
+﻿/* Card header styling */
+.card-header {
+    padding: 1rem 1.5rem;
+}
+
+/* Form label styling */
+.form-label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+/* Form control styling */
+.form-control,
+.form-select {
+    padding: 0.5rem 1rem;
+    height: calc(1.5em + 1rem + 2px);
+    border: 1px solid #000;
+    border-radius: 0.25rem;
+}
+
+/* Button styling */
+.btn {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+/* Validation states */
+.needs-validation .form-control:invalid,
+.needs-validation .form-select:invalid {
+    border-color: #dc3545;
+}
+
+.needs-validation .form-control:valid,
+.needs-validation .form-select:valid {
+    border-color: #000;
+}
+
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: #dc3545;
+}
+
+/* Focus states */
+.form-control:focus,
+.form-select:focus {
+    border-color: #000;
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+}
+
+/* Alert styling */
+.alert {
+    border-radius: 0.25rem;
+}
