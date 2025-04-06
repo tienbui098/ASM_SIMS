@@ -4,21 +4,11 @@ using SIMS_ASM.Models;
 
 namespace SIMS_ASM.Factory
 {
-    public class CourseRepository : Repository<Course>
+    public class CourseRepository : Repository<Course>, ICourseRepository
     {
-        private ApplicationDbContex _context;
         public CourseRepository(ApplicationDbContex context) : base(context)
         {
-            this._context = context;
         }
-
-        //// Additional course-specific methods
-        //public IEnumerable<Course> GetActiveCourses()
-        //{
-        //    return _context.Courses
-        //        .Where(c => c.CourseEndDate > DateTime.Now)
-        //        .ToList();
-        //}
 
         public Course GetCourseWithDetails(int courseId)
         {

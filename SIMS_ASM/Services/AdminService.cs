@@ -7,51 +7,51 @@ namespace SIMS_ASM.Services
 {
     public class AdminService
     {
-        // Khai báo RepositoryFactory để tạo các repository
-        private RepositoryFactory _repositoryFactory;
+        private readonly ICourseRepository _courseRepository;
+        private readonly IMajorRepository _majorRepository;
 
-        // Constructor: Inject ApplicationDbContex và khởi tạo RepositoryFactory
-        public AdminService(ApplicationDbContex context)
+        // Constructor: Inject các repository cần thiết
+        public AdminService(ICourseRepository courseRepository, IMajorRepository majorRepository)
         {
-            _repositoryFactory = new RepositoryFactory(context); // Tạo factory với context được inject
+            _courseRepository = courseRepository;
+            _majorRepository = majorRepository;
         }
 
         // Lấy danh sách tất cả khóa học
         public IEnumerable<Course> GetAllCourses()
         {
-            var courseRepo = _repositoryFactory.GetSpecificCourseRepository(); // Lấy repository chuyên biệt cho Course
-            return courseRepo.GetAll(); // Trả về tất cả khóa học từ repository
+            return _courseRepository.GetAll();
         }
 
         // Lấy chi tiết khóa học theo ID
         public Course GetCourseDetails(int courseId)
         {
-            var courseRepo = _repositoryFactory.GetSpecificCourseRepository(); // Lấy repository chuyên biệt cho Course
-            return courseRepo.GetCourseWithDetails(courseId); // Trả về khóa học với chi tiết (có thể bao gồm thông tin liên quan)
+            return _courseRepository.GetCourseWithDetails(courseId);
         }
 
         // Tạo khóa học mới
         public void CreateCourse(Course course)
         {
-            var courseRepo = _repositoryFactory.GetCourseRepository(); // Lấy repository cơ bản cho Course
-            courseRepo.Insert(course); // Thêm khóa học mới vào cơ sở dữ liệu
-            courseRepo.Save(); // Lưu thay đổi
+            _courseRepository.Add(course);
+            _courseRepository.SaveChanges();
         }
 
         // Cập nhật thông tin khóa học
         public void UpdateCourse(Course course)
         {
-            var courseRepo = _repositoryFactory.GetCourseRepository(); // Lấy repository cơ bản cho Course
-            courseRepo.Update(course); // Cập nhật thông tin khóa học
-            courseRepo.Save(); // Lưu thay đổi
+            _courseRepository.Update(course);
+            _courseRepository.SaveChanges();
         }
 
         // Xóa khóa học theo ID
         public void DeleteCourse(int courseId)
         {
-            var courseRepo = _repositoryFactory.GetCourseRepository(); // Lấy repository cơ bản cho Course
-            courseRepo.Delete(courseId); // Xóa khóa học theo ID
-            courseRepo.Save(); // Lưu thay đổi
+            var course = _courseRepository.GetById(courseId);
+            if (course != null)
+            {
+                _courseRepository.Delete(course);
+                _courseRepository.SaveChanges();
+            }
         }
 
         // QUẢN LÝ NGÀNH HỌC (Major Management)
@@ -59,39 +59,38 @@ namespace SIMS_ASM.Services
         // Lấy chi tiết ngành học theo ID
         public Major GetMajorDetails(int majorId)
         {
-            var majorRepo = _repositoryFactory.GetSpecificMajorRepository(); // Lấy repository chuyên biệt cho Major
-            return majorRepo.GetById(majorId); // Trả về ngành học theo ID
+            return _majorRepository.GetById(majorId);
         }
 
         // Lấy danh sách ngành học kèm khóa học liên quan
         public IEnumerable<Major> GetMajorsWithCourses()
         {
-            var majorRepo = _repositoryFactory.GetSpecificMajorRepository(); // Lấy repository chuyên biệt cho Major
-            return majorRepo.GetMajorsWithCourses(); // Trả về danh sách ngành học với thông tin khóa học liên quan
+            return _majorRepository.GetMajorsWithCourses();
         }
 
         // Tạo ngành học mới
         public void CreateMajor(Major newMajor)
         {
-            var majorRepo = _repositoryFactory.GetMajorRepository(); // Lấy repository cơ bản cho Major
-            majorRepo.Insert(newMajor); // Thêm ngành học mới vào cơ sở dữ liệu
-            majorRepo.Save(); // Lưu thay đổi
+            _majorRepository.Add(newMajor);
+            _majorRepository.SaveChanges();
         }
 
         // Cập nhật thông tin ngành học
         public void UpdateMajor(Major updatedMajor)
         {
-            var majorRepo = _repositoryFactory.GetMajorRepository(); // Lấy repository cơ bản cho Major
-            majorRepo.Update(updatedMajor); // Cập nhật thông tin ngành học
-            majorRepo.Save(); // Lưu thay đổi
+            _majorRepository.Update(updatedMajor);
+            _majorRepository.SaveChanges();
         }
 
         // Xóa ngành học theo ID
         public void DeleteMajor(int majorId)
         {
-            var majorRepo = _repositoryFactory.GetMajorRepository(); // Lấy repository cơ bản cho Major
-            majorRepo.Delete(majorId); // Xóa ngành học theo ID
-            majorRepo.Save(); // Lưu thay đổi
+            var major = _majorRepository.GetById(majorId);
+            if (major != null)
+            {
+                _majorRepository.Delete(major);
+                _majorRepository.SaveChanges();
+            }
         }
     }
 }
