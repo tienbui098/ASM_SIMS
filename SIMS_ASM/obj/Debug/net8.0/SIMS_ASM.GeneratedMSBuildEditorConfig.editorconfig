@@ -17,49 +17,221 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = SIMS_ASM
 build_property.RootNamespace = SIMS_ASM
-build_property.ProjectDir = C:\Users\ADMIN88\source\repos\ASM_SIMS\SIMS_ASM\
+build_property.ProjectDir = D:\Visual Studio 2022\source\ASM_SIMS\SIMS_ASM\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\ADMIN88\source\repos\ASM_SIMS\SIMS_ASM
+build_property.MSBuildProjectDirectory = D:\Visual Studio 2022\source\ASM_SIMS\SIMS_ASM
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/Account/Login.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Account/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/Account/Register.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/Home/Index.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Admin/AddAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkQWRtaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Admin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Admin/ManageAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlQWRtaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Admin/UpdateAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXBkYXRlQWRtaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/ClassCourseFaculty/CreateClassCourseFaculty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3NDb3Vyc2VGYWN1bHR5XENyZWF0ZUNsYXNzQ291cnNlRmFjdWx0eS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/ClassCourseFaculty/EditClassCourseFaculty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3NDb3Vyc2VGYWN1bHR5XEVkaXRDbGFzc0NvdXJzZUZhY3VsdHkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/ClassCourseFaculty/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3NDb3Vyc2VGYWN1bHR5XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Class/ClassesByMajor.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3NcQ2xhc3Nlc0J5TWFqb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Class/CreateClass.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3NcQ3JlYXRlQ2xhc3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Class/EditClass.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3NcRWRpdENsYXNzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Class/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3NcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Course/CourseCreate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXENvdXJzZUNyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Course/CourseEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXENvdXJzZUVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Course/CourseView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXENvdXJzZVZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Course/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Enrollment/CreateEnrollment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5yb2xsbWVudFxDcmVhdGVFbnJvbGxtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Enrollment/EditEnrollment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5yb2xsbWVudFxFZGl0RW5yb2xsbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Enrollment/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5yb2xsbWVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Grade/CreateGrade.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhZGVcQ3JlYXRlR3JhZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Grade/EditGrade.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhZGVcRWRpdEdyYWRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Grade/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JhZGVcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Lecturer/AddLecturer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcQWRkTGVjdHVyZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/Shared/Error.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Lecturer/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Lecturer/ManageLecturer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcTWFuYWdlTGVjdHVyZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Lecturer/UpdateLecturer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcVXBkYXRlTGVjdHVyZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Lecturer/ViewClassCourseFaculty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcVmlld0NsYXNzQ291cnNlRmFjdWx0eS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Lecturer/ViewGrade.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVjdHVyZXJcVmlld0dyYWRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Major/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFqb3JcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Major/MajorCreate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFqb3JcTWFqb3JDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Major/MajorEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFqb3JcTWFqb3JFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Shared/_Layout1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQxLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Shared/_LogoutPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dvdXRQYXJ0aWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/_ViewImports.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/StudentClass/AddMultipleStudents.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudENsYXNzXEFkZE11bHRpcGxlU3R1ZGVudHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/StudentClass/CreateStudentClass.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudENsYXNzXENyZWF0ZVN0dWRlbnRDbGFzcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/StudentClass/EditStudentClass.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudENsYXNzXEVkaXRTdHVkZW50Q2xhc3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/StudentClass/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudENsYXNzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Student/AddStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxBZGRTdHVkZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Student/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Student/ManageStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxNYW5hZ2VTdHVkZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Student/UpdateStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxVcGRhdGVTdHVkZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Student/ViewEnrollment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxWaWV3RW5yb2xsbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Student/ViewGrade.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxWaWV3R3JhZGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Student/ViewStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxWaWV3U3R1ZGVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/_ViewStart.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN88/source/repos/ASM_SIMS/SIMS_ASM/Views/Shared/_Layout.cshtml]
+[D:/Visual Studio 2022/source/ASM_SIMS/SIMS_ASM/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-y49z0xxenl

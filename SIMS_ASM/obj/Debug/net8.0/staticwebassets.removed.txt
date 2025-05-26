@@ -1,0 +1,2 @@
+D:\Visual Studio 2022\source\ASM_SIMS\SIMS_ASM\wwwroot\css\site.css
+D:\Visual Studio 2022\source\ASM_SIMS\SIMS_ASM\wwwroot\js\site.js
