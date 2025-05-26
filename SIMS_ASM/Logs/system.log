@@ -3,3 +3,42 @@
 2025-03-22 19:58:48 - User huy registered successfully with role Student
 2025-03-22 20:07:03 - User Huy logged in with role Student
 2025-03-22 20:07:18 - User huy logged in with role Student
+2025-04-07 00:56:45 - User admin logged in with role Admin
+2025-04-07 09:19:49 - User admin logged in with role Admin
+2025-04-07 11:02:53 - User admin logged in with role Admin
+2025-04-07 12:21:07 - User admin logged in with role Admin
+2025-04-07 12:59:38 - Unauthorized access to ClassCourseFaculty Management: User not an admin
+2025-04-07 12:59:41 - User admin logged in with role Admin
+2025-04-07 13:49:32 - Unauthorized access to Create StudentClass: User not an admin
+2025-04-07 13:49:36 - User admin logged in with role Admin
+2025-04-07 14:35:30 - User admin logged in with role Admin
+2025-04-07 14:47:38 - User nguyenhanh logged in with role Lecturer
+2025-04-07 15:01:29 - User nguyenhanh logged in with role Lecturer
+2025-04-07 15:29:58 - Unauthorized access to Class Management: User not an admin
+2025-04-07 15:30:00 - User nguyenhanh logged in with role Lecturer
+2025-04-07 15:35:48 - User admin2 logged in with role Student
+2025-04-07 15:42:09 - User admin2 logged in with role Student
+2025-05-11 18:38:18 - Failed login attempt for user admin
+2025-05-24 11:22:25 - Failed login attempt for user admin
+2025-05-24 11:22:30 - Failed login attempt for user admin
+2025-05-24 11:24:28 - User admin registered successfully with role Student
+2025-05-24 11:24:30 - User admin logged in with role Student
+2025-05-24 12:26:34 - Unauthorized access to Class Management: User not an admin
+2025-05-24 12:26:35 - Unauthorized access to Grade Management
+2025-05-24 12:26:41 - User admin logged in with role Student
+2025-05-24 23:13:12 - User admin123 registered successfully with role Student
+2025-05-24 23:13:33 - User admin123 logged in with role Student
+2025-05-24 23:19:13 - Failed registration attempt: Username already exists
+2025-05-24 23:20:38 - User admin logged in with role Student
+2025-05-24 23:21:19 - User nguyenhanh registered successfully with role Student
+2025-05-24 23:21:27 - User nguyenhanh logged in with role Student
+2025-05-24 23:41:13 - User quanly registered successfully with role Student
+2025-05-24 23:53:56 - User quanly1 registered successfully with role Admin
+2025-05-24 23:54:20 - User quanly1 logged in with role Admin
+2025-05-24 23:54:30 - User with ID 1002 deleted by admin
+2025-05-24 23:54:47 - User with ID 3 deleted by admin
+2025-05-24 23:55:30 - User with ID 2 deleted by admin
+2025-05-24 23:55:36 - User with ID 1 deleted by admin
+2025-05-24 23:55:39 - User with ID 1003 deleted by admin
+2025-05-24 23:56:20 - User admin registered successfully with role Admin
+2025-05-24 23:56:32 - User admin logged in with role Admin
